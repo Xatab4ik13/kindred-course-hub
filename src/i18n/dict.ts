@@ -118,6 +118,11 @@ export const dict = {
     "days.fri": "Fri",
     "days.sat": "Sat",
     "days.sun": "Sun",
+    "companion.features": "Look what we've got 👀",
+    "companion.pricing": "Pick a format — I'll help!",
+    "companion.schedule": "Live 2-week schedule",
+    "companion.reviews": "Students already love it 🧡",
+    "companion.cta": "Shall we begin? 你好!",
   },
 } as const;
 
