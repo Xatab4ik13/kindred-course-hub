@@ -17,8 +17,17 @@ export function CtaSection() {
         className="relative overflow-hidden rounded-4xl bg-brand text-brand-foreground p-8 md:p-14"
       >
         <div className="absolute inset-0 -z-10 bg-grain opacity-20" />
+
+        {/* Giant hanzi backdrop */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-6 -top-10 font-hanzi text-[220px] font-black leading-none text-brand-foreground/10 select-none"
+        >
+          学
+        </div>
+
         <div className="grid items-center gap-8 md:grid-cols-[1fr_auto]">
-          <div>
+          <div className="relative z-10">
             <h2 className="font-display text-4xl font-extrabold md:text-5xl">
               {t("cta.title")}
             </h2>
@@ -30,7 +39,20 @@ export function CtaSection() {
               {t("cta.enroll")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <Mascot pose="wave" size={220} className="justify-self-end" />
+
+          {/* Mascot peeking from behind, not a sticker */}
+          <div className="relative h-56 w-56 md:h-64 md:w-64">
+            <div className="absolute inset-0 rounded-full bg-brand-foreground/10 blur-2xl" />
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={viewportOnce}
+              transition={{ type: "spring", stiffness: 140, damping: 16, delay: 0.2 }}
+              className="absolute inset-x-0 bottom-0 flex justify-center"
+            >
+              <Mascot pose="wave" size={260} interactive />
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>
