@@ -56,6 +56,11 @@ export const dict = {
     "days.fri": "Пт",
     "days.sat": "Сб",
     "days.sun": "Вс",
+    "companion.features": "Смотри, что мы умеем 👀",
+    "companion.pricing": "Выбирай формат — я подскажу!",
+    "companion.schedule": "Живое расписание на 2 недели",
+    "companion.reviews": "Ученики уже влюбились 🧡",
+    "companion.cta": "Ну что, начнём? 你好!",
   },
   en: {
     "nav.about": "About",
