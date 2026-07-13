@@ -148,6 +148,9 @@
   --brand-soft: oklch(0.32 0.09 30);
   --tiger: oklch(0.75 0.18 45);
   --cream: oklch(0.24 0.03 40);
+  --coral: oklch(0.5 0.13 40);
+  --coral-deep: oklch(0.42 0.13 38);
+
 
   --primary: oklch(0.68 0.2 30);
   --primary-foreground: oklch(0.18 0.02 40);
