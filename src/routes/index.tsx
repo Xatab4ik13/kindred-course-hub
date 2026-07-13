@@ -7,6 +7,7 @@ import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { CtaSection } from "@/components/site/CtaSection";
+import { MascotCompanion } from "@/components/site/MascotCompanion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,13 +34,24 @@ function Index() {
       <Header />
       <main>
         <HeroSection />
-        <FeaturesSection />
-        <PricingSection />
-        <SchedulePreviewSection />
-        <ReviewsSection />
-        <CtaSection />
+        <div data-companion-section="features">
+          <FeaturesSection />
+        </div>
+        <div data-companion-section="pricing">
+          <PricingSection />
+        </div>
+        <div data-companion-section="schedule">
+          <SchedulePreviewSection />
+        </div>
+        <div data-companion-section="reviews">
+          <ReviewsSection />
+        </div>
+        <div data-companion-section="cta">
+          <CtaSection />
+        </div>
       </main>
       <Footer />
+      <MascotCompanion />
     </div>
   );
 }
