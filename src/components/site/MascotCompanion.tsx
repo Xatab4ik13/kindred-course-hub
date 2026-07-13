@@ -3,10 +3,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowUp } from "lucide-react";
 import { Mascot, type MascotPose } from "@/components/site/Mascot";
 import { useI18n } from "@/providers/i18n";
+import type { DictKey } from "@/i18n/dict";
 
 type SectionKey = "features" | "pricing" | "schedule" | "reviews" | "cta";
 
-const POSE_BY_SECTION: Record<SectionKey, { pose: MascotPose; tipKey: string }> = {
+const POSE_BY_SECTION: Record<SectionKey, { pose: MascotPose; tipKey: DictKey }> = {
   features: { pose: "point", tipKey: "companion.features" },
   pricing: { pose: "smile", tipKey: "companion.pricing" },
   schedule: { pose: "calm", tipKey: "companion.schedule" },
