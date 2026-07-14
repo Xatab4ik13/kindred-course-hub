@@ -30,12 +30,12 @@ const REVIEWS = [
 export function ReviewsSection() {
   const { t, lang } = useI18n();
   return (
-    <section className="relative bg-ink">
+    <section className="relative bg-black">
       {/* Черный кривой разделитель, который перекрывает низ расписания */}
       <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8">
         <div
           aria-hidden
-          className="absolute -top-20 inset-x-0 h-40 bg-ink"
+          className="absolute -top-20 inset-x-0 h-40 bg-black"
           style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 55%, 52% 0, 0 45%)" }}
         />
 
@@ -69,13 +69,6 @@ export function ReviewsSection() {
           ))}
         </motion.div>
       </div>
-
-      {/* Светлый кривой разделитель между черными блоками отзывов и футера */}
-      <div
-        aria-hidden
-        className="relative h-24 bg-background md:h-32"
-        style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 55%, 52% 0, 0 45%)" }}
-      />
     </section>
   );
 }
