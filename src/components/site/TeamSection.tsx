@@ -126,7 +126,7 @@ export function TeamSection() {
               >
                 {/* Curved organic frame */}
                 <div
-                  className="relative aspect-[3/4] overflow-hidden bg-brand-soft shadow-soft transition-shadow duration-500 group-hover:shadow-float"
+                  className="relative aspect-[3/4] overflow-hidden bg-brand-soft shadow-soft"
                   style={{
                     borderRadius:
                       "58% 42% 55% 45% / 45% 40% 60% 55%",
@@ -138,7 +138,7 @@ export function TeamSection() {
                     loading="lazy"
                     width={768}
                     height={1024}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover"
                   />
                   <div
                     className="pointer-events-none absolute inset-0"
@@ -153,19 +153,27 @@ export function TeamSection() {
                   <h3 className="font-display text-2xl font-bold leading-tight">
                     {t(p.nameKey)}
                   </h3>
-                  <p className="mt-1 text-sm font-semibold uppercase tracking-widest text-brand">
-                    {t(p.roleKey)}
-                  </p>
                   <p className="mt-4 flex-1 text-base leading-relaxed text-muted-foreground">
                     {t(p.bioKey)}
                   </p>
 
                   <Link
                     to="/schedule"
-                    className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-brand/30 bg-brand-soft px-5 py-2.5 text-sm font-semibold text-brand transition hover:bg-brand hover:text-brand-foreground"
+                    className="relative mt-6 inline-flex w-fit items-center gap-2 overflow-hidden px-6 py-3 text-sm font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
+                    style={{
+                      borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
+                      backgroundColor: "var(--brand)",
+                    }}
                   >
-                    <CalendarDays className="h-4 w-4" />
-                    {t("team.cta.schedule")}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[3.25rem] font-black leading-none tracking-tighter text-white/15"
+                      style={{ letterSpacing: "-0.05em" }}
+                    >
+                      学习汉语
+                    </span>
+                    <CalendarDays className="relative h-4 w-4" />
+                    <span className="relative">{t("team.cta.schedule")}</span>
                   </Link>
                 </div>
               </motion.article>
