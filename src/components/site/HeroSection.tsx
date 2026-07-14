@@ -50,7 +50,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
           className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
-          style={{ fontSize: "clamp(1.75rem, 5.5vw, 5.5rem)" }}
+          style={{ fontSize: "clamp(1.35rem, 5.5vw, 5.5rem)" }}
         >
           <span className="text-brand-foreground">Онлайн школа</span>
           <br />
