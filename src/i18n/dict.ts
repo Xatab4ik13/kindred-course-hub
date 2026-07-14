@@ -301,7 +301,7 @@ export const dict = {
     "enroll.contact.lead": "Write to us directly — we'll answer fast about courses, schedule and pricing.",
     "enroll.contact.tgDesc": "@china_ya · Reply within an hour",
     "enroll.contact.vkDesc": "vk.ru/chinaja · School group",
-    "enroll.contact.footer": "Or call us — switch to the «Leave a request» tab",
+    
     "enroll.error.name": "Enter your name",
     "enroll.error.phone": "Enter a valid phone",
     "enroll.error.goal": "Choose a learning goal",
