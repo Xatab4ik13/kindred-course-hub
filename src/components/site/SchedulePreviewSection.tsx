@@ -8,13 +8,10 @@ import type { DictKey } from "@/i18n/dict";
 import { viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { EnrollModal } from "@/components/site/EnrollModal";
-import mascotHello from "@/assets/mascot/hello.png";
-import mascotWave from "@/assets/mascot/wave.png";
-import mascotSmile from "@/assets/mascot/smile.png";
-import mascotPoint from "@/assets/mascot/point.png";
-import mascotCalm from "@/assets/mascot/calm.png";
-import mascotSide from "@/assets/mascot/side.png";
-import mascotBack from "@/assets/mascot/back.png";
+import mascotDay1 from "@/assets/mascot/day-1.png";
+import mascotDay2 from "@/assets/mascot/day-2.png";
+import mascotDay3 from "@/assets/mascot/day-3.png";
+import mascotDay4 from "@/assets/mascot/day-4.png";
 
 const DAY_KEYS: DictKey[] = [
   "days.mon",
@@ -51,7 +48,7 @@ const CHIP: Record<LevelTone, string> = {
 };
 
 // Mascot rotation for the days: today, tomorrow, +2 highlighted; rest muted
-const MASCOT_POOL = [mascotHello, mascotWave, mascotSmile, mascotPoint, mascotCalm, mascotSide, mascotBack];
+const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
 
 const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
