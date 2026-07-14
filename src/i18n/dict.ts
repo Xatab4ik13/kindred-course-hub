@@ -70,11 +70,13 @@ export const dict = {
     "days.fri": "Пт",
     "days.sat": "Сб",
     "days.sun": "Вс",
+    "companion.about": "Немного о нас 🐯",
     "companion.features": "Смотри, что мы умеем 👀",
     "companion.pricing": "Выбирай формат — я подскажу!",
     "companion.schedule": "Живое расписание на 2 недели",
     "companion.reviews": "Ученики уже влюбились 🧡",
     "companion.cta": "Ну что, начнём? 你好!",
+
   },
   en: {
     "nav.about": "About",
@@ -146,11 +148,13 @@ export const dict = {
     "days.fri": "Fri",
     "days.sat": "Sat",
     "days.sun": "Sun",
+    "companion.about": "A little about us 🐯",
     "companion.features": "Look what we've got 👀",
     "companion.pricing": "Pick a format — I'll help!",
     "companion.schedule": "Live 2-week schedule",
     "companion.reviews": "Students already love it 🧡",
     "companion.cta": "Shall we begin? 你好!",
+
   },
 } as const;
 

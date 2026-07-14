@@ -68,10 +68,15 @@ export function AboutSection() {
             </span>
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center lg:justify-start">
               <div
-                className="h-[70%] w-[70%] rounded-full bg-gradient-radial from-brand/5 to-transparent blur-3xl"
+                className="h-[70%] w-[70%] rounded-full blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, color-mix(in oklab, var(--brand) 5%, transparent) 0%, transparent 70%)",
+                }}
                 aria-hidden
               />
             </div>
+
           </motion.div>
 
           {/* Текстовый блок */}
