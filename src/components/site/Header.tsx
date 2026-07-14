@@ -53,7 +53,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-background/70 border-b border-border/60">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full backdrop-blur-md bg-background/85 border-b border-border/60 md:sticky">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-8">
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-brand-foreground font-hanzi text-lg font-bold">
