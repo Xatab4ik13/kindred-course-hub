@@ -21,26 +21,29 @@ export function Header() {
           <span className="font-display text-xl font-extrabold tracking-tight">CHINAR</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="rounded-full px-4 py-2 text-[15px] font-extrabold tracking-tight text-foreground/80 hover:bg-muted hover:text-foreground transition"
-              activeProps={{ className: "bg-muted text-foreground" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden md:flex flex-1 items-center justify-center gap-2">
+          <nav className="flex items-center gap-1">
+            {nav.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
+                activeProps={{ className: "bg-muted text-black" }}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
 
-        <div className="flex items-center gap-2">
           <Link
             to="/contacts"
-            className="hidden sm:inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-bold text-brand-foreground shadow-soft hover:opacity-90 transition"
+            className="inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-extrabold uppercase text-brand-foreground shadow-soft hover:opacity-90 transition"
           >
             {t("cta.enroll")}
           </Link>
+        </div>
+
+        <div className="flex items-center gap-2">
           <LangToggle />
           <ThemeToggle />
         </div>
