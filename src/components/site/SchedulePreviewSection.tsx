@@ -393,32 +393,28 @@ function LessonCard({
   );
 }
 
-function ScrollArrow({
+function HeaderArrow({
   direction,
+  disabled,
   onClick,
 }: {
   direction: "left" | "right";
+  disabled: boolean;
   onClick: () => void;
 }) {
   const Icon = direction === "left" ? ChevronLeft : ChevronRight;
-  const xOffset = direction === "left" ? -20 : 20;
   return (
     <motion.button
       type="button"
-      initial={{ opacity: 0, x: xOffset, scale: 0.9 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      exit={{ opacity: 0, x: xOffset, scale: 0.9 }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={disabled ? undefined : { scale: 1.06 }}
+      whileTap={disabled ? undefined : { scale: 0.94 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
+      disabled={disabled}
       aria-label={direction === "left" ? "Назад" : "Вперёд"}
       className={cn(
-        "absolute top-1/2 z-20 -translate-y-1/2",
-        "flex h-12 w-12 items-center justify-center rounded-full",
-        "bg-surface text-foreground shadow-float border border-border/60",
-        "transition-shadow hover:shadow-glow",
-        direction === "left" ? "left-2" : "right-2",
+        "flex h-11 w-11 items-center justify-center rounded-full border border-border/60 bg-surface text-foreground shadow-[0_8px_24px_-16px_rgba(0,0,0,0.2)] transition-opacity",
+        disabled ? "opacity-40 cursor-not-allowed" : "hover:shadow-glow",
       )}
     >
       <Icon className="h-5 w-5" />
