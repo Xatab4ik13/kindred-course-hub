@@ -25,15 +25,8 @@ export function PricingSection() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-      <div className="flex items-end justify-between gap-4">
-        <SectionHeader eyebrow={t("pricing.title")} title={t("pricing.subtitle")} />
-        <Link
-          to="/pricing"
-          className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
-        >
-          {t("pricing.cta")} <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      <SectionHeader eyebrow={t("pricing.title")} title={t("pricing.subtitle")} />
+
 
       <motion.div
         initial="hidden"
