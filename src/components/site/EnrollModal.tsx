@@ -141,15 +141,9 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
               </div>
 
               <div className="mt-6">
-                <AnimatePresence mode="wait" initial={false}>
-                  {tab === "form" ? (
-                    <motion.div
-                      key="form"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.18 }}
-                    >
+                {tab === "form" ? (
+                  <div>
+
                       {sent ? (
                         <div className="flex flex-col items-center py-10 text-center">
                           <div className="grid h-16 w-16 place-items-center rounded-full bg-brand text-brand-foreground shadow-glow">
