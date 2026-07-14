@@ -50,7 +50,6 @@ export const dict = {
     "pricing.subtitle": "Выберите свой формат обучения",
     "pricing.special": "Популярно",
     "pricing.cta": "Все программы",
-    "pricing.more": "Подробнее",
     "pricing.enroll": "Выбрать тариф",
     "pricing.p1.name": "HSK1 за 3 месяца",
     "pricing.p1.tag": "Стартуй в китайском с нуля",
