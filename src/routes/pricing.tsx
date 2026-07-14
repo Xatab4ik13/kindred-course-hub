@@ -48,7 +48,6 @@ type ProgramCopy = {
   bullets: string[];
   footer?: string;
   highlight?: string;
-  audience: string;
 };
 
 type Program = {
@@ -85,7 +84,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Через 3 месяца ты будешь уверенно говорить, писать и понимать базовый китайский + сдашь HSK1 без стресса!",
       highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! УСПЕЙ ЗАПИСАТЬСЯ!",
-      audience: "Взрослые и подростки",
     },
     en: {
       name: "HSK1 in 3 months",
@@ -106,7 +104,6 @@ const PROGRAMS: Program[] = [
       footer:
         "In 3 months you'll confidently speak, write and understand basic Chinese + pass HSK1 without stress!",
       highlight: "ONLY 4 SEATS PER GROUP! HURRY!",
-      audience: "Adults and teens",
     },
   },
   {
@@ -132,7 +129,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Через 4 месяца ты будешь свободно общаться на бытовые темы, писать тексты и уверенно сдашь HSK2!",
       highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! СТАРТУЕМ СКОРО!",
-      audience: "После HSK 1",
     },
     en: {
       name: "HSK2 in 4 months",
@@ -153,7 +149,6 @@ const PROGRAMS: Program[] = [
       footer:
         "In 4 months you'll speak freely on everyday topics, write texts and confidently pass HSK2!",
       highlight: "ONLY 4 SEATS PER GROUP! STARTING SOON!",
-      audience: "After HSK 1",
     },
   },
   {
@@ -178,7 +173,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Говорите уверенно, пишете грамотно, понимаете речь на слух — с нуля или до продвинутого уровня!",
       highlight: "ИНДИВИДУАЛЬНЫЙ ПОДХОД ПО ЦЕНЕ ГРУППОВЫХ ЗАНЯТИЙ",
-      audience: "Дети, подростки, взрослые",
     },
     en: {
       name: "One-to-one Chinese online",
@@ -198,7 +192,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Speak confidently, write correctly, understand by ear — from zero to advanced!",
       highlight: "ONE-TO-ONE AT GROUP PRICE",
-      audience: "Kids, teens, adults",
     },
   },
   {
@@ -222,7 +215,6 @@ const PROGRAMS: Program[] = [
         "Личный куратор проверит домашние задания и поддержит на пути к цели.",
       ],
       highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! СТАРТУЕМ СКОРО!",
-      audience: "Взрослые и подростки",
     },
     en: {
       name: "Group lessons for beginners",
@@ -241,7 +233,6 @@ const PROGRAMS: Program[] = [
         "Personal tutor checks homework and supports you on the way.",
       ],
       highlight: "ONLY 4 SEATS PER GROUP! STARTING SOON!",
-      audience: "Adults and teens",
     },
   },
   {
@@ -265,7 +256,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Вы сдадите ЕГЭ на высокий балл, как Тимофей, и получите преимущество при поступлении!",
       highlight: "ИНДИВИДУАЛЬНЫЙ ПОДХОД ПО ЦЕНЕ ГРУППОВЫХ ЗАНЯТИЙ",
-      audience: "Ученики 10–11 классов",
     },
     en: {
       name: "Chinese EGE for 100 points",
@@ -284,7 +274,6 @@ const PROGRAMS: Program[] = [
       footer:
         "You'll pass the EGE with a high score like Timofey and gain an admission advantage!",
       highlight: "ONE-TO-ONE AT GROUP PRICE",
-      audience: "Grade 10–11 students",
     },
   },
   {
@@ -309,7 +298,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Ребёнок полюбит китайский, подтянет оценки и будет уверенно говорить на уроках.",
       highlight: "БЕСПЛАТНЫЙ ПРОБНЫЙ УРОК",
-      audience: "Школьники",
     },
     en: {
       name: "Chinese for schoolkids online",
@@ -329,7 +317,6 @@ const PROGRAMS: Program[] = [
       footer:
         "Your child will love Chinese, improve grades and speak confidently in class.",
       highlight: "FREE TRIAL LESSON",
-      audience: "Schoolkids",
     },
   },
 ];
