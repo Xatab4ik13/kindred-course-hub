@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/FeaturesSection";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
@@ -125,20 +125,6 @@ export function PricingSection() {
                   </span>
                 </div>
 
-                <div className="mt-2 flex justify-end">
-                  <Link
-                    to="/pricing"
-                    className={cn(
-                      "group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                      isSpecial
-                        ? "bg-cream/10 text-cream hover:bg-cream/20"
-                        : "bg-transparent text-brand hover:bg-brand-soft",
-                    )}
-                  >
-                    {t("pricing.more")}
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
               </div>
 
               <Link
