@@ -272,7 +272,28 @@ export const dict = {
     "companion.reviews": "Students already love it 🧡",
     "companion.cta": "Shall we begin? 你好!",
 
+    "enroll.title": "Enroll in a course",
+    "enroll.tab.form": "Leave a request",
+    "enroll.tab.contact": "Message us",
+    "enroll.name.label": "Your name",
+    "enroll.name.placeholder": "John Doe",
+    "enroll.phone.label": "Phone number",
+    "enroll.phone.placeholder": "+1 (555) 000-0000",
+    "enroll.goal.label": "What would you like to learn",
+    "enroll.goal.other": "Other",
+    "enroll.submit": "Send request",
+    "enroll.success.title": "Request sent!",
+    "enroll.success.text": "We'll get back to you shortly. 谢谢!",
+    "enroll.contact.lead": "Write to us directly — we'll answer fast about courses, schedule and pricing.",
+    "enroll.contact.tgDesc": "@china_ya · Reply within an hour",
+    "enroll.contact.vkDesc": "vk.ru/chinaja · School group",
+    "enroll.contact.footer": "Or call us — switch to the «Leave a request» tab",
+    "enroll.error.name": "Enter your name",
+    "enroll.error.phone": "Enter a valid phone",
+    "enroll.error.goal": "Choose a learning goal",
+
   },
+
 } as const;
 
 export type Lang = keyof typeof dict;
