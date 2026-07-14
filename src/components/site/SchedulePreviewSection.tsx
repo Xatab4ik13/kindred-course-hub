@@ -207,24 +207,8 @@ export function SchedulePreviewSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative mt-10"
       >
-        {/* Legend */}
-        <div className="mb-5 flex flex-wrap items-center gap-3 text-xs font-semibold text-muted-foreground">
-          {[
-            { tone: "hsk1" as const, label: "HSK 1" },
-            { tone: "hsk2" as const, label: "HSK 2" },
-            { tone: "hsk3" as const, label: "HSK 3" },
-            { tone: "kids" as const, label: "Kids" },
-            { tone: "speak" as const, label: "Speak" },
-            { tone: "individual" as const, label: "Индивид." },
-          ].map((l) => (
-            <div key={l.tone} className="flex items-center gap-1.5">
-              <span className={cn("h-2.5 w-2.5 rounded-full", TONE[l.tone].dot)} />
-              <span>{l.label}</span>
-            </div>
-          ))}
-        </div>
-
         {/* Track wrapper */}
+
         <div className="relative">
           {/* Gradient edges */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
