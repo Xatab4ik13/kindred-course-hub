@@ -18,14 +18,22 @@ type Plan = {
 
 
 const PLANS: Plan[] = [
-  { id: "p1", hanzi: "一", special: true },
-  { id: "p2", hanzi: "个" },
-  { id: "p3", hanzi: "百" },
+  { id: "p1", hanzi: "一", goalId: "hsk1", special: true },
+  { id: "p2", hanzi: "个", goalId: "individual" },
+  { id: "p3", hanzi: "百", goalId: "ege" },
 ];
 
 export function PricingSection() {
   const { t } = useI18n();
   const k = (id: Plan["id"], suffix: string) => `pricing.${id}.${suffix}` as DictKey;
+  const [open, setOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<string | undefined>(undefined);
+
+  const openWith = (goalId?: string) => {
+    setSelectedGoal(goalId);
+    setOpen(true);
+  };
+
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
