@@ -36,22 +36,19 @@ function Index() {
       <Header />
       <main>
         <HeroSection />
-        <div data-companion-section="about">
+        <div id="about" data-companion-section="about">
           <AboutSection />
         </div>
-        <div data-companion-section="team">
+        <div id="team" data-companion-section="team">
           <TeamSection />
         </div>
-
-
-
-        <div data-companion-section="pricing">
+        <div id="pricing" data-companion-section="pricing">
           <PricingSection />
         </div>
-        <div data-companion-section="schedule">
+        <div id="schedule" data-companion-section="schedule">
           <SchedulePreviewSection />
         </div>
-        <div data-companion-section="reviews">
+        <div id="reviews" data-companion-section="reviews">
           <ReviewsSection />
         </div>
 

@@ -35,7 +35,7 @@ function Segmented<T extends string>({
             className={cn(
               "relative z-10 inline-flex h-8 min-w-8 items-center justify-center rounded-full px-3 text-xs font-bold uppercase tracking-wider transition",
               active
-                ? "bg-brand text-brand-foreground shadow-soft"
+                ? "bg-black text-white shadow-soft"
                 : "text-foreground/60 hover:text-foreground",
             )}
           >
