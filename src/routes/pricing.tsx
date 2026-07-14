@@ -451,7 +451,7 @@ function PricingPage() {
                 {/* side: bullets + price */}
                 <div
                   className={cn(
-                    "relative flex flex-col justify-between gap-8 border-t p-8 md:border-l md:border-t-0 md:p-10",
+                    "relative flex min-w-0 flex-col justify-between gap-8 border-t p-6 md:border-l md:border-t-0 md:p-10",
                     isSpecial ? "border-cream/15" : "border-border/60",
                     reverse && "md:order-1 md:border-l-0 md:border-r",
                   )}
