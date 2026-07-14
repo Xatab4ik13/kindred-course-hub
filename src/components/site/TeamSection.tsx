@@ -88,7 +88,7 @@ export function TeamSection() {
                 type="button"
                 onClick={() => setTab(k)}
                 className={cn(
-                  "relative rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                  "relative rounded-full px-6 py-3 text-base font-semibold transition-colors",
                   tab === k
                     ? "text-brand-foreground"
                     : "text-muted-foreground hover:text-foreground",
