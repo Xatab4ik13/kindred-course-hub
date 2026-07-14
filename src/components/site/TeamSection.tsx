@@ -88,7 +88,7 @@ export function TeamSection() {
                 type="button"
                 onClick={() => setTab(k)}
                 className={cn(
-                  "relative rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                  "relative rounded-full px-6 py-3 text-base font-semibold transition-colors",
                   tab === k
                     ? "text-brand-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -159,7 +159,7 @@ export function TeamSection() {
 
                   <Link
                     to="/schedule"
-                    className="relative mt-6 inline-flex w-fit items-center gap-2 overflow-hidden px-6 py-3 text-sm font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
+                    className="relative mt-6 inline-flex w-fit items-center gap-3 overflow-hidden px-8 py-4 text-base font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
                     style={{
                       borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
                       backgroundColor: "var(--brand)",
@@ -167,12 +167,12 @@ export function TeamSection() {
                   >
                     <span
                       aria-hidden
-                      className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[3.25rem] font-black leading-none tracking-tighter text-white/15"
+                      className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[4rem] font-black leading-none tracking-tighter text-white/15"
                       style={{ letterSpacing: "-0.05em" }}
                     >
                       学习汉语
                     </span>
-                    <CalendarDays className="relative h-4 w-4" />
+                    <CalendarDays className="relative h-5 w-5" />
                     <span className="relative">{t("team.cta.schedule")}</span>
                   </Link>
                 </div>
