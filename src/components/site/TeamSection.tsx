@@ -247,13 +247,13 @@ function ScrollArrow({
       aria-label={direction === "left" ? "Назад" : "Вперёд"}
       className={cn(
         "absolute top-1/2 z-10 -translate-y-1/2",
-        "flex h-14 w-14 items-center justify-center rounded-full",
+        "flex h-12 w-12 items-center justify-center rounded-full",
         "bg-surface text-foreground shadow-float backdrop-blur-sm",
         "border border-border/60 transition-shadow hover:shadow-glow",
-        direction === "left" ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2",
+        direction === "left" ? "left-0" : "right-0",
       )}
     >
-      <Icon className="h-6 w-6" />
+      <Icon className="h-5 w-5" />
     </motion.button>
   );
 }
