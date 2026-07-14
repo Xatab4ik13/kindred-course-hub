@@ -27,8 +27,8 @@ export function PricingSection() {
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <SectionHeader eyebrow={t("pricing.title")} title={t("pricing.subtitle")} />
 
-
       <motion.div
+
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
