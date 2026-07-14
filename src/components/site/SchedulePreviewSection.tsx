@@ -197,10 +197,6 @@ export function SchedulePreviewSection() {
         className="relative mt-10"
       >
         <div className="relative">
-          {/* Narrow fades — only hint at more content, never cover it */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-background to-transparent sm:w-6" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-4 bg-gradient-to-l from-background to-transparent sm:w-6" />
-
           <div
             ref={trackRef}
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-2 pb-6 pt-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
