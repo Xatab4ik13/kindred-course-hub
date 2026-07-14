@@ -9,7 +9,7 @@ import { HeroSection } from "@/components/site/HeroSection";
 import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
-import { CtaSection } from "@/components/site/CtaSection";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,9 +54,7 @@ function Index() {
         <div data-companion-section="reviews">
           <ReviewsSection />
         </div>
-        <div data-companion-section="cta">
-          <CtaSection />
-        </div>
+
       </main>
       <Footer />
       
