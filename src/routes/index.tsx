@@ -1,11 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { AboutSection } from "@/components/site/AboutSection";
 import { TeamSection } from "@/components/site/TeamSection";
-
 import { HeroSection } from "@/components/site/HeroSection";
-
 import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
@@ -31,27 +30,38 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = location.hash ?? window.location.hash;
+    if (!hash) return;
+    const id = hash.replace("#", "");
+    const el = document.getElementById(id);
+    if (el) {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [location.hash]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <HeroSection />
-        <div data-companion-section="about">
+        <div id="about" data-companion-section="about">
           <AboutSection />
         </div>
-        <div data-companion-section="team">
+        <div id="team" data-companion-section="team">
           <TeamSection />
         </div>
-
-
-
-        <div data-companion-section="pricing">
+        <div id="pricing" data-companion-section="pricing">
           <PricingSection />
         </div>
-        <div data-companion-section="schedule">
+        <div id="schedule" data-companion-section="schedule">
           <SchedulePreviewSection />
         </div>
-        <div data-companion-section="reviews">
+        <div id="reviews" data-companion-section="reviews">
           <ReviewsSection />
         </div>
 

@@ -1,15 +1,42 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { useI18n } from "@/providers/i18n";
 import { LangToggle, ThemeToggle } from "./Toggles";
 
+function ScrollNavLink({
+  sectionId,
+  children,
+}: {
+  sectionId: string;
+  children: React.ReactNode;
+}) {
+  const location = useLocation();
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } else {
+      router.navigate({ to: "/", hash: sectionId });
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
+    >
+      {children}
+    </button>
+  );
+}
+
 export function Header() {
   const { t } = useI18n();
-  const nav = [
-    { to: "/about", label: t("nav.about") },
-    { to: "/team", label: t("nav.team") },
-    { to: "/pricing", label: t("nav.pricing") },
-    { to: "/schedule", label: t("nav.schedule") },
-  ] as const;
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/70 border-b border-border/60">
@@ -23,16 +50,22 @@ export function Header() {
 
         <div className="hidden md:flex flex-1 items-center justify-center gap-2">
           <nav className="flex items-center gap-1">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
-                activeProps={{ className: "bg-muted text-black" }}
-              >
-                {n.label}
-              </Link>
-            ))}
+            <ScrollNavLink sectionId="about">{t("nav.about")}</ScrollNavLink>
+            <ScrollNavLink sectionId="team">{t("nav.team")}</ScrollNavLink>
+            <Link
+              to="/pricing"
+              className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
+              activeProps={{ className: "bg-muted text-black" }}
+            >
+              {t("nav.pricing")}
+            </Link>
+            <Link
+              to="/schedule"
+              className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
+              activeProps={{ className: "bg-muted text-black" }}
+            >
+              {t("nav.schedule")}
+            </Link>
           </nav>
         </div>
 
