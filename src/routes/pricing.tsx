@@ -386,8 +386,9 @@ function PricingPage() {
               <motion.article
                 key={p.id}
                 variants={fadeUp}
+                lang={lang}
                 className={cn(
-                  "relative grid overflow-hidden rounded-[2.5rem] border shadow-soft md:grid-cols-[1.35fr_1fr]",
+                  "relative grid min-w-0 overflow-hidden rounded-[2rem] border shadow-soft md:rounded-[2.5rem] md:grid-cols-[1.35fr_1fr]",
                   isSpecial
                     ? "border-ink bg-ink text-cream"
                     : "border-border/60 bg-surface text-surface-foreground",
@@ -396,7 +397,7 @@ function PricingPage() {
                 {/* content */}
                 <div
                   className={cn(
-                    "relative p-8 md:p-12",
+                    "relative min-w-0 p-6 md:p-12",
                     reverse && "md:order-2",
                   )}
                 >
@@ -412,7 +413,7 @@ function PricingPage() {
 
                   <h2
                     className={cn(
-                      "relative font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl",
+                      "relative font-display text-2xl font-extrabold uppercase leading-tight break-words [hyphens:auto] sm:text-3xl md:text-4xl",
                       isSpecial ? "text-cream" : "text-foreground",
                     )}
                   >
