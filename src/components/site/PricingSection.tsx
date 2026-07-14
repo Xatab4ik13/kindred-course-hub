@@ -132,8 +132,9 @@ export function PricingSection() {
 
               </div>
 
-              <Link
-                to="/pricing"
+              <button
+                type="button"
+                onClick={() => openWith(p.goalId)}
                 className={cn(
                   "mt-4 inline-flex h-12 w-full items-center justify-center rounded-full text-sm font-bold uppercase tracking-wider transition-opacity hover:opacity-90",
                   isSpecial
@@ -142,7 +143,8 @@ export function PricingSection() {
                 )}
               >
                 {t("pricing.enroll")}
-              </Link>
+              </button>
+
             </motion.article>
           );
         })}
