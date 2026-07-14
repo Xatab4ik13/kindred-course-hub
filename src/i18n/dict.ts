@@ -147,7 +147,7 @@ export const dict = {
     "enroll.contact.lead": "Напишите нам напрямую — ответим быстро и расскажем о курсах, расписании и ценах.",
     "enroll.contact.tgDesc": "@china_ya · Ответим в течение часа",
     "enroll.contact.vkDesc": "vk.ru/chinaja · Группа школы",
-    "enroll.contact.footer": "Или позвоните нам — перейдите на вкладку «Оставить заявку»",
+    
     "enroll.error.name": "Введите имя",
     "enroll.error.phone": "Введите корректный телефон",
     "enroll.error.goal": "Выберите цель обучения",
