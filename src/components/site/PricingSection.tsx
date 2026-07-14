@@ -163,6 +163,6 @@ export function PricingSection() {
         </Link>
       </motion.div>
     </section>
-
   );
 }
+
