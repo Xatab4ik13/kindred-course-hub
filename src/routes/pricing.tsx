@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import {
@@ -8,16 +8,13 @@ import {
   Clock,
   Calendar,
   GraduationCap,
-  Baby,
-  Trophy,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { EnrollModal } from "@/components/site/EnrollModal";
 import { useI18n } from "@/providers/i18n";
-import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
+import { fadeUp, stagger } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pricing")({
@@ -27,34 +24,22 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Все программы школы китайского CHINAR: HSK 1–6, индивидуальные занятия, курсы для детей, подготовка к ЕГЭ. Выбирайте формат под свою цель.",
+          "Все программы школы китайского CHINAR: HSK 1–2, индивидуально, ЕГЭ, для школьников. Выбирайте формат под свою цель.",
       },
       { property: "og:title", content: "Все программы — CHINAR" },
       {
         property: "og:description",
-        content: "Полный каталог программ CHINAR — от нуля до HSK 6, ЕГЭ и детских курсов.",
+        content: "Полный каталог программ CHINAR — HSK, индивидуальные занятия, ЕГЭ и школьники.",
       },
     ],
   }),
   component: PricingPage,
 });
 
-type Category = "all" | "group" | "solo" | "kids" | "exam";
-
-type Program = {
-  id: string;
-  hanzi: string;
-  category: Exclude<Category, "all">;
-  goalId: string;
-  special?: boolean;
-  ru: ProgramCopy;
-  en: ProgramCopy;
-};
-
 type ProgramCopy = {
   name: string;
   tag: string;
-  desc: string;
+  desc?: string;
   price: string;
   unit: string;
   format: string;
@@ -62,283 +47,298 @@ type ProgramCopy = {
   duration: string;
   level: string;
   bullets: string[];
+  footer?: string;
+  highlight?: string;
   audience: string;
+};
+
+type Program = {
+  id: string;
+  hanzi: string;
+  goalId: string;
+  popular?: boolean;
+  ru: ProgramCopy;
+  en: ProgramCopy;
 };
 
 const PROGRAMS: Program[] = [
   {
     id: "hsk1",
     hanzi: "一",
-    category: "group",
     goalId: "hsk1",
-    special: true,
+    popular: true,
     ru: {
-      name: "HSK 1 за 3 месяца",
-      tag: "Стартуй с нуля",
-      desc: "Базовый курс для тех, кто впервые сталкивается с китайским. За 12 занятий вы освоите фонетику, 150 иероглифов и начнёте говорить простыми фразами.",
+      name: "HSK1 за 3 месяца",
+      tag: "Стартуй в китайском с нуля",
       price: "8 000 ₽",
-      unit: "/ месяц",
-      format: "Онлайн",
+      unit: "/ мес",
+      format: "Онлайн, мини-группа",
       group: "До 4 человек",
       duration: "3 месяца · 12 занятий",
       level: "С нуля → HSK 1",
       bullets: [
-        "Вся теория HSK 1 — грамматика, иероглифы, аудио- и письменные задания",
-        "Занятия по 1,5 часа в мини-группе до 4 человек",
-        "Карточки Quizlet и личный куратор, который проверит домашнее задание",
-        "Пробный экзамен HSK 1 в конце курса",
+        "Вся теория HSK1 — грамматика, иероглифы, аудио- и письменные задания.",
+        "12 занятий по 1,5 часа в мини-группах до 4 человек — максимум практики и внимания к каждому!",
+        "2 бесплатных пробных экзамена HSK в курсе — тренируйся на реальных заданиях.",
+        "Карточки Quizlet со всеми словами уровня — запоминай лексику легко и быстро.",
+        "Личный куратор проверит ДЗ и поможет не сойти с пути.",
       ],
-      audience: "Взрослые и подростки от 14 лет",
+      footer:
+        "Через 3 месяца ты будешь уверенно говорить, писать и понимать базовый китайский + сдашь HSK1 без стресса!",
+      highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! УСПЕЙ ЗАПИСАТЬСЯ!",
+      audience: "Взрослые и подростки",
     },
     en: {
-      name: "HSK 1 in 3 months",
-      tag: "Start from zero",
-      desc: "A starter course for absolute beginners. In 12 lessons you'll master phonetics, 150 characters and start speaking simple phrases.",
+      name: "HSK1 in 3 months",
+      tag: "Start Chinese from zero",
       price: "8 000 ₽",
       unit: "/ month",
-      format: "Online",
+      format: "Online mini-group",
       group: "Up to 4 people",
       duration: "3 months · 12 lessons",
       level: "Zero → HSK 1",
       bullets: [
-        "Full HSK 1 theory — grammar, characters, listening & writing",
-        "1.5-hour lessons in mini-groups up to 4",
-        "Quizlet decks and a personal tutor to check homework",
-        "Mock HSK 1 exam at the end of the course",
+        "Full HSK1 theory — grammar, characters, listening and writing tasks.",
+        "12 lessons of 1.5 hours in mini-groups up to 4 — maximum practice and attention.",
+        "2 free mock HSK exams during the course — train on real tasks.",
+        "Quizlet decks with all level vocabulary — memorise words easily.",
+        "Personal tutor checks homework and keeps you on track.",
       ],
-      audience: "Adults and teens 14+",
+      footer:
+        "In 3 months you'll confidently speak, write and understand basic Chinese + pass HSK1 without stress!",
+      highlight: "ONLY 4 SEATS PER GROUP! HURRY!",
+      audience: "Adults and teens",
     },
   },
   {
     id: "hsk2",
     hanzi: "二",
-    category: "group",
     goalId: "hsk2",
     ru: {
-      name: "HSK 2 — продолжающий",
-      tag: "Уверенный базовый уровень",
-      desc: "Развиваем базу HSK 1: 300 новых иероглифов, сложные конструкции, свободные диалоги на повседневные темы.",
-      price: "8 500 ₽",
-      unit: "/ месяц",
-      format: "Онлайн",
-      group: "До 5 человек",
+      name: "HSK2 за 4 месяца",
+      tag: "Подними китайский на новый уровень",
+      price: "8 000 ₽",
+      unit: "/ мес",
+      format: "Онлайн, мини-группа",
+      group: "До 4 человек",
       duration: "4 месяца · 16 занятий",
       level: "HSK 1 → HSK 2",
       bullets: [
-        "Расширенная лексика — 300 новых слов и иероглифов",
-        "Разговорные клубы с носителем языка раз в 2 недели",
-        "Разбор реальных диалогов из фильмов и подкастов",
-        "Подготовка к сертификации HSK 2",
+        "Полная программа HSK2 — грамматика, иероглифы, аудио- и письменные задания.",
+        "16 занятий по 1,5 часа в мини-группах до 4 человек — больше практики, больше прогресса!",
+        "2 бесплатных пробных экзамена HSK2 — отработай стратегии и сдай тест без ошибок.",
+        "Карточки Quizlet со всей лексикой уровня — запоминай слова играючи.",
+        "Личный куратор проверит домашние задания и поддержит на пути к цели.",
       ],
-      audience: "Ученики после HSK 1 или с базой самообучения",
+      footer:
+        "Через 4 месяца ты будешь свободно общаться на бытовые темы, писать тексты и уверенно сдашь HSK2!",
+      highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! СТАРТУЕМ СКОРО!",
+      audience: "После HSK 1",
     },
     en: {
-      name: "HSK 2 — continuing",
-      tag: "Confident basic level",
-      desc: "Building on HSK 1: 300 new characters, more complex structures, fluent everyday conversations.",
-      price: "8 500 ₽",
+      name: "HSK2 in 4 months",
+      tag: "Take Chinese to the next level",
+      price: "8 000 ₽",
       unit: "/ month",
-      format: "Online",
-      group: "Up to 5 people",
+      format: "Online mini-group",
+      group: "Up to 4 people",
       duration: "4 months · 16 lessons",
       level: "HSK 1 → HSK 2",
       bullets: [
-        "Extended vocabulary — 300 new words and characters",
-        "Conversation clubs with a native speaker every 2 weeks",
-        "Real dialogues from films and podcasts",
-        "HSK 2 certification prep",
+        "Full HSK2 programme — grammar, characters, listening and writing.",
+        "16 lessons of 1.5 hours in mini-groups up to 4 — more practice, more progress!",
+        "2 free HSK2 mock exams — train strategies and pass without mistakes.",
+        "Quizlet decks with all level vocabulary — memorise words with fun.",
+        "Personal tutor checks homework and supports you on the way.",
       ],
-      audience: "Students after HSK 1 or with self-study basics",
+      footer:
+        "In 4 months you'll speak freely on everyday topics, write texts and confidently pass HSK2!",
+      highlight: "ONLY 4 SEATS PER GROUP! STARTING SOON!",
+      audience: "After HSK 1",
     },
   },
   {
     id: "individual",
     hanzi: "个",
-    category: "solo",
     goalId: "individual",
     ru: {
-      name: "Индивидуально онлайн",
+      name: "Индивидуальный китайский онлайн",
       tag: "Ваш путь к успеху",
-      desc: "Персональная программа под вашу цель — от базовых фраз для путешествий до делового китайского и подготовки к работе в Китае.",
       price: "1 800 ₽",
       unit: "/ час",
       format: "Онлайн, 1 на 1",
       group: "Только вы и преподаватель",
       duration: "Гибкий график",
-      level: "Любой — от нуля до HSK 6",
+      level: "Любой уровень",
       bullets: [
-        "Преподаватели с уровнем HSK 5–6 — носители и эксперты языка",
-        "Программа под ваши цели: путешествия, бизнес, экзамены, работа",
-        "Занятия в удобное время — можно переносить за 12 часов",
-        "Материалы и запись каждого урока — учитесь в своём темпе",
+        "Преподаватели-профессионалы с уровнем HSK 5–6 — только проверенные носители и эксперты языка.",
+        "Программа под Ваши цели: от базовых разговорных фраз до бизнес-китайского или подготовки к HSK.",
+        "Собственные учебные материалы — эффективно и без скучной теории.",
+        "Любой возраст: дети, подростки, взрослые — учим всех и всегда!",
       ],
-      audience: "Дети от 10 лет, подростки, взрослые",
+      footer:
+        "Говорите уверенно, пишете грамотно, понимаете речь на слух — с нуля или до продвинутого уровня!",
+      highlight: "ИНДИВИДУАЛЬНЫЙ ПОДХОД ПО ЦЕНЕ ГРУППОВЫХ ЗАНЯТИЙ",
+      audience: "Дети, подростки, взрослые",
     },
     en: {
-      name: "One-to-one online",
-      tag: "Your path to fluency",
-      desc: "A personal programme for your goal — from travel basics to business Chinese and prep for working in China.",
+      name: "One-to-one Chinese online",
+      tag: "Your path to success",
       price: "1 800 ₽",
       unit: "/ hour",
       format: "Online, 1-on-1",
       group: "Just you and the teacher",
       duration: "Flexible schedule",
-      level: "Any — zero to HSK 6",
+      level: "Any level",
       bullets: [
-        "Teachers with HSK 5–6 — verified natives and experts",
-        "Programme tailored to your goals: travel, business, exams, work",
-        "Lessons at convenient times, reschedule up to 12h before",
-        "Recording and materials for every lesson",
+        "Professional teachers with HSK 5–6 — verified natives and language experts.",
+        "Programme for your goals: from basic phrases to business Chinese or HSK prep.",
+        "Own learning materials — effective and without boring theory.",
+        "Any age: kids, teens, adults — we teach everyone!",
       ],
-      audience: "Kids 10+, teens, adults",
+      footer:
+        "Speak confidently, write correctly, understand by ear — from zero to advanced!",
+      highlight: "ONE-TO-ONE AT GROUP PRICE",
+      audience: "Kids, teens, adults",
     },
   },
   {
-    id: "kids",
-    hanzi: "娃",
-    category: "kids",
-    goalId: "kids",
-    ru: {
-      name: "Китайский для детей",
-      tag: "Игровой формат 6–11 лет",
-      desc: "Занятия через игры, песни и мультфильмы. Дети запоминают иероглифы визуально и не боятся говорить.",
-      price: "6 500 ₽",
-      unit: "/ месяц",
-      format: "Онлайн в мини-группе",
-      group: "До 4 детей одного возраста",
-      duration: "4 занятия по 45 минут в месяц",
-      level: "С нуля",
-      bullets: [
-        "Игровой метод — иероглифы через карточки, песни и мультфильмы",
-        "Домашние задания в приложении, интересные ребёнку",
-        "Отчёт родителям после каждого месяца",
-        "Праздники китайского Нового года и мастер-классы",
-      ],
-      audience: "Дети 6–11 лет",
-    },
-    en: {
-      name: "Chinese for kids",
-      tag: "Playful format 6–11 y.o.",
-      desc: "Lessons through games, songs and cartoons. Kids memorise characters visually and speak without fear.",
-      price: "6 500 ₽",
-      unit: "/ month",
-      format: "Online mini-group",
-      group: "Up to 4 kids of the same age",
-      duration: "4 lessons of 45 min/month",
-      level: "From zero",
-      bullets: [
-        "Playful method — characters via cards, songs and cartoons",
-        "Homework in an app, engaging for the child",
-        "Monthly report for parents",
-        "Chinese New Year events and master-classes",
-      ],
-      audience: "Kids 6–11 y.o.",
-    },
-  },
-  {
-    id: "teens",
-    hanzi: "青",
-    category: "kids",
+    id: "group",
+    hanzi: "众",
     goalId: "group",
     ru: {
-      name: "Онлайн-школа для подростков",
-      tag: "5–11 класс",
-      desc: "Системная программа для школьников: подготовка к олимпиадам, ЕГЭ и поступлению в китайские вузы.",
-      price: "7 500 ₽",
-      unit: "/ месяц",
-      format: "Онлайн в группе",
-      group: "До 6 подростков",
-      duration: "Учебный год · 2 занятия в неделю",
-      level: "От нуля до HSK 4",
+      name: "Групповые занятия для начинающих",
+      tag: "Подними китайский на новый уровень",
+      price: "5 000 ₽",
+      unit: "/ мес",
+      format: "Онлайн, мини-группа",
+      group: "До 4 человек",
+      duration: "5 занятий по 1,5 часа",
+      level: "С нуля",
       bullets: [
-        "Программа согласована со школьной нагрузкой",
-        "Разбор олимпиадных заданий и первый шаг к ЕГЭ",
-        "Проектная работа: страноведение и культура Китая",
-        "Обмен и стажировки с китайскими партнёрскими школами",
+        "Подойдёт для тех, кто хочет начать изучать китайский язык.",
+        "5 занятий по 1,5 часа в мини-группах до 4 человек — больше практики, больше прогресса!",
+        "Бесплатные пробные экзамены HSK — отработай стратегии и сдай тест без ошибок.",
+        "Карточки Quizlet со всей лексикой уровня — запоминай слова играючи.",
+        "Личный куратор проверит домашние задания и поддержит на пути к цели.",
       ],
-      audience: "Школьники 11–17 лет",
+      highlight: "ТОЛЬКО 4 МЕСТА В ГРУППЕ! СТАРТУЕМ СКОРО!",
+      audience: "Взрослые и подростки",
     },
     en: {
-      name: "Online school for teens",
-      tag: "Grades 5–11",
-      desc: "A systematic programme for schoolchildren: olympiads, EGE and admission to Chinese universities.",
-      price: "7 500 ₽",
+      name: "Group lessons for beginners",
+      tag: "Take Chinese to the next level",
+      price: "5 000 ₽",
       unit: "/ month",
-      format: "Online in a group",
-      group: "Up to 6 teens",
-      duration: "Academic year · 2 lessons/week",
-      level: "Zero to HSK 4",
+      format: "Online mini-group",
+      group: "Up to 4 people",
+      duration: "5 lessons of 1.5 h",
+      level: "From zero",
       bullets: [
-        "Programme aligned with school workload",
-        "Olympiad tasks and first steps to EGE",
-        "Project work: China studies and culture",
-        "Exchange with partner schools in China",
+        "For those who want to start learning Chinese.",
+        "5 lessons of 1.5 h in mini-groups up to 4 — more practice, more progress!",
+        "Free HSK mock exams — train strategies and pass without mistakes.",
+        "Quizlet decks with all level vocabulary — memorise words with fun.",
+        "Personal tutor checks homework and supports you on the way.",
       ],
-      audience: "Students 11–17 y.o.",
+      highlight: "ONLY 4 SEATS PER GROUP! STARTING SOON!",
+      audience: "Adults and teens",
     },
   },
   {
     id: "ege",
     hanzi: "百",
-    category: "exam",
     goalId: "ege",
     ru: {
-      name: "ЕГЭ на 100 баллов",
-      tag: "С Тимофеем — 99 баллов ЕГЭ-2023",
-      desc: "Точечная подготовка к ЕГЭ по китайскому языку. Все секреты экзамена, эксклюзивные материалы и разбор устной части.",
+      name: "ЕГЭ по китайскому на 100 баллов",
+      tag: "ChinaЯ",
       price: "1 800 ₽",
       unit: "/ час",
-      format: "Индивидуально или мини-группа",
+      format: "Индивидуально или в группе",
       group: "1 на 1 или до 3 человек",
       duration: "6–12 месяцев до экзамена",
-      level: "HSK 2 → 90+ баллов ЕГЭ",
+      level: "HSK 2 → 90+ баллов",
       bullets: [
-        "Старший преподаватель раскроет все секреты экзамена",
-        "Эксклюзивные материалы для устной части",
-        "Пробные экзамены каждый месяц с разбором ошибок",
-        "Психологическая подготовка к формату ЕГЭ",
+        "Старший преподаватель: Тимофей (99 баллов на ЕГЭ-2023) раскроет все секреты экзамена!",
+        "Эксклюзивные материалы для устной части — учим говорить без ошибок и страха.",
+        "Индивидуально или в группе — выбирай удобный формат и скорость подготовки.",
       ],
+      footer:
+        "Вы сдадите ЕГЭ на высокий балл, как Тимофей, и получите преимущество при поступлении!",
+      highlight: "ИНДИВИДУАЛЬНЫЙ ПОДХОД ПО ЦЕНЕ ГРУППОВЫХ ЗАНЯТИЙ",
       audience: "Ученики 10–11 классов",
     },
     en: {
-      name: "EGE for 100 points",
-      tag: "With Timofey — 99 points EGE-2023",
-      desc: "Focused prep for the Chinese EGE. Every secret of the exam, exclusive materials and oral-part breakdown.",
+      name: "Chinese EGE for 100 points",
+      tag: "ChinaЯ",
       price: "1 800 ₽",
       unit: "/ hour",
-      format: "One-to-one or mini-group",
+      format: "One-to-one or group",
       group: "1-on-1 or up to 3",
       duration: "6–12 months before exam",
-      level: "HSK 2 → 90+ EGE points",
+      level: "HSK 2 → 90+ points",
       bullets: [
-        "Senior teacher reveals every secret of the exam",
-        "Exclusive materials for the oral part",
-        "Monthly mock exams with error analysis",
-        "Psychological prep for the EGE format",
+        "Senior teacher: Timofey (99 points on EGE-2023) reveals every secret of the exam!",
+        "Exclusive materials for the oral part — speak without mistakes or fear.",
+        "One-to-one or group — pick the format and pace that fits you.",
       ],
+      footer:
+        "You'll pass the EGE with a high score like Timofey and gain an admission advantage!",
+      highlight: "ONE-TO-ONE AT GROUP PRICE",
       audience: "Grade 10–11 students",
+    },
+  },
+  {
+    id: "school",
+    hanzi: "校",
+    goalId: "kids",
+    ru: {
+      name: "Китайский для школьников онлайн",
+      tag: "Учим легко и эффективно",
+      price: "1 800 ₽",
+      unit: "/ час",
+      format: "Онлайн, индивидуально",
+      group: "1 на 1 с преподавателем",
+      duration: "Гибкий график",
+      level: "Школьная программа",
+      bullets: [
+        "Преподаватели-профи с HSK 5–6 + опыт работы с детьми — объяснят даже сложные темы просто!",
+        "Под школьную программу: помощь с домашними заданиями, подготовка к контрольным и экзаменам.",
+        "Индивидуальный график — занятия в удобное время, даже после уроков.",
+        "Собственные материалы — увлекательные задания, игры и тесты для школьников.",
+      ],
+      footer:
+        "Ребёнок полюбит китайский, подтянет оценки и будет уверенно говорить на уроках.",
+      highlight: "БЕСПЛАТНЫЙ ПРОБНЫЙ УРОК",
+      audience: "Школьники",
+    },
+    en: {
+      name: "Chinese for schoolkids online",
+      tag: "Learn easily and effectively",
+      price: "1 800 ₽",
+      unit: "/ hour",
+      format: "Online, 1-on-1",
+      group: "1-on-1 with a teacher",
+      duration: "Flexible schedule",
+      level: "School curriculum",
+      bullets: [
+        "Pro teachers with HSK 5–6 and experience with kids — even hard topics made simple!",
+        "Aligned with school: homework help, prep for tests and exams.",
+        "Individual schedule — lessons at convenient times, even after school.",
+        "Own materials — engaging tasks, games and tests for schoolkids.",
+      ],
+      footer:
+        "Your child will love Chinese, improve grades and speak confidently in class.",
+      highlight: "FREE TRIAL LESSON",
+      audience: "Schoolkids",
     },
   },
 ];
 
-const CAT_META: Record<Category, { ru: string; en: string; icon: typeof Users }> = {
-  all: { ru: "Все программы", en: "All programmes", icon: Sparkles },
-  group: { ru: "Группы", en: "Groups", icon: Users },
-  solo: { ru: "Индивидуально", en: "One-to-one", icon: User },
-  kids: { ru: "Дети и школа", en: "Kids & school", icon: Baby },
-  exam: { ru: "Экзамены", en: "Exams", icon: Trophy },
-};
-
 function PricingPage() {
   const { t, lang } = useI18n();
-  const [cat, setCat] = useState<Category>("all");
   const [open, setOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<string | undefined>();
-
-  const filtered = useMemo(
-    () => (cat === "all" ? PROGRAMS : PROGRAMS.filter((p) => p.category === cat)),
-    [cat],
-  );
 
   const openWith = (goalId?: string) => {
     setSelectedGoal(goalId);
@@ -348,8 +348,8 @@ function PricingPage() {
   const heroTitle = lang === "ru" ? "Все программы" : "All programmes";
   const heroLead =
     lang === "ru"
-      ? "От первого 你好 до сдачи HSK 6 и ЕГЭ — выберите формат под свою цель и возраст. Все программы ведут преподаватели с уровнем HSK 5–6."
-      : "From your first 你好 to HSK 6 and EGE — pick the format that fits your goal and age. Every programme is led by teachers with HSK 5–6.";
+      ? "От первого 你好 до сдачи HSK и ЕГЭ — выберите формат под свою цель и возраст. Все программы ведут преподаватели с уровнем HSK 5–6."
+      : "From your first 你好 to HSK and EGE — pick the format that fits your goal and age. Every programme is led by teachers with HSK 5–6.";
   const eyebrow = lang === "ru" ? "Каталог" : "Catalogue";
 
   return (
@@ -375,45 +375,20 @@ function PricingPage() {
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {heroLead}
           </p>
-
-          {/* Filter chips */}
-          <div className="mt-10 flex flex-wrap gap-2">
-            {(Object.keys(CAT_META) as Category[]).map((c) => {
-              const active = cat === c;
-              const Icon = CAT_META[c].icon;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCat(c)}
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition",
-                    active
-                      ? "border-brand bg-brand text-brand-foreground shadow-soft"
-                      : "border-border/70 bg-surface text-foreground hover:border-brand/60 hover:text-brand",
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {CAT_META[c][lang]}
-                </button>
-              );
-            })}
-          </div>
         </div>
       </section>
 
       {/* Programs list */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
         <motion.div
-          key={cat}
           initial="hidden"
           animate="show"
           variants={stagger(0.08)}
           className="space-y-8"
         >
-          {filtered.map((p, i) => {
+          {PROGRAMS.map((p, i) => {
             const c = p[lang];
-            const isSpecial = !!p.special;
+            const isSpecial = !!p.popular;
             const reverse = i % 2 === 1;
             const meta = [
               { icon: Calendar, label: c.format },
@@ -449,52 +424,32 @@ function PricingPage() {
                     {p.hanzi}
                   </div>
 
-                  {isSpecial && (
-                    <div className="relative inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-foreground">
-                      <Sparkles className="h-3 w-3" />
-                      {lang === "ru" ? "Хит продаж" : "Bestseller"}
-                    </div>
-                  )}
-
                   <h2
                     className={cn(
-                      "relative mt-4 font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl",
+                      "relative font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl",
                       isSpecial ? "text-cream" : "text-foreground",
                     )}
                   >
                     {c.name}
                   </h2>
                   <p className="relative mt-2 text-sm font-semibold text-brand">{c.tag}</p>
-                  <p
-                    className={cn(
-                      "relative mt-5 max-w-xl text-[15px] leading-relaxed",
-                      isSpecial ? "text-cream/80" : "text-surface-foreground/80",
-                    )}
-                  >
-                    {c.desc}
-                  </p>
 
                   {/* meta grid */}
-                  <div className="relative mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div className="relative mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
                     {meta.map((m) => (
                       <div
                         key={m.label}
                         className={cn(
-                          "rounded-2xl border p-3",
+                          "flex min-w-0 flex-col gap-2 rounded-2xl border p-3",
                           isSpecial
                             ? "border-cream/15 bg-cream/[0.04]"
                             : "border-border/60 bg-background/60",
                         )}
                       >
-                        <m.icon
-                          className={cn(
-                            "h-4 w-4",
-                            isSpecial ? "text-brand" : "text-brand",
-                          )}
-                        />
+                        <m.icon className="h-4 w-4 shrink-0 text-brand" />
                         <div
                           className={cn(
-                            "mt-2 text-xs font-semibold leading-snug",
+                            "text-[11px] font-semibold leading-snug break-words hyphens-auto",
                             isSpecial ? "text-cream/90" : "text-foreground",
                           )}
                         >
@@ -526,29 +481,48 @@ function PricingPage() {
                     reverse && "md:order-1 md:border-l-0 md:border-r",
                   )}
                 >
-                  <ul className="space-y-3">
-                    {c.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed">
-                        <span
-                          className={cn(
-                            "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full",
-                            isSpecial
-                              ? "bg-brand text-brand-foreground"
-                              : "bg-brand-soft text-brand",
-                          )}
-                        >
-                          <Check className="h-3 w-3" strokeWidth={3} />
-                        </span>
-                        <span
-                          className={cn(
-                            isSpecial ? "text-cream/85" : "text-surface-foreground/85",
-                          )}
-                        >
-                          {b}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="space-y-5">
+                    <ul className="space-y-3">
+                      {c.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed">
+                          <span
+                            className={cn(
+                              "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full",
+                              isSpecial
+                                ? "bg-brand text-brand-foreground"
+                                : "bg-brand-soft text-brand",
+                            )}
+                          >
+                            <Check className="h-3 w-3" strokeWidth={3} />
+                          </span>
+                          <span
+                            className={cn(
+                              isSpecial ? "text-cream/85" : "text-surface-foreground/85",
+                            )}
+                          >
+                            {b}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {c.footer && (
+                      <p
+                        className={cn(
+                          "text-sm italic leading-relaxed",
+                          isSpecial ? "text-cream/70" : "text-muted-foreground",
+                        )}
+                      >
+                        {c.footer}
+                      </p>
+                    )}
+
+                    {c.highlight && (
+                      <p className="text-sm font-bold uppercase leading-snug tracking-wide text-brand">
+                        {c.highlight}
+                      </p>
+                    )}
+                  </div>
 
                   <div>
                     <div
