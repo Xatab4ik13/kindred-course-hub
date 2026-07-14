@@ -12,6 +12,20 @@ import mascotDay1 from "@/assets/mascot/day-1.png";
 import mascotDay2 from "@/assets/mascot/day-2.png";
 import mascotDay3 from "@/assets/mascot/day-3.png";
 import mascotDay4 from "@/assets/mascot/day-4.png";
+import teacher1 from "@/assets/teachers/teacher-1.jpg";
+import teacher2 from "@/assets/teachers/teacher-2.jpg";
+import teacher3 from "@/assets/teachers/teacher-3.jpg";
+import teacher4 from "@/assets/teachers/teacher-4.jpg";
+
+// Mock-mapping инициалов на фото. В будущем фото придёт с бекенда
+// (тот же URL, что и на карточке преподавателя, ужатый до размера аватарки).
+// Если фото нет — рендерим инициалы.
+export const TEACHER_PHOTOS: Record<string, string> = {
+  "ТБ": teacher1,
+  "НР": teacher2,
+  "ВГ": teacher3,
+  "АС": teacher4,
+};
 
 export const DAY_KEYS: DictKey[] = [
   "days.mon",
