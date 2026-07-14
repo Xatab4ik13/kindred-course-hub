@@ -1,5 +1,4 @@
 import { motion } from "motion/react";
-import heroVideo from "../../../public/hero-bg.mp4.asset.json";
 
 /**
  * Hero — тишина и имя.
@@ -17,7 +16,7 @@ export function HeroSection() {
         loop
         playsInline
         className="pointer-events-none absolute inset-0 -z-30 h-full w-full object-cover"
-        src={heroVideo.url}
+        src="/hero-bg.mp4"
       />
 
       {/* Персиковый градиент поверх видео — как раньше, видео едва проступает */}
