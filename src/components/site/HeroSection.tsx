@@ -18,7 +18,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display font-black leading-none tracking-[-0.055em] text-ink text-center"
+          className="font-display font-black leading-none tracking-[-0.055em] text-black text-center"
           style={{ fontSize: "clamp(6rem, 22vw, 22rem)" }}
         >
           CHINAR
