@@ -25,17 +25,10 @@ export function PricingSection() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-      <div className="flex items-end justify-between gap-4">
-        <SectionHeader eyebrow={t("pricing.title")} title={t("pricing.subtitle")} />
-        <Link
-          to="/pricing"
-          className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
-        >
-          {t("pricing.cta")} <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      <SectionHeader eyebrow={t("pricing.title")} title={t("pricing.subtitle")} />
 
       <motion.div
+
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
@@ -142,6 +135,35 @@ export function PricingSection() {
           );
         })}
       </motion.div>
+
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+        variants={fadeUp}
+        className="mt-12 flex justify-center"
+      >
+        <Link
+          to="/pricing"
+          className="group relative inline-flex items-center gap-4 overflow-hidden px-14 py-7 text-lg font-bold uppercase tracking-wider text-brand-foreground shadow-float transition hover:shadow-glow"
+          style={{
+            borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
+            backgroundColor: "var(--brand)",
+          }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[6rem] font-black leading-none tracking-tighter text-white/10"
+            style={{ letterSpacing: "-0.05em" }}
+          >
+            全部课程
+          </span>
+
+          <span className="relative">{t("pricing.cta")}</span>
+          <ArrowRight className="relative h-6 w-6 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </motion.div>
     </section>
   );
 }
+
