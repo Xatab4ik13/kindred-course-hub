@@ -239,9 +239,6 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                         desc={t("enroll.contact.vkDesc")}
                       />
                     </div>
-                    <p className="mt-6 text-center text-xs text-muted-foreground">
-                      {t("enroll.contact.footer")}
-                    </p>
                   </div>
                 )}
               </div>
