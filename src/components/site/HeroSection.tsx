@@ -1,18 +1,37 @@
 import { motion } from "motion/react";
+import heroVideo from "../../../public/hero-bg.mp4.asset.json";
 
 /**
- * Hero — тишина и имя. Только коралловый фон и wordmark CHINAR.
- * Никаких подписей, дат, ссылок, монограмм — чистая обложка.
+ * Hero — тишина и имя.
+ * Под персиковым градиентом течёт абстрактное видео в китайской манере.
+ * Текст остаётся на сплошном градиенте, видео лишь едва проступает сквозь него.
  */
 export function HeroSection() {
   return (
-    <section
-      className="relative isolate overflow-hidden text-brand-foreground"
-      style={{
-        background:
-          "linear-gradient(160deg, oklch(0.82 0.10 62) 0%, oklch(0.76 0.13 52) 35%, oklch(0.68 0.15 42) 100%)",
-      }}
-    >
+    <section className="relative isolate overflow-hidden text-brand-foreground">
+      {/* Видео-фон */}
+      <video
+        aria-hidden
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="pointer-events-none absolute inset-0 -z-30 h-full w-full object-cover"
+        src={heroVideo.url}
+      />
+
+      {/* Персиковый градиент поверх видео — сплошной под текстом, прозрачный к краям */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-20"
+        style={{
+          background:
+            "linear-gradient(160deg, oklch(0.82 0.10 62) 0%, oklch(0.76 0.13 52) 35%, oklch(0.68 0.15 42) 100%)",
+          WebkitMaskImage:
+            "radial-gradient(circle at 50% 42%, black 0%, black 22%, transparent 60%)",
+          maskImage:
+            "radial-gradient(circle at 50% 42%, black 0%, black 22%, transparent 60%)",
+        }}
+      />
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_20%,oklch(0.62_0.16_35/0.45),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(90%_60%_at_10%_90%,oklch(0.58_0.14_30/0.25),transparent_60%)]" />
