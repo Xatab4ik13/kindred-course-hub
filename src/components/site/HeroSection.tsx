@@ -19,7 +19,7 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-grain opacity-30 mix-blend-overlay" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-64px)] max-w-[110rem] items-center justify-center px-6 pb-40 md:px-12 md:pb-56">
+      <div className="relative mx-auto flex min-h-[calc(100svh-64px)] max-w-[110rem] flex-col items-center justify-center px-6 pb-40 md:px-12 md:pb-56">
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,6 +29,18 @@ export function HeroSection() {
         >
           CHINAR
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-4 md:mt-6 text-center font-sans font-medium leading-tight tracking-wide"
+          style={{ fontSize: "clamp(1.125rem, 2.6vw, 2.25rem)" }}
+        >
+          <span className="text-brand-foreground">Онлайн школа</span>
+          <br />
+          <span className="text-brand">китайского языка</span>
+        </motion.p>
       </div>
 
       <div
