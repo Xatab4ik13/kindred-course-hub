@@ -6,10 +6,10 @@ import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import type { DictKey } from "@/i18n/dict";
 import { cn } from "@/lib/utils";
-import teacher1 from "@/assets/teachers/teacher-1.jpg";
-import teacher2 from "@/assets/teachers/teacher-2.jpg";
-import teacher3 from "@/assets/teachers/teacher-3.jpg";
-import teacher4 from "@/assets/teachers/teacher-4.jpg";
+import teacher1 from "@/assets/teachers/teacher-1.webp";
+import teacher2 from "@/assets/teachers/teacher-2.webp";
+import teacher3 from "@/assets/teachers/teacher-3.webp";
+import teacher4 from "@/assets/teachers/teacher-4.webp";
 import lead1 from "@/assets/leadership/timofey.jpg";
 import lead2 from "@/assets/leadership/nikolay.jpg";
 import lead3 from "@/assets/leadership/vadim.jpg";
@@ -91,9 +91,11 @@ function PersonCard({
         <img
           src={person.photo}
           alt={t(person.nameKey)}
-          loading="lazy"
-          width={768}
-          height={1024}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          width={720}
+          height={960}
           className="h-full w-full object-cover"
         />
         <div

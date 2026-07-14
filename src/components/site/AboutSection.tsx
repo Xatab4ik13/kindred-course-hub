@@ -90,7 +90,10 @@ export function AboutSection() {
               <span className="text-sm font-semibold uppercase tracking-widest text-brand">
                 {t("about.eyebrow")}
               </span>
-              <h2 className="mt-4 break-words font-display text-4xl font-black leading-[1.05] tracking-tight md:text-5xl">
+              <h2
+                lang="ru"
+                className="mt-4 break-words font-display text-[2rem] font-black leading-[1.05] tracking-tight [hyphens:auto] sm:text-4xl md:text-5xl"
+              >
                 <span className="block">{t("about.title.1")}</span>
                 <span className="block text-brand">{t("about.title.2")}</span>
               </h2>

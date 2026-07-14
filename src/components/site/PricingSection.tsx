@@ -78,8 +78,9 @@ export function PricingSection() {
               )}
 
               <h3
+                lang="ru"
                 className={cn(
-                  "font-display text-2xl font-extrabold uppercase leading-tight mt-4",
+                  "mt-4 break-words font-display text-xl font-extrabold uppercase leading-tight [hyphens:auto] sm:text-2xl",
                   isSpecial ? "text-cream" : "text-foreground",
                 )}
               >
