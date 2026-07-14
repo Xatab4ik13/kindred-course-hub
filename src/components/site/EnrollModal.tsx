@@ -71,11 +71,11 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/70"
             onClick={onClose}
             aria-hidden
           />
@@ -83,12 +83,14 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
           <motion.div
             role="dialog"
             aria-modal="true"
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            style={{ willChange: "transform, opacity" }}
             className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] bg-background shadow-float"
           >
+
             {/* Decorative hanzi */}
             <div
               aria-hidden
