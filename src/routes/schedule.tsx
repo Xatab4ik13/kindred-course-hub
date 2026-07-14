@@ -8,6 +8,7 @@ import { EnrollModal } from "@/components/site/EnrollModal";
 import {
   DayPlaque,
   LessonCard,
+  MobileDayPager,
   WEEK_TEMPLATE,
   DAY_KEYS,
   DAY_SHORT_RU,
