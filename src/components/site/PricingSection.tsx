@@ -113,18 +113,16 @@ export function PricingSection() {
                   isSpecial ? "border-cream/15" : "border-border/60",
                 )}
               >
-                <div>
-                  <div className="font-display text-4xl font-extrabold leading-none">
-                    {t(k(p.id, "price"))}
-                  </div>
-                  <div
+                <div className="flex items-baseline gap-2 whitespace-nowrap font-display text-[2.25rem] font-extrabold leading-none">
+                  {t(k(p.id, "price"))}
+                  <span
                     className={cn(
-                      "mt-1 text-xs uppercase tracking-wider",
+                      "text-xs uppercase tracking-wider",
                       isSpecial ? "text-cream/60" : "text-muted-foreground",
                     )}
                   >
                     {t(k(p.id, "unit"))}
-                  </div>
+                  </span>
                 </div>
                 <Link
                   to="/pricing"
