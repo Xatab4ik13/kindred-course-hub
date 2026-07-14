@@ -409,11 +409,13 @@ function LessonCapsule({
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-4 text-left shadow-[0_12px_30px_-12px_rgba(0,0,0,0.06)] backdrop-blur-md transition-all",
-        tone.border,
-        "border-b-4",
-        !disabled && "hover:bg-white hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)]",
-        disabled && "cursor-not-allowed",
+        "group relative overflow-hidden rounded-2xl p-4 text-left transition-all",
+        // Multi-layer glass
+        "border border-white/70 bg-white/55 backdrop-blur-xl",
+        "shadow-[0_10px_30px_-14px_rgba(30,20,15,0.25),0_1px_0_0_rgba(255,255,255,0.9)_inset]",
+        !disabled && "hover:bg-white/75 hover:border-white/90",
+        !disabled && "hover:shadow-[0_22px_40px_-16px_rgba(30,20,15,0.28),0_1px_0_0_rgba(255,255,255,1)_inset]",
+        disabled && "cursor-not-allowed opacity-70",
       )}
     >
       {/* Subtle tone gradient wash */}
