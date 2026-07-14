@@ -1,52 +1,28 @@
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Check, ArrowRight } from "lucide-react";
-import { SoftCard } from "@/components/site/SoftCard";
+import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/FeaturesSection";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import type { DictKey } from "@/i18n/dict";
 
 type Plan = {
-  name: { ru: string; en: string };
-  price: string;
-  perks: { ru: string; en: string }[];
+  id: "p1" | "p2" | "p3";
+  hanzi: string;
   special?: boolean;
 };
 
 const PLANS: Plan[] = [
-  {
-    name: { ru: "Индивидуально", en: "One-to-one" },
-    price: "1 800 ₽",
-    perks: [
-      { ru: "Персональная программа", en: "Personal programme" },
-      { ru: "Свободный график", en: "Flexible schedule" },
-      { ru: "Онлайн или офлайн", en: "Online or offline" },
-    ],
-  },
-  {
-    name: { ru: "Группа до 6", en: "Group up to 6" },
-    price: "12 000 ₽",
-    special: true,
-    perks: [
-      { ru: "2 занятия в неделю", en: "2 lessons a week" },
-      { ru: "Носитель + методист", en: "Native + methodist" },
-      { ru: "Клуб общения включён", en: "Speaking club included" },
-    ],
-  },
-  {
-    name: { ru: "Детская группа", en: "Kids group" },
-    price: "8 900 ₽",
-    perks: [
-      { ru: "Игровой формат", en: "Playful format" },
-      { ru: "От 6 лет", en: "Age 6+" },
-      { ru: "Открытые уроки", en: "Open lessons" },
-    ],
-  },
+  { id: "p1", hanzi: "一", special: true },
+  { id: "p2", hanzi: "个" },
+  { id: "p3", hanzi: "百" },
 ];
 
 export function PricingSection() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
+  const k = (id: Plan["id"], suffix: string) => `pricing.${id}.${suffix}` as DictKey;
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <div className="flex items-end justify-between gap-4">
@@ -63,53 +39,121 @@ export function PricingSection() {
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        variants={stagger(0.1)}
-        className="mt-12 grid gap-5 md:grid-cols-3"
+        variants={stagger(0.08)}
+        className="mt-12 grid gap-6 md:grid-cols-3"
       >
-        {PLANS.map((p) => (
-          <motion.div key={p.name.en} variants={fadeUp}>
-            <SoftCard
+        {PLANS.map((p) => {
+          const isSpecial = p.special;
+          return (
+            <motion.article
+              key={p.id}
+              variants={fadeUp}
               className={cn(
-                "relative p-7 h-full flex flex-col",
-                p.special && "bg-brand text-brand-foreground border-brand shadow-float",
+                "relative flex flex-col overflow-hidden rounded-[2rem] p-8 border transition-shadow",
+                isSpecial
+                  ? "bg-ink text-cream border-ink shadow-float"
+                  : "bg-surface text-surface-foreground border-border/60 shadow-soft",
               )}
             >
-              {p.special && (
-                <div className="absolute -top-3 right-6 rounded-full bg-foreground text-background px-3 py-1 text-xs font-semibold">
+              {/* decorative hanzi */}
+              <div
+                aria-hidden
+                className={cn(
+                  "pointer-events-none absolute -right-6 -top-10 font-hanzi text-[12rem] leading-none select-none",
+                  isSpecial ? "text-cream/5" : "text-brand/5",
+                )}
+              >
+                {p.hanzi}
+              </div>
+
+              {isSpecial && (
+                <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-brand px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-foreground">
                   {t("pricing.special")}
                 </div>
               )}
-              <div className={cn("text-sm font-semibold uppercase tracking-wider", p.special ? "text-brand-foreground/80" : "text-muted-foreground")}>
-                {p.name[lang]}
-              </div>
-              <div className="mt-3 flex items-baseline gap-1">
-                <div className="font-display text-4xl font-extrabold">{p.price}</div>
-                <div className={cn("text-sm", p.special ? "text-brand-foreground/80" : "text-muted-foreground")}>
-                  {t("pricing.perMonth")}
-                </div>
-              </div>
-              <ul className="mt-6 space-y-2.5 flex-1">
-                {p.perks.map((perk) => (
-                  <li key={perk.en} className="flex items-start gap-2 text-sm">
-                    <Check className={cn("mt-0.5 h-4 w-4 shrink-0", p.special ? "text-brand-foreground" : "text-brand")} />
-                    {perk[lang]}
+
+              <h3
+                className={cn(
+                  "font-display text-2xl font-extrabold uppercase leading-tight mt-4",
+                  isSpecial ? "text-cream" : "text-foreground",
+                )}
+              >
+                {t(k(p.id, "name"))}
+              </h3>
+              <p
+                className={cn(
+                  "mt-2 text-sm font-semibold",
+                  isSpecial ? "text-brand" : "text-brand",
+                )}
+              >
+                {t(k(p.id, "tag"))}
+              </p>
+
+              <ul className="mt-6 space-y-3 flex-1">
+                {(["b1", "b2", "b3"] as const).map((b) => (
+                  <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed">
+                    <span
+                      className={cn(
+                        "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full",
+                        isSpecial ? "bg-brand text-brand-foreground" : "bg-brand-soft text-brand",
+                      )}
+                    >
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    </span>
+                    <span className={isSpecial ? "text-cream/85" : "text-surface-foreground/85"}>
+                      {t(k(p.id, b))}
+                    </span>
                   </li>
                 ))}
               </ul>
+
+              <div
+                className={cn(
+                  "mt-8 pt-6 border-t flex items-end justify-between gap-3",
+                  isSpecial ? "border-cream/15" : "border-border/60",
+                )}
+              >
+                <div>
+                  <div className="font-display text-4xl font-extrabold leading-none">
+                    {t(k(p.id, "price"))}
+                  </div>
+                  <div
+                    className={cn(
+                      "mt-1 text-xs uppercase tracking-wider",
+                      isSpecial ? "text-cream/60" : "text-muted-foreground",
+                    )}
+                  >
+                    {t(k(p.id, "unit"))}
+                  </div>
+                </div>
+                <Link
+                  to="/pricing"
+                  className={cn(
+                    "group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                    isSpecial
+                      ? "bg-cream/10 text-cream hover:bg-cream/20"
+                      : "bg-transparent text-brand hover:bg-brand-soft",
+                  )}
+                >
+                  {t("pricing.more")}
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </Link>
+              </div>
+
               <Link
                 to="/pricing"
                 className={cn(
-                  "mt-7 inline-flex h-11 items-center justify-center rounded-full text-sm font-semibold transition",
-                  p.special
-                    ? "bg-background text-foreground hover:opacity-90"
-                    : "bg-brand text-brand-foreground hover:opacity-90",
+                  "mt-4 inline-flex h-12 w-full items-center justify-center rounded-full text-sm font-bold uppercase tracking-wider transition-opacity hover:opacity-90",
+                  isSpecial
+                    ? "bg-brand text-brand-foreground"
+                    : "bg-ink text-cream",
                 )}
               >
-                {t("cta.enroll")}
+                {t("pricing.enroll")}
               </Link>
-            </SoftCard>
-          </motion.div>
-        ))}
+            </motion.article>
+          );
+        })}
       </motion.div>
     </section>
   );
