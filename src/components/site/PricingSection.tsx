@@ -109,35 +109,36 @@ export function PricingSection() {
 
               <div
                 className={cn(
-                  "mt-8 pt-6 border-t flex items-end justify-between gap-3",
+                  "mt-8 pt-6 border-t",
                   isSpecial ? "border-cream/15" : "border-border/60",
                 )}
               >
-                <div>
-                  <div className="font-display text-4xl font-extrabold leading-none">
-                    {t(k(p.id, "price"))}
-                  </div>
-                  <div
+                <div className="flex items-baseline gap-2 whitespace-nowrap font-display text-[2.25rem] font-extrabold leading-none">
+                  {t(k(p.id, "price"))}
+                  <span
                     className={cn(
-                      "mt-1 text-xs uppercase tracking-wider",
+                      "text-xs uppercase tracking-wider",
                       isSpecial ? "text-cream/60" : "text-muted-foreground",
                     )}
                   >
                     {t(k(p.id, "unit"))}
-                  </div>
+                  </span>
                 </div>
-                <Link
-                  to="/pricing"
-                  className={cn(
-                    "group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                    isSpecial
-                      ? "bg-cream/10 text-cream hover:bg-cream/20"
-                      : "bg-transparent text-brand hover:bg-brand-soft",
-                  )}
-                >
-                  {t("pricing.more")}
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </Link>
+
+                <div className="mt-2 flex justify-end">
+                  <Link
+                    to="/pricing"
+                    className={cn(
+                      "group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                      isSpecial
+                        ? "bg-cream/10 text-cream hover:bg-cream/20"
+                        : "bg-transparent text-brand hover:bg-brand-soft",
+                    )}
+                  >
+                    {t("pricing.more")}
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
               </div>
 
               <Link
