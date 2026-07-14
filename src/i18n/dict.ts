@@ -177,7 +177,6 @@ export const dict = {
     "pricing.subtitle": "Choose your learning format",
     "pricing.special": "Popular",
     "pricing.cta": "All programmes",
-    "pricing.more": "Learn more",
     "pricing.enroll": "Choose plan",
     "pricing.p1.name": "HSK1 in 3 months",
     "pricing.p1.tag": "Start Chinese from zero",
