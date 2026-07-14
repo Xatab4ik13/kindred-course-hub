@@ -10,7 +10,6 @@ import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { CtaSection } from "@/components/site/CtaSection";
-import { MascotCompanion } from "@/components/site/MascotCompanion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,7 +59,7 @@ function Index() {
         </div>
       </main>
       <Footer />
-      <MascotCompanion />
+      
     </div>
   );
 }
