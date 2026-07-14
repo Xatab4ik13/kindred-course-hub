@@ -44,10 +44,10 @@ export function ReviewsSection() {
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8">
 
-        <div className="text-sm font-semibold uppercase tracking-widest text-brand-foreground">
+        <div className="text-sm font-semibold uppercase tracking-widest text-white">
           {t("reviews.title")}
         </div>
-        <h2 className="mt-2 font-display text-4xl font-extrabold tracking-tight text-brand-foreground md:text-5xl">
+        <h2 className="mt-2 font-display text-4xl font-extrabold tracking-tight text-white md:text-5xl">
           {t("reviews.subtitle")}
         </h2>
 
@@ -60,14 +60,14 @@ export function ReviewsSection() {
         >
           {REVIEWS.map((r) => (
             <motion.div key={r.name.en} variants={fadeUp}>
-              <SoftCard className="p-7 h-full bg-brand-foreground/5 border-brand-foreground/10 text-brand-foreground/90">
-                <div className="font-hanzi text-5xl leading-none text-brand-foreground/60">"</div>
+              <SoftCard className="p-7 h-full bg-white/5 border-white/10 text-white/90">
+                <div className="font-hanzi text-5xl leading-none text-white/60">"</div>
                 <p className="mt-2">{r.text[lang]}</p>
                 <div className="mt-6 flex items-center gap-3">
                   <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-soft text-brand font-bold">
                     {r.name[lang].charAt(0)}
                   </div>
-                  <div className="text-sm font-semibold text-brand-foreground">{r.name[lang]}</div>
+                  <div className="text-sm font-semibold text-white">{r.name[lang]}</div>
                 </div>
               </SoftCard>
             </motion.div>

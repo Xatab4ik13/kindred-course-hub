@@ -33,7 +33,7 @@ function ScrollNavLink({
     <button
       type="button"
       onClick={() => scrollTo(sectionId)}
-      className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
+      className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-foreground hover:bg-muted transition"
     >
       {children}
     </button>
@@ -69,15 +69,15 @@ export function Header() {
               <ScrollNavLink sectionId="team">{t("nav.team")}</ScrollNavLink>
               <Link
                 to="/pricing"
-                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
-                activeProps={{ className: "bg-muted text-black" }}
+                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-foreground hover:bg-muted transition"
+                activeProps={{ className: "bg-muted text-foreground" }}
               >
                 {t("nav.pricing")}
               </Link>
               <Link
                 to="/schedule"
-                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-black hover:bg-muted transition"
-                activeProps={{ className: "bg-muted text-black" }}
+                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-foreground hover:bg-muted transition"
+                activeProps={{ className: "bg-muted text-foreground" }}
               >
                 {t("nav.schedule")}
               </Link>
