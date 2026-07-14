@@ -3,7 +3,7 @@ import { useI18n } from "@/providers/i18n";
 export function Footer() {
   const { t } = useI18n();
   return (
-    <footer className="mt-24 bg-[#0d0d0d] text-neutral-200">
+    <footer className="bg-[#0d0d0d] text-neutral-200">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-3 md:px-8">
         <div>
           <div className="flex items-center gap-2">
