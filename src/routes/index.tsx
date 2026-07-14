@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { AboutSection } from "@/components/site/AboutSection";
 
 import { HeroSection } from "@/components/site/HeroSection";
-import { FeaturesSection } from "@/components/site/FeaturesSection";
+
 import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
@@ -40,9 +40,6 @@ function Index() {
           <AboutSection />
         </div>
 
-        <div data-companion-section="features">
-          <FeaturesSection />
-        </div>
         <div data-companion-section="pricing">
           <PricingSection />
         </div>

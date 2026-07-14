@@ -5,11 +5,10 @@ import { Mascot, type MascotPose } from "@/components/site/Mascot";
 import { useI18n } from "@/providers/i18n";
 import type { DictKey } from "@/i18n/dict";
 
-type SectionKey = "about" | "features" | "pricing" | "schedule" | "reviews" | "cta";
+type SectionKey = "about" | "pricing" | "schedule" | "reviews" | "cta";
 
 const POSE_BY_SECTION: Record<SectionKey, { pose: MascotPose; tipKey: DictKey }> = {
   about: { pose: "hello", tipKey: "companion.about" },
-  features: { pose: "point", tipKey: "companion.features" },
   pricing: { pose: "smile", tipKey: "companion.pricing" },
   schedule: { pose: "calm", tipKey: "companion.schedule" },
   reviews: { pose: "smile", tipKey: "companion.reviews" },
