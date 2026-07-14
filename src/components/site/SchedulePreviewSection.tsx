@@ -34,58 +34,52 @@ interface Lesson {
   goalId: string;
 }
 
-// Tone → tailwind classes (no left strip; color lives in border + badge + gradient)
+// Tone → color lives ONLY in chip + dot + hover wash. No colored borders.
 const TONE: Record<
   LevelTone,
-  { border: string; dot: string; chip: string; gradient: string; soft: string; text: string }
+  { dot: string; chip: string; gradient: string; soft: string; glow: string }
 > = {
   hsk1: {
-    border: "border-b-brand",
     dot: "bg-brand",
-    chip: "bg-brand text-brand-foreground",
-    gradient: "from-brand/12",
-    soft: "bg-brand/10 text-brand",
-    text: "text-brand",
+    chip: "bg-brand/90 text-brand-foreground",
+    gradient: "from-brand/18",
+    soft: "bg-brand/12 text-brand",
+    glow: "shadow-[0_24px_60px_-20px_var(--brand)]",
   },
   hsk2: {
-    border: "border-b-coral-deep",
     dot: "bg-coral-deep",
-    chip: "bg-coral-deep text-brand-foreground",
-    gradient: "from-coral-deep/12",
-    soft: "bg-coral-deep/10 text-coral-deep",
-    text: "text-coral-deep",
+    chip: "bg-coral-deep/90 text-brand-foreground",
+    gradient: "from-coral-deep/18",
+    soft: "bg-coral-deep/12 text-coral-deep",
+    glow: "shadow-[0_24px_60px_-20px_var(--coral-deep)]",
   },
   hsk3: {
-    border: "border-b-foreground",
     dot: "bg-foreground",
-    chip: "bg-foreground text-background",
-    gradient: "from-foreground/10",
-    soft: "bg-foreground/8 text-foreground",
-    text: "text-foreground",
+    chip: "bg-foreground/90 text-background",
+    gradient: "from-foreground/14",
+    soft: "bg-foreground/10 text-foreground",
+    glow: "shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]",
   },
   kids: {
-    border: "border-b-accent",
     dot: "bg-accent",
-    chip: "bg-accent text-accent-foreground",
-    gradient: "from-accent/14",
-    soft: "bg-accent/12 text-accent-foreground",
-    text: "text-accent-foreground",
+    chip: "bg-accent/90 text-accent-foreground",
+    gradient: "from-accent/22",
+    soft: "bg-accent/16 text-accent-foreground",
+    glow: "shadow-[0_24px_60px_-20px_var(--accent)]",
   },
   speak: {
-    border: "border-b-tiger",
     dot: "bg-tiger",
-    chip: "bg-tiger text-brand-foreground",
-    gradient: "from-tiger/12",
-    soft: "bg-tiger/10 text-tiger",
-    text: "text-tiger",
+    chip: "bg-tiger/90 text-brand-foreground",
+    gradient: "from-tiger/18",
+    soft: "bg-tiger/12 text-tiger",
+    glow: "shadow-[0_24px_60px_-20px_var(--tiger)]",
   },
   individual: {
-    border: "border-b-muted-foreground/60",
-    dot: "bg-muted-foreground/60",
-    chip: "bg-muted text-foreground",
-    gradient: "from-muted-foreground/8",
+    dot: "bg-muted-foreground/70",
+    chip: "bg-white/60 text-foreground",
+    gradient: "from-muted-foreground/10",
     soft: "bg-muted/60 text-muted-foreground",
-    text: "text-muted-foreground",
+    glow: "shadow-[0_24px_60px_-20px_rgba(0,0,0,0.2)]",
   },
 };
 
