@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import {
   Check,
   Users,
-  User,
   Clock,
   Calendar,
   GraduationCap,
