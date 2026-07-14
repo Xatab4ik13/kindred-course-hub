@@ -48,7 +48,7 @@ const CHIP: Record<LevelTone, string> = {
 };
 
 // Mascot rotation for the days: today, tomorrow, +2 highlighted; rest muted
-const MASCOT_POOL = [mascotHello, mascotWave, mascotSmile, mascotPoint, mascotCalm, mascotSide, mascotBack];
+const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
 
 const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
