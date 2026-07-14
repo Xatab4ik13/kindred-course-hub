@@ -1,37 +1,82 @@
-import { Moon, Sun, Languages } from "lucide-react";
 import { useTheme } from "@/providers/theme";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle({ className }: { className?: string }) {
-  const { theme, toggle } = useTheme();
+function Segmented<T extends string>({
+  value,
+  options,
+  onChange,
+  ariaLabel,
+  className,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+  ariaLabel: string;
+  className?: string;
+}) {
   return (
-    <button
-      onClick={toggle}
-      aria-label="Toggle theme"
+    <div
+      role="group"
+      aria-label={ariaLabel}
       className={cn(
-        "inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground hover:bg-muted transition",
+        "relative inline-flex h-10 items-center rounded-full border border-border bg-surface p-1",
         className,
       )}
     >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
+      {options.map((opt) => {
+        const active = opt.value === value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            aria-pressed={active}
+            className={cn(
+              "relative z-10 inline-flex h-8 min-w-8 items-center justify-center rounded-full px-3 text-xs font-bold uppercase tracking-wider transition",
+              active
+                ? "bg-brand text-brand-foreground shadow-soft"
+                : "text-foreground/60 hover:text-foreground",
+            )}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function ThemeToggle({ className }: { className?: string }) {
+  const { theme, toggle } = useTheme();
+  return (
+    <Segmented
+      ariaLabel="Toggle theme"
+      value={theme === "dark" ? "dark" : "light"}
+      options={[
+        { value: "light", label: "☀" },
+        { value: "dark", label: "☾" },
+      ]}
+      onChange={(v) => {
+        if (v !== theme) toggle();
+      }}
+      className={className}
+    />
   );
 }
 
 export function LangToggle({ className }: { className?: string }) {
   const { lang, setLang } = useI18n();
   return (
-    <button
-      onClick={() => setLang(lang === "ru" ? "en" : "ru")}
-      aria-label="Switch language"
-      className={cn(
-        "inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-sm font-medium text-foreground hover:bg-muted transition",
-        className,
-      )}
-    >
-      <Languages className="h-4 w-4" />
-      {lang.toUpperCase()}
-    </button>
+    <Segmented
+      ariaLabel="Switch language"
+      value={lang}
+      options={[
+        { value: "ru", label: "RU" },
+        { value: "en", label: "EN" },
+      ]}
+      onChange={(v) => setLang(v)}
+      className={className}
+    />
   );
 }

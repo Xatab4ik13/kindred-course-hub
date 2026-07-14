@@ -26,7 +26,7 @@ export function Header() {
             <Link
               key={n.to}
               to={n.to}
-              className="rounded-full px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground transition"
+              className="rounded-full px-4 py-2 text-[15px] font-extrabold tracking-tight text-foreground/80 hover:bg-muted hover:text-foreground transition"
               activeProps={{ className: "bg-muted text-foreground" }}
             >
               {n.label}
@@ -35,14 +35,14 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <LangToggle />
-          <ThemeToggle />
           <Link
             to="/contacts"
-            className="hidden sm:inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-semibold text-brand-foreground shadow-soft hover:opacity-90 transition"
+            className="hidden sm:inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-bold text-brand-foreground shadow-soft hover:opacity-90 transition"
           >
             {t("cta.enroll")}
           </Link>
+          <LangToggle />
+          <ThemeToggle />
         </div>
       </div>
     </header>
