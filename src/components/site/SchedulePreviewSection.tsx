@@ -271,7 +271,7 @@ export function SchedulePreviewSection() {
   );
 }
 
-function DayPlaque({
+export function DayPlaque({
   day,
   label,
   monthShort,
@@ -334,7 +334,7 @@ function DayPlaque({
   );
 }
 
-function LessonCard({
+export function LessonCard({
   lesson,
   disabled,
   onClick,
