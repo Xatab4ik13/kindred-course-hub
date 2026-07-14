@@ -217,41 +217,35 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                           </button>
                         </form>
                       )}
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="contact"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      <p className="text-sm leading-relaxed text-muted-foreground">
-                        {t("enroll.contact.lead")}
-                      </p>
-                      <div className="mt-5 space-y-3">
-                        <ContactLink
-                          href="https://t.me/china_ya"
-                          bg="bg-[#0088cc]"
-                          initials="TG"
-                          title="TELEGRAM"
-                          desc={t("enroll.contact.tgDesc")}
-                        />
-                        <ContactLink
-                          href="https://vk.com/chinaja"
-                          bg="bg-[#0077ff]"
-                          initials="VK"
-                          title="ВКОНТАКТЕ"
-                          desc={t("enroll.contact.vkDesc")}
-                        />
-                      </div>
-                      <p className="mt-6 text-center text-xs text-muted-foreground">
-                        {t("enroll.contact.footer")}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {t("enroll.contact.lead")}
+                    </p>
+                    <div className="mt-5 space-y-3">
+                      <ContactLink
+                        href="https://t.me/china_ya"
+                        bg="bg-[#0088cc]"
+                        initials="TG"
+                        title="TELEGRAM"
+                        desc={t("enroll.contact.tgDesc")}
+                      />
+                      <ContactLink
+                        href="https://vk.com/chinaja"
+                        bg="bg-[#0077ff]"
+                        initials="VK"
+                        title="ВКОНТАКТЕ"
+                        desc={t("enroll.contact.vkDesc")}
+                      />
+                    </div>
+                    <p className="mt-6 text-center text-xs text-muted-foreground">
+                      {t("enroll.contact.footer")}
+                    </p>
+                  </div>
+                )}
               </div>
+
             </div>
           </motion.div>
         </motion.div>
