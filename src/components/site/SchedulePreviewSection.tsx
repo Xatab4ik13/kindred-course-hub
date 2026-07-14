@@ -34,58 +34,52 @@ interface Lesson {
   goalId: string;
 }
 
-// Tone → tailwind classes (no left strip; color lives in border + badge + gradient)
+// Tone → color lives ONLY in chip + dot + hover wash. No colored borders.
 const TONE: Record<
   LevelTone,
-  { border: string; dot: string; chip: string; gradient: string; soft: string; text: string }
+  { dot: string; chip: string; gradient: string; soft: string; glow: string }
 > = {
   hsk1: {
-    border: "border-b-brand",
     dot: "bg-brand",
-    chip: "bg-brand text-brand-foreground",
-    gradient: "from-brand/12",
-    soft: "bg-brand/10 text-brand",
-    text: "text-brand",
+    chip: "bg-brand/90 text-brand-foreground",
+    gradient: "from-brand/18",
+    soft: "bg-brand/12 text-brand",
+    glow: "shadow-[0_24px_60px_-20px_var(--brand)]",
   },
   hsk2: {
-    border: "border-b-coral-deep",
     dot: "bg-coral-deep",
-    chip: "bg-coral-deep text-brand-foreground",
-    gradient: "from-coral-deep/12",
-    soft: "bg-coral-deep/10 text-coral-deep",
-    text: "text-coral-deep",
+    chip: "bg-coral-deep/90 text-brand-foreground",
+    gradient: "from-coral-deep/18",
+    soft: "bg-coral-deep/12 text-coral-deep",
+    glow: "shadow-[0_24px_60px_-20px_var(--coral-deep)]",
   },
   hsk3: {
-    border: "border-b-foreground",
     dot: "bg-foreground",
-    chip: "bg-foreground text-background",
-    gradient: "from-foreground/10",
-    soft: "bg-foreground/8 text-foreground",
-    text: "text-foreground",
+    chip: "bg-foreground/90 text-background",
+    gradient: "from-foreground/14",
+    soft: "bg-foreground/10 text-foreground",
+    glow: "shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]",
   },
   kids: {
-    border: "border-b-accent",
     dot: "bg-accent",
-    chip: "bg-accent text-accent-foreground",
-    gradient: "from-accent/14",
-    soft: "bg-accent/12 text-accent-foreground",
-    text: "text-accent-foreground",
+    chip: "bg-accent/90 text-accent-foreground",
+    gradient: "from-accent/22",
+    soft: "bg-accent/16 text-accent-foreground",
+    glow: "shadow-[0_24px_60px_-20px_var(--accent)]",
   },
   speak: {
-    border: "border-b-tiger",
     dot: "bg-tiger",
-    chip: "bg-tiger text-brand-foreground",
-    gradient: "from-tiger/12",
-    soft: "bg-tiger/10 text-tiger",
-    text: "text-tiger",
+    chip: "bg-tiger/90 text-brand-foreground",
+    gradient: "from-tiger/18",
+    soft: "bg-tiger/12 text-tiger",
+    glow: "shadow-[0_24px_60px_-20px_var(--tiger)]",
   },
   individual: {
-    border: "border-b-muted-foreground/60",
-    dot: "bg-muted-foreground/60",
-    chip: "bg-muted text-foreground",
-    gradient: "from-muted-foreground/8",
+    dot: "bg-muted-foreground/70",
+    chip: "bg-white/60 text-foreground",
+    gradient: "from-muted-foreground/10",
     soft: "bg-muted/60 text-muted-foreground",
-    text: "text-muted-foreground",
+    glow: "shadow-[0_24px_60px_-20px_rgba(0,0,0,0.2)]",
   },
 };
 
@@ -264,69 +258,91 @@ export function SchedulePreviewSection() {
                   ref={isToday ? todayRef : undefined}
                   className={cn(
                     "relative w-[260px] shrink-0 snap-start sm:w-[280px]",
-                    isPast && "opacity-60",
+                    isPast && "opacity-55",
                   )}
                 >
+                  {/* Ambient glow behind glass */}
+                  {!isPast && (
+                    <div
+                      aria-hidden
+                      className={cn(
+                        "pointer-events-none absolute -inset-2 rounded-[2.5rem] blur-2xl transition-opacity",
+                        isToday
+                          ? "bg-brand/25 opacity-100"
+                          : isTomorrow
+                            ? "bg-tiger/20 opacity-80"
+                            : mascotIndex === 2
+                              ? "bg-accent/25 opacity-70"
+                              : "bg-foreground/5 opacity-60",
+                      )}
+                    />
+                  )}
+
                   <div
                     className={cn(
-                      "relative flex h-full flex-col gap-4 rounded-[2rem] border p-5 transition-all",
-                      isToday
-                        ? "border-brand/40 bg-brand text-brand-foreground shadow-float"
-                        : isPast
-                          ? "border-border/40 bg-muted/30"
-                          : "border-white/50 bg-white/60 shadow-[0_20px_50px_-18px_rgba(0,0,0,0.06)] backdrop-blur-xl",
+                      "relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] p-5 transition-all",
+                      // Base glass
+                      "border border-white/60 bg-white/45 backdrop-blur-2xl",
+                      // Deep layered shadow + inner highlight ring
+                      "shadow-[0_30px_60px_-24px_rgba(30,20,15,0.25),0_2px_0_0_rgba(255,255,255,0.9)_inset,0_-1px_0_0_rgba(255,255,255,0.4)_inset]",
+                      isPast && "bg-white/25 shadow-none",
                     )}
                   >
+                    {/* Top glass sheen */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/70 to-transparent"
+                    />
+                    {/* Subtle tint layer for special days */}
+                    {(isToday || isTomorrow || mascotIndex === 2) && (
+                      <div
+                        aria-hidden
+                        className={cn(
+                          "pointer-events-none absolute inset-0",
+                          isToday
+                            ? "bg-gradient-to-br from-brand/20 via-brand/8 to-transparent"
+                            : isTomorrow
+                              ? "bg-gradient-to-br from-tiger/16 via-tiger/6 to-transparent"
+                              : "bg-gradient-to-br from-accent/18 via-accent/6 to-transparent",
+                        )}
+                      />
+                    )}
+
                     {/* Mascot watermark for first 3 day columns */}
                     {mascotIndex >= 0 && (
                       <img
                         src={MASCOT_WATERMARKS[mascotIndex]}
                         alt=""
                         aria-hidden
-                        className={cn(
-                          "pointer-events-none absolute -bottom-4 -right-4 h-36 w-36 select-none object-contain",
-                          isToday ? "opacity-25" : "opacity-15",
-                        )}
+                        className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 select-none object-contain opacity-30 mix-blend-luminosity"
                         loading="lazy"
                       />
                     )}
 
                     {/* Day header */}
-                    <div
-                      className={cn(
-                        "relative overflow-hidden rounded-2xl p-4",
-                        isToday
-                          ? "bg-brand-foreground/10"
-                          : "bg-white/50 backdrop-blur-md border border-white/40",
-                      )}
-                    >
-                      <div className="relative flex items-baseline justify-between">
-                        <div>
-                          <div
-                            className={cn(
-                              "text-[10px] font-black uppercase tracking-[0.18em]",
-                              isToday ? "text-brand-foreground/80" : "text-muted-foreground",
-                            )}
-                          >
-                            {isToday ? "Сегодня" : isTomorrow ? "Завтра" : t(dayKey)}
-                          </div>
-                          <div
-                            className={cn(
-                              "font-heading text-3xl font-black leading-none",
-                              isToday ? "text-brand-foreground" : "text-foreground",
-                            )}
-                          >
-                            {d.getDate()}
-                          </div>
+                    <div className="relative flex items-baseline justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-foreground/60">
+                          {isToday && (
+                            <span className="relative flex h-1.5 w-1.5">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
+                              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
+                            </span>
+                          )}
+                          {isToday ? "Сегодня" : isTomorrow ? "Завтра" : t(dayKey)}
                         </div>
-                        <div className="text-right text-[10px] font-semibold uppercase tracking-wider opacity-70">
-                          <div>{lessons.length} занятий</div>
-                          <div className="mt-0.5 opacity-60">
-                            {d.toLocaleString("ru-RU", { month: "short" })}
-                          </div>
+                        <div className="font-heading text-4xl font-black leading-none text-foreground">
+                          {d.getDate()}
+                        </div>
+                      </div>
+                      <div className="text-right text-[10px] font-semibold uppercase tracking-wider text-foreground/50">
+                        <div>{lessons.length} занятий</div>
+                        <div className="mt-0.5">
+                          {d.toLocaleString("ru-RU", { month: "short" })}
                         </div>
                       </div>
                     </div>
+
 
                     {/* Lessons */}
                     <div className="relative flex flex-col gap-3">
@@ -393,11 +409,13 @@ function LessonCapsule({
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-4 text-left shadow-[0_12px_30px_-12px_rgba(0,0,0,0.06)] backdrop-blur-md transition-all",
-        tone.border,
-        "border-b-4",
-        !disabled && "hover:bg-white hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)]",
-        disabled && "cursor-not-allowed",
+        "group relative overflow-hidden rounded-2xl p-4 text-left transition-all",
+        // Multi-layer glass
+        "border border-white/70 bg-white/55 backdrop-blur-xl",
+        "shadow-[0_10px_30px_-14px_rgba(30,20,15,0.25),0_1px_0_0_rgba(255,255,255,0.9)_inset]",
+        !disabled && "hover:bg-white/75 hover:border-white/90",
+        !disabled && "hover:shadow-[0_22px_40px_-16px_rgba(30,20,15,0.28),0_1px_0_0_rgba(255,255,255,1)_inset]",
+        disabled && "cursor-not-allowed opacity-70",
       )}
     >
       {/* Subtle tone gradient wash */}
