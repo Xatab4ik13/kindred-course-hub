@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/site/FeaturesSection";
@@ -173,14 +173,20 @@ export function SchedulePreviewSection() {
 
   return (
     <section id="schedule" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionHeader eyebrow={t("schedule.title")} title={t("schedule.subtitle")} />
-        <Link
-          to="/schedule"
-          className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
-        >
-          {t("schedule.cta")} <ArrowRight className="h-4 w-4" />
-        </Link>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2">
+            <HeaderArrow direction="left" disabled={!canLeft} onClick={() => scroll("left")} />
+            <HeaderArrow direction="right" disabled={!canRight} onClick={() => scroll("right")} />
+          </div>
+          <Link
+            to="/schedule"
+            className="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+          >
+            {t("schedule.cta")} <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
 
       <motion.div
@@ -191,13 +197,13 @@ export function SchedulePreviewSection() {
         className="relative mt-10"
       >
         <div className="relative">
-          {/* Gradient fades */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
+          {/* Narrow fades — only hint at more content, never cover it */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-background to-transparent sm:w-6" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-4 bg-gradient-to-l from-background to-transparent sm:w-6" />
 
           <div
             ref={trackRef}
-            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-2 pb-6 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-2 pb-6 pt-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {days.map((d, idx) => {
               const dow = (d.getDay() + 6) % 7;
@@ -216,11 +222,10 @@ export function SchedulePreviewSection() {
                   data-day-col
                   ref={isToday ? todayRef : undefined}
                   className={cn(
-                    "flex w-[300px] shrink-0 snap-start flex-col gap-4 sm:w-[320px]",
+                    "flex w-[calc(100vw-3rem)] max-w-[340px] shrink-0 snap-start flex-col gap-4 sm:w-[290px] xl:w-[310px]",
                     isPast && "opacity-55",
                   )}
                 >
-                  {/* Day plaque */}
                   <DayPlaque
                     day={d.getDate()}
                     label={dayLabel}
@@ -231,7 +236,6 @@ export function SchedulePreviewSection() {
                     mascot={mascot}
                   />
 
-                  {/* Lesson plaques */}
                   <div className="flex flex-col gap-3">
                     {lessons.map((l, i) => (
                       <LessonCard
@@ -246,16 +250,13 @@ export function SchedulePreviewSection() {
               );
             })}
           </div>
-
-          <AnimatePresence>
-            {canLeft && <ScrollArrow direction="left" onClick={() => scroll("left")} />}
-          </AnimatePresence>
-          <AnimatePresence>
-            {canRight && <ScrollArrow direction="right" onClick={() => scroll("right")} />}
-          </AnimatePresence>
         </div>
 
-        <div className="mt-6 flex justify-center md:hidden">
+        <div className="mt-6 flex items-center justify-between gap-3 sm:hidden">
+          <div className="flex items-center gap-2">
+            <HeaderArrow direction="left" disabled={!canLeft} onClick={() => scroll("left")} />
+            <HeaderArrow direction="right" disabled={!canRight} onClick={() => scroll("right")} />
+          </div>
           <Link
             to="/schedule"
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
@@ -392,32 +393,28 @@ function LessonCard({
   );
 }
 
-function ScrollArrow({
+function HeaderArrow({
   direction,
+  disabled,
   onClick,
 }: {
   direction: "left" | "right";
+  disabled: boolean;
   onClick: () => void;
 }) {
   const Icon = direction === "left" ? ChevronLeft : ChevronRight;
-  const xOffset = direction === "left" ? -20 : 20;
   return (
     <motion.button
       type="button"
-      initial={{ opacity: 0, x: xOffset, scale: 0.9 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      exit={{ opacity: 0, x: xOffset, scale: 0.9 }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={disabled ? undefined : { scale: 1.06 }}
+      whileTap={disabled ? undefined : { scale: 0.94 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
+      disabled={disabled}
       aria-label={direction === "left" ? "Назад" : "Вперёд"}
       className={cn(
-        "absolute top-1/2 z-20 -translate-y-1/2",
-        "flex h-12 w-12 items-center justify-center rounded-full",
-        "bg-surface text-foreground shadow-float border border-border/60",
-        "transition-shadow hover:shadow-glow",
-        direction === "left" ? "left-2" : "right-2",
+        "flex h-11 w-11 items-center justify-center rounded-full border border-border/60 bg-surface text-foreground shadow-[0_8px_24px_-16px_rgba(0,0,0,0.2)] transition-opacity",
+        disabled ? "opacity-40 cursor-not-allowed" : "hover:shadow-glow",
       )}
     >
       <Icon className="h-5 w-5" />
