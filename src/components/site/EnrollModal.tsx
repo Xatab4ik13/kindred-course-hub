@@ -293,7 +293,7 @@ function ContactLink({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group flex items-center gap-4 rounded-2xl p-4 text-white shadow-soft transition hover:scale-[1.01] hover:shadow-float",
+        "group flex items-center gap-4 rounded-2xl p-4 text-white shadow-soft transition hover:shadow-float",
         bg,
       )}
     >
