@@ -13,7 +13,7 @@ import mascotDay2 from "@/assets/mascot/day-2.png";
 import mascotDay3 from "@/assets/mascot/day-3.png";
 import mascotDay4 from "@/assets/mascot/day-4.png";
 
-const DAY_KEYS: DictKey[] = [
+export const DAY_KEYS: DictKey[] = [
   "days.mon",
   "days.tue",
   "days.wed",
@@ -23,11 +23,11 @@ const DAY_KEYS: DictKey[] = [
   "days.sun",
 ];
 
-const DAY_SHORT_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+export const DAY_SHORT_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
 type LevelTone = "hsk1" | "hsk2" | "hsk3" | "kids" | "speak" | "individual";
 
-interface Lesson {
+export interface Lesson {
   time: string;
   duration: number;
   level: string;
@@ -48,9 +48,9 @@ const CHIP: Record<LevelTone, string> = {
 };
 
 // Mascot rotation for the days: today, tomorrow, +2 highlighted; rest muted
-const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
+export const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
 
-const WEEK_TEMPLATE: Lesson[][] = [
+export const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
   [
     { time: "09:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
