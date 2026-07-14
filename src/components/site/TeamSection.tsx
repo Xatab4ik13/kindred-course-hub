@@ -91,9 +91,11 @@ function PersonCard({
         <img
           src={person.photo}
           alt={t(person.nameKey)}
-          loading="lazy"
-          width={768}
-          height={1024}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          width={720}
+          height={960}
           className="h-full w-full object-cover"
         />
         <div
