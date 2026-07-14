@@ -207,24 +207,8 @@ export function SchedulePreviewSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative mt-10"
       >
-        {/* Legend */}
-        <div className="mb-5 flex flex-wrap items-center gap-3 text-xs font-semibold text-muted-foreground">
-          {[
-            { tone: "hsk1" as const, label: "HSK 1" },
-            { tone: "hsk2" as const, label: "HSK 2" },
-            { tone: "hsk3" as const, label: "HSK 3" },
-            { tone: "kids" as const, label: "Kids" },
-            { tone: "speak" as const, label: "Speak" },
-            { tone: "individual" as const, label: "Индивид." },
-          ].map((l) => (
-            <div key={l.tone} className="flex items-center gap-1.5">
-              <span className={cn("h-2.5 w-2.5 rounded-full", TONE[l.tone].dot)} />
-              <span>{l.label}</span>
-            </div>
-          ))}
-        </div>
-
         {/* Track wrapper */}
+
         <div className="relative">
           {/* Gradient edges */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
@@ -232,7 +216,7 @@ export function SchedulePreviewSection() {
 
           <div
             ref={trackRef}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 pt-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             style={{ willChange: "scroll-position" }}
           >
             {days.map((d, idx) => {
@@ -251,31 +235,9 @@ export function SchedulePreviewSection() {
                     "relative w-[240px] shrink-0 snap-start sm:w-[260px]",
                   )}
                 >
-                  {/* Today badge with mascot */}
-                  {isToday && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.4 }}
-                      className="pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2"
-                    >
-                      <div className="flex items-end gap-1">
-                        <img
-                          src={mascotPoint}
-                          alt=""
-                          className="h-14 w-14 drop-shadow-md"
-                          loading="lazy"
-                        />
-                        <span className="mb-1 rounded-full bg-brand px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-brand-foreground shadow-float">
-                          Сегодня
-                        </span>
-                      </div>
-                    </motion.div>
-                  )}
-
                   <div
                     className={cn(
-                      "relative flex h-full flex-col rounded-3xl border p-4 transition-colors",
+                      "relative flex h-full flex-col overflow-hidden rounded-3xl border p-4 transition-colors",
                       isToday
                         ? "border-brand/60 bg-brand-soft/40 shadow-float"
                         : isPast
@@ -283,8 +245,19 @@ export function SchedulePreviewSection() {
                           : "border-border/60 bg-surface hover:border-brand/40",
                     )}
                   >
+                    {/* Mascot background for today */}
+                    {isToday && (
+                      <img
+                        src={mascotPoint}
+                        alt=""
+                        aria-hidden
+                        className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 select-none opacity-20"
+                        loading="lazy"
+                      />
+                    )}
+
                     {/* Day header */}
-                    <div className="mb-3 flex items-baseline justify-between border-b border-border/40 pb-3">
+                    <div className="relative mb-3 flex items-baseline justify-between border-b border-border/40 pb-3">
                       <div>
                         <div
                           className={cn(
@@ -312,7 +285,7 @@ export function SchedulePreviewSection() {
                     </div>
 
                     {/* Lessons */}
-                    <div className="flex flex-col gap-2">
+                    <div className="relative flex flex-col gap-2">
                       {lessons.map((l, i) => (
                         <LessonCapsule
                           key={i}
@@ -327,6 +300,7 @@ export function SchedulePreviewSection() {
               );
             })}
           </div>
+
 
           <AnimatePresence>
             {canLeft && <ScrollArrow direction="left" onClick={() => scroll("left")} />}
@@ -378,20 +352,22 @@ function LessonCapsule({
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-border/50 bg-background/80 p-2.5 text-left transition-shadow",
-        !disabled && "hover:border-brand/40 hover:shadow-float",
+        "group relative overflow-hidden rounded-2xl border-2 border-border/60 bg-background p-3 text-left shadow-sm transition-shadow",
+        !disabled && "hover:border-brand hover:shadow-float",
         disabled && "cursor-not-allowed",
       )}
     >
       {/* Left color rail */}
-      <span className={cn("absolute inset-y-2 left-0 w-1 rounded-r-full", tone.bar)} />
+      <span className={cn("absolute inset-y-0 left-0 w-1.5", tone.bar)} />
 
-      <div className="pl-2">
+      <div className="pl-2.5">
         <div className="flex items-center justify-between gap-2">
-          <div className="font-heading text-sm font-black tabular-nums">{lesson.time}</div>
+          <div className="font-heading text-lg font-black tabular-nums leading-none text-foreground">
+            {lesson.time}
+          </div>
           <span
             className={cn(
-              "rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider",
+              "rounded-md px-2 py-1 text-[10px] font-black uppercase tracking-wider",
               tone.chip,
             )}
           >
@@ -399,15 +375,15 @@ function LessonCapsule({
           </span>
         </div>
 
-        <div className="mt-1.5 flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
+        <div className="mt-2 flex items-center gap-3 text-xs font-semibold text-foreground/80">
           <span className="inline-flex items-center gap-1">
-            <Clock className="h-3 w-3" />
-            {lesson.duration}м
+            <Clock className="h-3.5 w-3.5" />
+            {lesson.duration} мин
           </span>
-          <span className="inline-flex items-center gap-1">
+          <span className="inline-flex items-center gap-1.5">
             <span
               className={cn(
-                "grid h-4 w-4 place-items-center rounded-full text-[8px] font-black text-background",
+                "grid h-5 w-5 place-items-center rounded-full text-[9px] font-black text-background",
                 tone.dot,
               )}
               aria-hidden
@@ -415,20 +391,23 @@ function LessonCapsule({
               {lesson.teacher}
             </span>
           </span>
-          <span className="ml-auto inline-flex items-center gap-1">
+          <span
+            className={cn(
+              "ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5",
+              lesson.seatsLeft <= 1
+                ? "bg-brand/15 text-brand"
+                : "bg-muted text-muted-foreground",
+            )}
+          >
             <Users className="h-3 w-3" />
-            {lesson.seatsLeft}
+            {lesson.seatsLeft} мест
           </span>
-        </div>
-
-        {/* Duration bar */}
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-border/50">
-          <div className={cn("h-full rounded-full", tone.bar)} style={{ width: `${barPct}%` }} />
         </div>
       </div>
     </motion.button>
   );
 }
+
 
 function ScrollArrow({
   direction,
