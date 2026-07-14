@@ -177,7 +177,10 @@ export function PricingSection() {
           <ArrowRight className="relative h-6 w-6 transition-transform group-hover:translate-x-1" />
         </Link>
       </motion.div>
+
+      <EnrollModal open={open} onClose={() => setOpen(false)} defaultGoal={selectedGoal} />
     </section>
   );
 }
+
 
