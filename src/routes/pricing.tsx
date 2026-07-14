@@ -458,18 +458,6 @@ function PricingPage() {
                     ))}
                   </div>
 
-                  {/* audience pill */}
-                  <div
-                    className={cn(
-                      "relative mt-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold",
-                      isSpecial
-                        ? "bg-cream/10 text-cream/90"
-                        : "bg-brand-soft text-brand",
-                    )}
-                  >
-                    <User className="h-3.5 w-3.5" />
-                    {c.audience}
-                  </div>
                 </div>
 
                 {/* side: bullets + price */}
