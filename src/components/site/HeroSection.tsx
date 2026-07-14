@@ -24,8 +24,8 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display font-black leading-none tracking-[-0.055em] text-black text-center"
-          style={{ fontSize: "clamp(6rem, 22vw, 22rem)" }}
+          className="text-center font-display font-black text-black leading-[0.85] tracking-[-0.04em]"
+          style={{ fontSize: "clamp(5rem, 20vw, 20rem)" }}
         >
           CHINAR
         </motion.h1>
@@ -34,8 +34,8 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 md:mt-6 text-center font-display font-black uppercase leading-[0.9] tracking-[-0.04em]"
-          style={{ fontSize: "clamp(2.25rem, 7vw, 7rem)" }}
+          className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
+          style={{ fontSize: "clamp(1.75rem, 5.5vw, 5.5rem)" }}
         >
           <span className="text-brand-foreground">Онлайн школа</span>
           <br />
