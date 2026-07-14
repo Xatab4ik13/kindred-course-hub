@@ -571,7 +571,7 @@ function PricingPage() {
                       type="button"
                       onClick={() => openWith(p.goalId)}
                       className={cn(
-                        "mt-5 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-bold uppercase tracking-wider transition hover:opacity-90",
+                        "mt-5 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full text-sm font-bold uppercase tracking-wider transition hover:opacity-90",
                         isSpecial
                           ? "bg-brand text-brand-foreground"
                           : "bg-ink text-cream",
