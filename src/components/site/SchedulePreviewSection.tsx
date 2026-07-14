@@ -402,6 +402,26 @@ export function LessonCard({
   );
 }
 
+function TeacherAvatar({ initials, name }: { initials: string; name: string }) {
+  const photo = TEACHER_PHOTOS[initials];
+  if (photo) {
+    return (
+      <img
+        src={photo}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-border/60"
+      />
+    );
+  }
+  return (
+    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent/40 text-[11px] font-black text-accent-foreground">
+      {initials}
+    </div>
+  );
+}
+
 function HeaderArrow({
   direction,
   disabled,
