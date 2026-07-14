@@ -181,7 +181,7 @@ function TeamSlider({
   }, [checkScroll]);
 
   return (
-    <div className="relative px-10 md:px-12">
+    <div className="relative -mx-6 px-6 md:mx-0 md:px-12">
       <motion.div
         ref={trackRef}
         initial="hidden"
@@ -191,7 +191,7 @@ function TeamSlider({
           hidden: {},
           show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
         }}
-        className="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-6 md:gap-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ willChange: "scroll-position" }}
       >
         {people.map((person) => (
@@ -202,7 +202,7 @@ function TeamSlider({
               hidden: { opacity: 0, y: 18 },
               show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
             }}
-            className="w-[82vw] shrink-0 snap-start sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)]"
+            className="w-[calc(100vw-3rem)] shrink-0 snap-center sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)]"
           >
             <PersonCard person={person} showSchedule={showSchedule} />
           </motion.div>
