@@ -134,6 +134,13 @@ export const dict = {
     "enroll.phone.placeholder": "+7 (999) 000-00-00",
     "enroll.goal.label": "Чему хотите научиться",
     "enroll.goal.other": "Другое",
+    "enroll.goal.hsk1": "HSK1 за 3 месяца",
+    "enroll.goal.hsk2": "HSK2 за 4 месяца",
+    "enroll.goal.individual": "Индивидуальный китайский",
+    "enroll.goal.group": "Групповые занятия для начинающих",
+    "enroll.goal.ege": "ЕГЭ по китайскому",
+    "enroll.goal.kids": "Китайский для школьников",
+
     "enroll.submit": "Отправить заявку",
     "enroll.success.title": "Заявка отправлена!",
     "enroll.success.text": "Мы свяжемся с вами в ближайшее время. 谢谢!",
