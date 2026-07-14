@@ -207,7 +207,7 @@ function MobileMenu({
             type="button"
             onClick={onClose}
             aria-label="Закрыть меню"
-            className="grid h-11 w-11 place-items-center rounded-2xl bg-black text-white active:scale-95 transition"
+            className="grid h-11 w-11 place-items-center rounded-2xl bg-foreground text-background active:scale-95 transition"
           >
             <X className="h-6 w-6" strokeWidth={3} />
           </button>
@@ -232,7 +232,7 @@ function MobileMenu({
                   <button
                     type="button"
                     onClick={() => handleScroll(item.id)}
-                    className="group flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-2xl font-black uppercase tracking-tight text-black transition hover:bg-black/5"
+                    className="group flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-2xl font-black uppercase tracking-tight text-foreground transition hover:bg-foreground/5"
                   >
                     <span>{item.label}</span>
                     <span
@@ -246,7 +246,7 @@ function MobileMenu({
                   <Link
                     to={item.to}
                     onClick={onClose}
-                    className="group flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-2xl font-black uppercase tracking-tight text-black transition hover:bg-black/5"
+                    className="group flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-2xl font-black uppercase tracking-tight text-foreground transition hover:bg-foreground/5"
                   >
                     <span>{item.label}</span>
                     <span
