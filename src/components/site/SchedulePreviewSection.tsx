@@ -258,69 +258,91 @@ export function SchedulePreviewSection() {
                   ref={isToday ? todayRef : undefined}
                   className={cn(
                     "relative w-[260px] shrink-0 snap-start sm:w-[280px]",
-                    isPast && "opacity-60",
+                    isPast && "opacity-55",
                   )}
                 >
+                  {/* Ambient glow behind glass */}
+                  {!isPast && (
+                    <div
+                      aria-hidden
+                      className={cn(
+                        "pointer-events-none absolute -inset-2 rounded-[2.5rem] blur-2xl transition-opacity",
+                        isToday
+                          ? "bg-brand/25 opacity-100"
+                          : isTomorrow
+                            ? "bg-tiger/20 opacity-80"
+                            : mascotIndex === 2
+                              ? "bg-accent/25 opacity-70"
+                              : "bg-foreground/5 opacity-60",
+                      )}
+                    />
+                  )}
+
                   <div
                     className={cn(
-                      "relative flex h-full flex-col gap-4 rounded-[2rem] border p-5 transition-all",
-                      isToday
-                        ? "border-brand/40 bg-brand text-brand-foreground shadow-float"
-                        : isPast
-                          ? "border-border/40 bg-muted/30"
-                          : "border-white/50 bg-white/60 shadow-[0_20px_50px_-18px_rgba(0,0,0,0.06)] backdrop-blur-xl",
+                      "relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] p-5 transition-all",
+                      // Base glass
+                      "border border-white/60 bg-white/45 backdrop-blur-2xl",
+                      // Deep layered shadow + inner highlight ring
+                      "shadow-[0_30px_60px_-24px_rgba(30,20,15,0.25),0_2px_0_0_rgba(255,255,255,0.9)_inset,0_-1px_0_0_rgba(255,255,255,0.4)_inset]",
+                      isPast && "bg-white/25 shadow-none",
                     )}
                   >
+                    {/* Top glass sheen */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/70 to-transparent"
+                    />
+                    {/* Subtle tint layer for special days */}
+                    {(isToday || isTomorrow || mascotIndex === 2) && (
+                      <div
+                        aria-hidden
+                        className={cn(
+                          "pointer-events-none absolute inset-0",
+                          isToday
+                            ? "bg-gradient-to-br from-brand/20 via-brand/8 to-transparent"
+                            : isTomorrow
+                              ? "bg-gradient-to-br from-tiger/16 via-tiger/6 to-transparent"
+                              : "bg-gradient-to-br from-accent/18 via-accent/6 to-transparent",
+                        )}
+                      />
+                    )}
+
                     {/* Mascot watermark for first 3 day columns */}
                     {mascotIndex >= 0 && (
                       <img
                         src={MASCOT_WATERMARKS[mascotIndex]}
                         alt=""
                         aria-hidden
-                        className={cn(
-                          "pointer-events-none absolute -bottom-4 -right-4 h-36 w-36 select-none object-contain",
-                          isToday ? "opacity-25" : "opacity-15",
-                        )}
+                        className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 select-none object-contain opacity-30 mix-blend-luminosity"
                         loading="lazy"
                       />
                     )}
 
                     {/* Day header */}
-                    <div
-                      className={cn(
-                        "relative overflow-hidden rounded-2xl p-4",
-                        isToday
-                          ? "bg-brand-foreground/10"
-                          : "bg-white/50 backdrop-blur-md border border-white/40",
-                      )}
-                    >
-                      <div className="relative flex items-baseline justify-between">
-                        <div>
-                          <div
-                            className={cn(
-                              "text-[10px] font-black uppercase tracking-[0.18em]",
-                              isToday ? "text-brand-foreground/80" : "text-muted-foreground",
-                            )}
-                          >
-                            {isToday ? "Сегодня" : isTomorrow ? "Завтра" : t(dayKey)}
-                          </div>
-                          <div
-                            className={cn(
-                              "font-heading text-3xl font-black leading-none",
-                              isToday ? "text-brand-foreground" : "text-foreground",
-                            )}
-                          >
-                            {d.getDate()}
-                          </div>
+                    <div className="relative flex items-baseline justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-foreground/60">
+                          {isToday && (
+                            <span className="relative flex h-1.5 w-1.5">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75" />
+                              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
+                            </span>
+                          )}
+                          {isToday ? "Сегодня" : isTomorrow ? "Завтра" : t(dayKey)}
                         </div>
-                        <div className="text-right text-[10px] font-semibold uppercase tracking-wider opacity-70">
-                          <div>{lessons.length} занятий</div>
-                          <div className="mt-0.5 opacity-60">
-                            {d.toLocaleString("ru-RU", { month: "short" })}
-                          </div>
+                        <div className="font-heading text-4xl font-black leading-none text-foreground">
+                          {d.getDate()}
+                        </div>
+                      </div>
+                      <div className="text-right text-[10px] font-semibold uppercase tracking-wider text-foreground/50">
+                        <div>{lessons.length} занятий</div>
+                        <div className="mt-0.5">
+                          {d.toLocaleString("ru-RU", { month: "short" })}
                         </div>
                       </div>
                     </div>
+
 
                     {/* Lessons */}
                     <div className="relative flex flex-col gap-3">
