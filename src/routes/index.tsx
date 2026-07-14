@@ -9,7 +9,7 @@ import { HeroSection } from "@/components/site/HeroSection";
 import { PricingSection } from "@/components/site/PricingSection";
 import { SchedulePreviewSection } from "@/components/site/SchedulePreviewSection";
 import { ReviewsSection } from "@/components/site/ReviewsSection";
-import { CtaSection } from "@/components/site/CtaSection";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
