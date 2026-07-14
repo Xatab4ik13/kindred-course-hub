@@ -502,7 +502,7 @@ function PricingPage() {
                   <div>
                     <div
                       className={cn(
-                        "flex items-baseline gap-2 font-display text-[2.5rem] font-extrabold leading-none",
+                        "flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-[2rem] font-extrabold leading-none sm:text-[2.5rem]",
                         isSpecial ? "text-cream" : "text-foreground",
                       )}
                     >
