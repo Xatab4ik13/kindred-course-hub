@@ -20,21 +20,17 @@ export function HeroSection() {
         src={heroVideo.url}
       />
 
-      {/* Персиковый градиент поверх видео — сплошной под текстом, прозрачный к краям */}
+      {/* Персиковый градиент поверх видео — как раньше, видео едва проступает */}
       <div
         className="pointer-events-none absolute inset-0 -z-20"
         style={{
           background:
-            "linear-gradient(160deg, oklch(0.82 0.10 62) 0%, oklch(0.76 0.13 52) 35%, oklch(0.68 0.15 42) 100%)",
-          WebkitMaskImage:
-            "radial-gradient(circle at 50% 42%, black 0%, black 22%, transparent 60%)",
-          maskImage:
-            "radial-gradient(circle at 50% 42%, black 0%, black 22%, transparent 60%)",
+            "linear-gradient(160deg, oklch(0.82 0.10 62 / 0.92) 0%, oklch(0.76 0.13 52 / 0.9) 35%, oklch(0.68 0.15 42 / 0.88) 100%)",
         }}
       />
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_20%,oklch(0.62_0.16_35/0.45),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(90%_60%_at_10%_90%,oklch(0.58_0.14_30/0.25),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_20%,oklch(0.62_0.16_35/0.35),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(90%_60%_at_10%_90%,oklch(0.58_0.14_30/0.2),transparent_60%)]" />
         <div className="absolute inset-0 bg-grain opacity-30 mix-blend-overlay" />
       </div>
 
