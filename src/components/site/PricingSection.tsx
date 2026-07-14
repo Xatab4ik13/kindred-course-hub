@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Check, ArrowRight } from "lucide-react";
@@ -5,23 +6,34 @@ import { SectionHeader } from "@/components/site/FeaturesSection";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { EnrollModal } from "@/components/site/EnrollModal";
 import type { DictKey } from "@/i18n/dict";
 
 type Plan = {
   id: "p1" | "p2" | "p3";
   hanzi: string;
+  goalId: string;
   special?: boolean;
 };
 
+
 const PLANS: Plan[] = [
-  { id: "p1", hanzi: "一", special: true },
-  { id: "p2", hanzi: "个" },
-  { id: "p3", hanzi: "百" },
+  { id: "p1", hanzi: "一", goalId: "hsk1", special: true },
+  { id: "p2", hanzi: "个", goalId: "individual" },
+  { id: "p3", hanzi: "百", goalId: "ege" },
 ];
 
 export function PricingSection() {
   const { t } = useI18n();
   const k = (id: Plan["id"], suffix: string) => `pricing.${id}.${suffix}` as DictKey;
+  const [open, setOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<string | undefined>(undefined);
+
+  const openWith = (goalId?: string) => {
+    setSelectedGoal(goalId);
+    setOpen(true);
+  };
+
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
@@ -120,8 +132,9 @@ export function PricingSection() {
 
               </div>
 
-              <Link
-                to="/pricing"
+              <button
+                type="button"
+                onClick={() => openWith(p.goalId)}
                 className={cn(
                   "mt-4 inline-flex h-12 w-full items-center justify-center rounded-full text-sm font-bold uppercase tracking-wider transition-opacity hover:opacity-90",
                   isSpecial
@@ -130,7 +143,8 @@ export function PricingSection() {
                 )}
               >
                 {t("pricing.enroll")}
-              </Link>
+              </button>
+
             </motion.article>
           );
         })}
@@ -163,7 +177,10 @@ export function PricingSection() {
           <ArrowRight className="relative h-6 w-6 transition-transform group-hover:translate-x-1" />
         </Link>
       </motion.div>
+
+      <EnrollModal open={open} onClose={() => setOpen(false)} defaultGoal={selectedGoal} />
     </section>
   );
 }
+
 

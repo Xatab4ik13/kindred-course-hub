@@ -125,7 +125,35 @@ export const dict = {
     "companion.reviews": "Ученики уже влюбились 🧡",
     "companion.cta": "Ну что, начнём? 你好!",
 
+    "enroll.title": "Записаться на обучение",
+    "enroll.tab.form": "Оставить заявку",
+    "enroll.tab.contact": "Написать нам",
+    "enroll.name.label": "Как вас зовут",
+    "enroll.name.placeholder": "Иван Иванов",
+    "enroll.phone.label": "Номер телефона",
+    "enroll.phone.placeholder": "+7 (999) 000-00-00",
+    "enroll.goal.label": "Чему хотите научиться",
+    "enroll.goal.other": "Другое",
+    "enroll.goal.hsk1": "HSK1 за 3 месяца",
+    "enroll.goal.hsk2": "HSK2 за 4 месяца",
+    "enroll.goal.individual": "Индивидуальный китайский",
+    "enroll.goal.group": "Групповые занятия для начинающих",
+    "enroll.goal.ege": "ЕГЭ по китайскому",
+    "enroll.goal.kids": "Китайский для школьников",
+
+    "enroll.submit": "Отправить заявку",
+    "enroll.success.title": "Заявка отправлена!",
+    "enroll.success.text": "Мы свяжемся с вами в ближайшее время. 谢谢!",
+    "enroll.contact.lead": "Напишите нам напрямую — ответим быстро и расскажем о курсах, расписании и ценах.",
+    "enroll.contact.tgDesc": "@china_ya · Ответим в течение часа",
+    "enroll.contact.vkDesc": "vk.ru/chinaja · Группа школы",
+    "enroll.contact.footer": "Или позвоните нам — перейдите на вкладку «Оставить заявку»",
+    "enroll.error.name": "Введите имя",
+    "enroll.error.phone": "Введите корректный телефон",
+    "enroll.error.goal": "Выберите цель обучения",
+
   },
+
   en: {
     "nav.about": "About",
     "nav.team": "Team",
@@ -251,7 +279,35 @@ export const dict = {
     "companion.reviews": "Students already love it 🧡",
     "companion.cta": "Shall we begin? 你好!",
 
+    "enroll.title": "Enroll in a course",
+    "enroll.tab.form": "Leave a request",
+    "enroll.tab.contact": "Message us",
+    "enroll.name.label": "Your name",
+    "enroll.name.placeholder": "John Doe",
+    "enroll.phone.label": "Phone number",
+    "enroll.phone.placeholder": "+1 (555) 000-0000",
+    "enroll.goal.label": "What would you like to learn",
+    "enroll.goal.other": "Other",
+    "enroll.goal.hsk1": "HSK1 in 3 months",
+    "enroll.goal.hsk2": "HSK2 in 4 months",
+    "enroll.goal.individual": "One-to-one Chinese",
+    "enroll.goal.group": "Group classes for beginners",
+    "enroll.goal.ege": "EGE in Chinese",
+    "enroll.goal.kids": "Chinese for school kids",
+
+    "enroll.submit": "Send request",
+    "enroll.success.title": "Request sent!",
+    "enroll.success.text": "We'll get back to you shortly. 谢谢!",
+    "enroll.contact.lead": "Write to us directly — we'll answer fast about courses, schedule and pricing.",
+    "enroll.contact.tgDesc": "@china_ya · Reply within an hour",
+    "enroll.contact.vkDesc": "vk.ru/chinaja · School group",
+    "enroll.contact.footer": "Or call us — switch to the «Leave a request» tab",
+    "enroll.error.name": "Enter your name",
+    "enroll.error.phone": "Enter a valid phone",
+    "enroll.error.goal": "Choose a learning goal",
+
   },
+
 } as const;
 
 export type Lang = keyof typeof dict;
