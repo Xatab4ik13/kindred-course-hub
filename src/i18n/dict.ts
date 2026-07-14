@@ -288,6 +288,13 @@ export const dict = {
     "enroll.phone.placeholder": "+1 (555) 000-0000",
     "enroll.goal.label": "What would you like to learn",
     "enroll.goal.other": "Other",
+    "enroll.goal.hsk1": "HSK1 in 3 months",
+    "enroll.goal.hsk2": "HSK2 in 4 months",
+    "enroll.goal.individual": "One-to-one Chinese",
+    "enroll.goal.group": "Group classes for beginners",
+    "enroll.goal.ege": "EGE in Chinese",
+    "enroll.goal.kids": "Chinese for school kids",
+
     "enroll.submit": "Send request",
     "enroll.success.title": "Request sent!",
     "enroll.success.text": "We'll get back to you shortly. 谢谢!",
