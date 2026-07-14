@@ -216,7 +216,7 @@ export function SchedulePreviewSection() {
 
           <div
             ref={trackRef}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 pt-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 pt-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             style={{ willChange: "scroll-position" }}
           >
             {days.map((d, idx) => {
@@ -235,31 +235,9 @@ export function SchedulePreviewSection() {
                     "relative w-[240px] shrink-0 snap-start sm:w-[260px]",
                   )}
                 >
-                  {/* Today badge with mascot */}
-                  {isToday && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.4 }}
-                      className="pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2"
-                    >
-                      <div className="flex items-end gap-1">
-                        <img
-                          src={mascotPoint}
-                          alt=""
-                          className="h-14 w-14 drop-shadow-md"
-                          loading="lazy"
-                        />
-                        <span className="mb-1 rounded-full bg-brand px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-brand-foreground shadow-float">
-                          Сегодня
-                        </span>
-                      </div>
-                    </motion.div>
-                  )}
-
                   <div
                     className={cn(
-                      "relative flex h-full flex-col rounded-3xl border p-4 transition-colors",
+                      "relative flex h-full flex-col overflow-hidden rounded-3xl border p-4 transition-colors",
                       isToday
                         ? "border-brand/60 bg-brand-soft/40 shadow-float"
                         : isPast
@@ -267,8 +245,19 @@ export function SchedulePreviewSection() {
                           : "border-border/60 bg-surface hover:border-brand/40",
                     )}
                   >
+                    {/* Mascot background for today */}
+                    {isToday && (
+                      <img
+                        src={mascotPoint}
+                        alt=""
+                        aria-hidden
+                        className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 select-none opacity-20"
+                        loading="lazy"
+                      />
+                    )}
+
                     {/* Day header */}
-                    <div className="mb-3 flex items-baseline justify-between border-b border-border/40 pb-3">
+                    <div className="relative mb-3 flex items-baseline justify-between border-b border-border/40 pb-3">
                       <div>
                         <div
                           className={cn(
@@ -296,7 +285,7 @@ export function SchedulePreviewSection() {
                     </div>
 
                     {/* Lessons */}
-                    <div className="flex flex-col gap-2">
+                    <div className="relative flex flex-col gap-2">
                       {lessons.map((l, i) => (
                         <LessonCapsule
                           key={i}
@@ -311,6 +300,7 @@ export function SchedulePreviewSection() {
               );
             })}
           </div>
+
 
           <AnimatePresence>
             {canLeft && <ScrollArrow direction="left" onClick={() => scroll("left")} />}
