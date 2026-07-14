@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { AboutSection } from "@/components/site/AboutSection";
+
 import { HeroSection } from "@/components/site/HeroSection";
 import { FeaturesSection } from "@/components/site/FeaturesSection";
 import { PricingSection } from "@/components/site/PricingSection";
@@ -34,6 +36,10 @@ function Index() {
       <Header />
       <main>
         <HeroSection />
+        <div data-companion-section="about">
+          <AboutSection />
+        </div>
+
         <div data-companion-section="features">
           <FeaturesSection />
         </div>
