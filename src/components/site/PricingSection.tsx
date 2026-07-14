@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Check, ArrowRight } from "lucide-react";
@@ -5,13 +6,16 @@ import { SectionHeader } from "@/components/site/FeaturesSection";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { EnrollModal } from "@/components/site/EnrollModal";
 import type { DictKey } from "@/i18n/dict";
 
 type Plan = {
   id: "p1" | "p2" | "p3";
   hanzi: string;
+  goalId: string;
   special?: boolean;
 };
+
 
 const PLANS: Plan[] = [
   { id: "p1", hanzi: "一", special: true },
