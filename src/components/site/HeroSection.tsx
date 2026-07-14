@@ -34,8 +34,8 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 md:mt-6 text-center font-sans font-medium leading-tight tracking-wide"
-          style={{ fontSize: "clamp(1.125rem, 2.6vw, 2.25rem)" }}
+          className="mt-5 md:mt-8 text-center font-sans font-black leading-[0.95] tracking-[-0.03em]"
+          style={{ fontSize: "clamp(2rem, 5.5vw, 5rem)" }}
         >
           <span className="text-brand-foreground">Онлайн школа</span>
           <br />
