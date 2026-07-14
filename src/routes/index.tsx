@@ -59,7 +59,7 @@ function Index() {
         </div>
       </main>
       <Footer />
-      <MascotCompanion />
+      
     </div>
   );
 }
