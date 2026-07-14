@@ -6,10 +6,16 @@ import { motion } from "motion/react";
  */
 export function HeroSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-coral text-brand-foreground">
+    <section
+      className="relative isolate overflow-hidden text-brand-foreground"
+      style={{
+        background:
+          "linear-gradient(160deg, oklch(0.82 0.10 62) 0%, oklch(0.76 0.13 52) 35%, oklch(0.68 0.15 42) 100%)",
+      }}
+    >
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_20%,color-mix(in_oklab,var(--coral-deep)_45%,transparent),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(90%_60%_at_10%_90%,color-mix(in_oklab,var(--coral-deep)_25%,transparent),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_20%,oklch(0.62_0.16_35/0.45),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(90%_60%_at_10%_90%,oklch(0.58_0.14_30/0.25),transparent_60%)]" />
         <div className="absolute inset-0 bg-grain opacity-30 mix-blend-overlay" />
       </div>
 
