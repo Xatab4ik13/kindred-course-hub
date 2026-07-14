@@ -187,7 +187,10 @@ function TeamSlider({
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        variants={stagger(0.1)}
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+        }}
         className="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ willChange: "scroll-position" }}
       >
@@ -195,7 +198,10 @@ function TeamSlider({
           <motion.div
             key={person.nameKey}
             data-team-card
-            variants={fadeUp}
+            variants={{
+              hidden: { opacity: 0, y: 18 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+            }}
             className="w-[82vw] shrink-0 snap-start sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)]"
           >
             <PersonCard person={person} showSchedule={showSchedule} />
