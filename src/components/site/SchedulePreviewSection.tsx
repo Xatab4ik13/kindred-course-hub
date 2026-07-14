@@ -391,9 +391,8 @@ export function LessonCard({
       </div>
 
       <div className="flex items-center gap-3 border-t border-border/50 pt-3">
-        <div className="grid h-9 w-9 place-items-center rounded-full bg-accent/40 text-[11px] font-black text-accent-foreground">
-          {lesson.teacher}
-        </div>
+        <TeacherAvatar initials={lesson.teacher} name={lesson.teacherName} />
+
         <div className="flex flex-col">
           <span className="text-[11px] font-medium text-muted-foreground">Преподаватель</span>
           <span className="text-sm font-bold text-foreground">{lesson.teacherName}</span>
