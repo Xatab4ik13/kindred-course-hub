@@ -99,7 +99,7 @@ function SchedulePage() {
             <WeekArrow
               direction="left"
               onClick={() => setOffset((o) => o - 1)}
-              disabled={offset <= -4}
+              disabled={offset <= 0}
             />
             <div className="min-w-[220px] text-center">
               <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
