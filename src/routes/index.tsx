@@ -54,9 +54,7 @@ function Index() {
         <div data-companion-section="reviews">
           <ReviewsSection />
         </div>
-        <div data-companion-section="cta">
-          <CtaSection />
-        </div>
+
       </main>
       <Footer />
       
