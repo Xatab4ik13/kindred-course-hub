@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 import teacher1 from "@/assets/teachers/teacher-1.jpg";
 import teacher2 from "@/assets/teachers/teacher-2.jpg";
 import teacher3 from "@/assets/teachers/teacher-3.jpg";
+import lead1 from "@/assets/leadership/timofey.jpg";
+import lead2 from "@/assets/leadership/nikolay.jpg";
+import lead3 from "@/assets/leadership/vadim.jpg";
 
 type Tab = "teachers" | "leadership";
 
@@ -42,10 +45,22 @@ const TEACHERS: Person[] = [
 
 const LEADERSHIP: Person[] = [
   {
-    photo: teacher2,
+    photo: lead1,
     nameKey: "team.l1.name",
     roleKey: "team.l1.role",
     bioKey: "team.l1.bio",
+  },
+  {
+    photo: lead2,
+    nameKey: "team.l2.name",
+    roleKey: "team.l2.role",
+    bioKey: "team.l2.bio",
+  },
+  {
+    photo: lead3,
+    nameKey: "team.l3.name",
+    roleKey: "team.l3.role",
+    bioKey: "team.l3.bio",
   },
 ];
 
@@ -157,24 +172,26 @@ export function TeamSection() {
                     {t(p.bioKey)}
                   </p>
 
-                  <Link
-                    to="/schedule"
-                    className="relative mt-6 inline-flex w-fit items-center gap-3 overflow-hidden px-8 py-4 text-base font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
-                    style={{
-                      borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
-                      backgroundColor: "var(--brand)",
-                    }}
-                  >
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[4rem] font-black leading-none tracking-tighter text-white/15"
-                      style={{ letterSpacing: "-0.05em" }}
+                  {tab === "teachers" && (
+                    <Link
+                      to="/schedule"
+                      className="relative mt-6 inline-flex w-fit items-center gap-3 overflow-hidden px-8 py-4 text-base font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
+                      style={{
+                        borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
+                        backgroundColor: "var(--brand)",
+                      }}
                     >
-                      学习汉语
-                    </span>
-                    <CalendarDays className="relative h-5 w-5" />
-                    <span className="relative">{t("team.cta.schedule")}</span>
-                  </Link>
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[4rem] font-black leading-none tracking-tighter text-white/15"
+                        style={{ letterSpacing: "-0.05em" }}
+                      >
+                        学习汉语
+                      </span>
+                      <CalendarDays className="relative h-5 w-5" />
+                      <span className="relative">{t("team.cta.schedule")}</span>
+                    </Link>
+                  )}
                 </div>
               </motion.article>
             ))}
