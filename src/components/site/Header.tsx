@@ -34,16 +34,15 @@ export function Header() {
               </Link>
             ))}
           </nav>
+        </div>
 
+        <div className="flex items-center gap-2">
           <Link
             to="/contacts"
             className="inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-extrabold uppercase text-brand-foreground shadow-soft hover:opacity-90 transition"
           >
             {t("cta.enroll")}
           </Link>
-        </div>
-
-        <div className="flex items-center gap-2">
           <LangToggle />
           <ThemeToggle />
         </div>
