@@ -87,15 +87,17 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] flex items-end justify-center overflow-y-auto overscroll-contain p-0 sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-ink/70"
+            className="fixed inset-0 bg-ink/70"
             onClick={onClose}
             aria-hidden
           />
@@ -108,7 +110,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             style={{ willChange: "transform, opacity" }}
-            className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] bg-background shadow-float"
+            className="relative z-10 flex max-h-[100dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[2rem] bg-background shadow-float sm:max-h-[calc(100dvh-2rem)] sm:rounded-[2rem]"
           >
 
             {/* Decorative hanzi */}
@@ -128,7 +130,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
               <X className="h-5 w-5" />
             </button>
 
-            <div className="relative p-7 md:p-9">
+            <div className="relative flex-1 overflow-y-auto overscroll-contain p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:p-9">
               <div className="font-display text-sm font-extrabold uppercase tracking-widest text-brand">
                 CHINAR
               </div>
@@ -137,7 +139,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
               </h2>
 
               {/* Tabs */}
-              <div className="mt-6 grid grid-cols-2 gap-2 rounded-full bg-brand-soft/60 p-1.5">
+              <div className="mt-6 grid grid-cols-2 gap-1 rounded-full bg-brand-soft/60 p-1">
                 {(["form", "contact"] as const).map((k) => {
                   const active = tab === k;
                   const Icon = k === "form" ? Phone : Send;
@@ -147,7 +149,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                       type="button"
                       onClick={() => setTab(k)}
                       className={cn(
-                        "relative inline-flex h-11 items-center justify-center gap-2 rounded-full text-sm font-bold transition",
+                        "relative inline-flex h-11 w-full items-center justify-center gap-2 rounded-full text-sm font-bold transition",
                         active
                           ? "bg-brand text-brand-foreground shadow-soft"
                           : "text-foreground/70 hover:text-foreground",
