@@ -210,7 +210,18 @@ export function SchedulePreviewSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative mt-10"
       >
-        <div className="relative">
+        {/* Mobile day pager */}
+        <div className="sm:hidden">
+          <MobileDayPager
+            days={days}
+            todayStr={todayStr}
+            todayTime={todayTime}
+            onEnroll={(g) => setEnrollGoal(g)}
+          />
+        </div>
+
+        {/* Desktop / tablet horizontal scroll */}
+        <div className="relative hidden sm:block">
           <div
             ref={trackRef}
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-2 pb-6 pt-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -232,7 +243,7 @@ export function SchedulePreviewSection() {
                   data-day-col
                   ref={isToday ? todayRef : undefined}
                   className={cn(
-                    "flex w-[calc(100vw-3rem)] max-w-[340px] shrink-0 snap-start flex-col gap-4 sm:w-[290px] xl:w-[310px]",
+                    "flex w-[290px] max-w-[340px] shrink-0 snap-start flex-col gap-4 xl:w-[310px]",
                     isPast && "opacity-55",
                   )}
                 >
@@ -262,11 +273,7 @@ export function SchedulePreviewSection() {
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3 sm:hidden">
-          <div className="flex items-center gap-2">
-            <HeaderArrow direction="left" disabled={!canLeft} onClick={() => scroll("left")} />
-            <HeaderArrow direction="right" disabled={!canRight} onClick={() => scroll("right")} />
-          </div>
+        <div className="mt-6 flex items-center justify-center gap-3 sm:hidden">
           <Link
             to="/schedule"
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
@@ -282,6 +289,144 @@ export function SchedulePreviewSection() {
         defaultGoal={enrollGoal ?? undefined}
       />
     </section>
+  );
+}
+
+export function MobileDayPager({
+  days,
+  todayStr,
+  todayTime,
+  onEnroll,
+}: {
+  days: Date[];
+  todayStr: string;
+  todayTime: number;
+  onEnroll: (goalId: string) => void;
+}) {
+  const { t } = useI18n();
+  const initial = Math.max(
+    0,
+    days.findIndex((d) => d.toDateString() === todayStr),
+  );
+  const [index, setIndex] = useState(initial === -1 ? 0 : initial);
+  const [dir, setDir] = useState<1 | -1>(1);
+
+  const go = (delta: number) => {
+    const next = Math.min(days.length - 1, Math.max(0, index + delta));
+    if (next === index) return;
+    setDir(delta > 0 ? 1 : -1);
+    setIndex(next);
+  };
+
+  // touch swipe
+  const startX = useRef<number | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    startX.current = e.touches[0]?.clientX ?? null;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (startX.current == null) return;
+    const dx = (e.changedTouches[0]?.clientX ?? 0) - startX.current;
+    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+    startX.current = null;
+  };
+
+  const d = days[index]!;
+  const dow = (d.getDay() + 6) % 7;
+  const dayKey = DAY_KEYS[dow]!;
+  const lessons = WEEK_TEMPLATE[dow]!;
+  const isToday = d.toDateString() === todayStr;
+  const isPast = d.getTime() < todayTime;
+  const mascot = MASCOT_POOL[index % MASCOT_POOL.length]!;
+  const monthShort = d.toLocaleString("ru-RU", { month: "long" });
+  const dayLabel = isToday ? "Сегодня" : t(dayKey);
+
+  return (
+    <div>
+      {/* pager header */}
+      <div className="flex items-center justify-between gap-3 pb-4">
+        <HeaderArrow
+          direction="left"
+          disabled={index === 0}
+          onClick={() => go(-1)}
+        />
+        <div className="text-center">
+          <div className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
+            {dayLabel}
+          </div>
+          <div className="font-heading text-lg font-black">
+            {d.getDate()} {monthShort}
+          </div>
+        </div>
+        <HeaderArrow
+          direction="right"
+          disabled={index === days.length - 1}
+          onClick={() => go(1)}
+        />
+      </div>
+
+      <div
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="relative overflow-hidden"
+        style={{ touchAction: "pan-y" }}
+      >
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, x: dir * 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          className={cn("flex flex-col gap-4", isPast && "opacity-55")}
+        >
+          <DayPlaque
+            day={d.getDate()}
+            label={dayLabel}
+            monthShort={monthShort}
+            dowShort={DAY_SHORT_RU[dow]!}
+            isToday={isToday}
+            isPast={isPast}
+            mascot={mascot}
+          />
+          <div className="flex flex-col gap-3">
+            {lessons.length === 0 && (
+              <div className="rounded-3xl border border-dashed border-border/60 bg-surface p-6 text-center text-sm text-muted-foreground">
+                Занятий нет
+              </div>
+            )}
+            {lessons.map((l, i) => (
+              <LessonCard
+                key={i}
+                lesson={l}
+                disabled={isPast}
+                onClick={() => !isPast && onEnroll(l.goalId)}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* dots */}
+      <div className="mt-5 flex flex-wrap justify-center gap-1.5">
+        {days.map((dd, i) => {
+          const active = i === index;
+          const past = dd.getTime() < todayTime;
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                setDir(i > index ? 1 : -1);
+                setIndex(i);
+              }}
+              aria-label={`День ${i + 1}`}
+              className={cn(
+                "h-2 rounded-full transition-all",
+                active ? "w-6 bg-brand" : past ? "w-2 bg-foreground/15" : "w-2 bg-foreground/30",
+              )}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

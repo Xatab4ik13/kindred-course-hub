@@ -34,13 +34,13 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-grain opacity-30 mix-blend-overlay" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-64px)] max-w-[110rem] flex-col items-center justify-center px-6 pb-40 md:px-12 md:pb-56">
+      <div className="relative mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-[110rem] flex-col items-center justify-center px-4 pb-32 md:px-12 md:pb-56">
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center font-display font-black text-black leading-[0.85] tracking-[-0.04em]"
-          style={{ fontSize: "clamp(5rem, 20vw, 20rem)" }}
+          className="w-full text-center font-display font-black text-black leading-[0.85] tracking-[-0.04em]"
+          style={{ fontSize: "clamp(3.5rem, 18vw, 20rem)" }}
         >
           CHINAR
         </motion.h1>
@@ -50,7 +50,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
           className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
-          style={{ fontSize: "clamp(1.75rem, 5.5vw, 5.5rem)" }}
+          style={{ fontSize: "clamp(1.35rem, 5.5vw, 5.5rem)" }}
         >
           <span className="text-brand-foreground">Онлайн школа</span>
           <br />
