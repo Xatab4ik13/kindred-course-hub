@@ -80,13 +80,13 @@ function SchedulePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <main className="mx-auto max-w-[110rem] px-4 pb-24 pt-12 md:px-8 md:pt-16">
+      <main className="mx-auto max-w-[110rem] px-4 pb-24 pt-10 md:px-8 md:pt-16">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <span className="text-sm font-semibold uppercase tracking-widest text-brand">
               {t("nav.schedule")}
             </span>
-            <h1 className="mt-4 font-display text-4xl font-black leading-[1.05] tracking-tight md:text-5xl lg:text-6xl">
+            <h1 className="mt-4 font-display text-[2.25rem] font-black leading-[1.05] tracking-tight md:text-5xl lg:text-6xl">
               <span className="block">Расписание</span>
               <span className="block text-brand">на любую неделю</span>
             </h1>
@@ -96,17 +96,17 @@ function SchedulePage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-3 md:justify-end md:gap-4">
             <WeekArrow
               direction="left"
               onClick={() => setOffset((o) => o - 1)}
               disabled={offset <= 0}
             />
-            <div className="min-w-[220px] text-center">
-              <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="min-w-0 flex-1 text-center md:min-w-[220px] md:flex-none">
+              <div className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
                 {offset === 0 ? "Текущая неделя" : offset > 0 ? `+${offset} нед.` : `${offset} нед.`}
               </div>
-              <div className="mt-1 font-heading text-lg font-black text-foreground">
+              <div className="mt-1 font-heading text-base font-black text-foreground md:text-lg">
                 {formatRange(weekStart)}
               </div>
             </div>
@@ -118,12 +118,29 @@ function SchedulePage() {
           </div>
         </div>
 
+        {/* Mobile: single-day pager */}
+        <motion.div
+          key={`m-${offset}`}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-10 sm:hidden"
+        >
+          <MobileDayPager
+            days={days}
+            todayStr={todayStr}
+            todayTime={todayTime}
+            onEnroll={(g) => setEnrollGoal(g)}
+          />
+        </motion.div>
+
+        {/* Tablet+ grid */}
         <motion.div
           key={offset}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7"
+          className="mt-12 hidden gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7"
         >
           {days.map((d, idx) => {
             const dow = (d.getDay() + 6) % 7;
