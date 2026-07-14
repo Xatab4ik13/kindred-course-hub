@@ -352,20 +352,22 @@ function LessonCapsule({
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-border/50 bg-background/80 p-2.5 text-left transition-shadow",
-        !disabled && "hover:border-brand/40 hover:shadow-float",
+        "group relative overflow-hidden rounded-2xl border-2 border-border/60 bg-background p-3 text-left shadow-sm transition-shadow",
+        !disabled && "hover:border-brand hover:shadow-float",
         disabled && "cursor-not-allowed",
       )}
     >
       {/* Left color rail */}
-      <span className={cn("absolute inset-y-2 left-0 w-1 rounded-r-full", tone.bar)} />
+      <span className={cn("absolute inset-y-0 left-0 w-1.5", tone.bar)} />
 
-      <div className="pl-2">
+      <div className="pl-2.5">
         <div className="flex items-center justify-between gap-2">
-          <div className="font-heading text-sm font-black tabular-nums">{lesson.time}</div>
+          <div className="font-heading text-lg font-black tabular-nums leading-none text-foreground">
+            {lesson.time}
+          </div>
           <span
             className={cn(
-              "rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider",
+              "rounded-md px-2 py-1 text-[10px] font-black uppercase tracking-wider",
               tone.chip,
             )}
           >
@@ -373,15 +375,15 @@ function LessonCapsule({
           </span>
         </div>
 
-        <div className="mt-1.5 flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
+        <div className="mt-2 flex items-center gap-3 text-xs font-semibold text-foreground/80">
           <span className="inline-flex items-center gap-1">
-            <Clock className="h-3 w-3" />
-            {lesson.duration}м
+            <Clock className="h-3.5 w-3.5" />
+            {lesson.duration} мин
           </span>
-          <span className="inline-flex items-center gap-1">
+          <span className="inline-flex items-center gap-1.5">
             <span
               className={cn(
-                "grid h-4 w-4 place-items-center rounded-full text-[8px] font-black text-background",
+                "grid h-5 w-5 place-items-center rounded-full text-[9px] font-black text-background",
                 tone.dot,
               )}
               aria-hidden
@@ -389,20 +391,23 @@ function LessonCapsule({
               {lesson.teacher}
             </span>
           </span>
-          <span className="ml-auto inline-flex items-center gap-1">
+          <span
+            className={cn(
+              "ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5",
+              lesson.seatsLeft <= 1
+                ? "bg-brand/15 text-brand"
+                : "bg-muted text-muted-foreground",
+            )}
+          >
             <Users className="h-3 w-3" />
-            {lesson.seatsLeft}
+            {lesson.seatsLeft} мест
           </span>
-        </div>
-
-        {/* Duration bar */}
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-border/50">
-          <div className={cn("h-full rounded-full", tone.bar)} style={{ width: `${barPct}%` }} />
         </div>
       </div>
     </motion.button>
   );
 }
+
 
 function ScrollArrow({
   direction,
