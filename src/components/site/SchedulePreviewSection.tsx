@@ -8,7 +8,9 @@ import type { DictKey } from "@/i18n/dict";
 import { viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { EnrollModal } from "@/components/site/EnrollModal";
-import mascotPoint from "@/assets/mascot/point.png";
+import mascotHello from "@/assets/mascot/hello.png";
+import mascotWave from "@/assets/mascot/wave.png";
+import mascotSmile from "@/assets/mascot/smile.png";
 
 const DAY_KEYS: DictKey[] = [
   "days.mon",
@@ -32,39 +34,63 @@ interface Lesson {
   goalId: string;
 }
 
-// Tone → tailwind classes (all via semantic tokens)
-const TONE: Record<LevelTone, { bar: string; dot: string; chip: string }> = {
+// Tone → tailwind classes (no left strip; color lives in border + badge + gradient)
+const TONE: Record<
+  LevelTone,
+  { border: string; dot: string; chip: string; gradient: string; soft: string; text: string }
+> = {
   hsk1: {
-    bar: "bg-brand",
+    border: "border-b-brand",
     dot: "bg-brand",
     chip: "bg-brand text-brand-foreground",
+    gradient: "from-brand/12",
+    soft: "bg-brand/10 text-brand",
+    text: "text-brand",
   },
   hsk2: {
-    bar: "bg-brand/70",
-    dot: "bg-brand/70",
-    chip: "bg-brand/85 text-brand-foreground",
+    border: "border-b-coral-deep",
+    dot: "bg-coral-deep",
+    chip: "bg-coral-deep text-brand-foreground",
+    gradient: "from-coral-deep/12",
+    soft: "bg-coral-deep/10 text-coral-deep",
+    text: "text-coral-deep",
   },
   hsk3: {
-    bar: "bg-foreground",
+    border: "border-b-foreground",
     dot: "bg-foreground",
     chip: "bg-foreground text-background",
+    gradient: "from-foreground/10",
+    soft: "bg-foreground/8 text-foreground",
+    text: "text-foreground",
   },
   kids: {
-    bar: "bg-accent",
+    border: "border-b-accent",
     dot: "bg-accent",
     chip: "bg-accent text-accent-foreground",
+    gradient: "from-accent/14",
+    soft: "bg-accent/12 text-accent-foreground",
+    text: "text-accent-foreground",
   },
   speak: {
-    bar: "bg-brand-soft",
-    dot: "bg-brand-soft",
-    chip: "bg-brand-soft text-foreground",
+    border: "border-b-tiger",
+    dot: "bg-tiger",
+    chip: "bg-tiger text-brand-foreground",
+    gradient: "from-tiger/12",
+    soft: "bg-tiger/10 text-tiger",
+    text: "text-tiger",
   },
   individual: {
-    bar: "bg-muted-foreground/60",
+    border: "border-b-muted-foreground/60",
     dot: "bg-muted-foreground/60",
     chip: "bg-muted text-foreground",
+    gradient: "from-muted-foreground/8",
+    soft: "bg-muted/60 text-muted-foreground",
+    text: "text-muted-foreground",
   },
 };
+
+// Mascot watermark for the first 3 visible day columns
+const MASCOT_WATERMARKS = [mascotHello, mascotWave, mascotSmile];
 
 // Rich sample: 4–8 lessons per weekday, fewer on weekends
 const WEEK_TEMPLATE: Lesson[][] = [
@@ -187,6 +213,11 @@ export function SchedulePreviewSection() {
   }, [check]);
 
   const todayStr = new Date().toDateString();
+  const tomorrowStr = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toDateString();
+  }, []);
 
   return (
     <section id="schedule" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
@@ -207,8 +238,6 @@ export function SchedulePreviewSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative mt-10"
       >
-        {/* Track wrapper */}
-
         <div className="relative">
           {/* Gradient edges */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
@@ -224,7 +253,9 @@ export function SchedulePreviewSection() {
               const dayKey = DAY_KEYS[dow]!;
               const lessons = WEEK_TEMPLATE[dow]!;
               const isToday = d.toDateString() === todayStr;
+              const isTomorrow = d.toDateString() === tomorrowStr;
               const isPast = d.getTime() < new Date(todayStr).getTime();
+              const mascotIndex = isToday ? 0 : isTomorrow ? 1 : idx <= 2 ? 2 : -1;
 
               return (
                 <div
@@ -232,60 +263,73 @@ export function SchedulePreviewSection() {
                   data-day-col
                   ref={isToday ? todayRef : undefined}
                   className={cn(
-                    "relative w-[240px] shrink-0 snap-start sm:w-[260px]",
+                    "relative w-[260px] shrink-0 snap-start sm:w-[280px]",
+                    isPast && "opacity-60",
                   )}
                 >
                   <div
                     className={cn(
-                      "relative flex h-full flex-col overflow-hidden rounded-3xl border p-4 transition-colors",
+                      "relative flex h-full flex-col gap-4 rounded-[2rem] border p-5 transition-all",
                       isToday
-                        ? "border-brand/60 bg-brand-soft/40 shadow-float"
+                        ? "border-brand/40 bg-brand text-brand-foreground shadow-float"
                         : isPast
-                          ? "border-border/40 bg-muted/30 opacity-60"
-                          : "border-border/60 bg-surface hover:border-brand/40",
+                          ? "border-border/40 bg-muted/30"
+                          : "border-white/50 bg-white/60 shadow-[0_20px_50px_-18px_rgba(0,0,0,0.06)] backdrop-blur-xl",
                     )}
                   >
-                    {/* Mascot background for today */}
-                    {isToday && (
+                    {/* Mascot watermark for first 3 day columns */}
+                    {mascotIndex >= 0 && (
                       <img
-                        src={mascotPoint}
+                        src={MASCOT_WATERMARKS[mascotIndex]}
                         alt=""
                         aria-hidden
-                        className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 select-none opacity-20"
+                        className={cn(
+                          "pointer-events-none absolute -bottom-4 -right-4 h-36 w-36 select-none object-contain",
+                          isToday ? "opacity-25" : "opacity-15",
+                        )}
                         loading="lazy"
                       />
                     )}
 
                     {/* Day header */}
-                    <div className="relative mb-3 flex items-baseline justify-between border-b border-border/40 pb-3">
-                      <div>
-                        <div
-                          className={cn(
-                            "text-[10px] font-black uppercase tracking-[0.18em]",
-                            isToday ? "text-brand" : "text-muted-foreground",
-                          )}
-                        >
-                          {t(dayKey)}
+                    <div
+                      className={cn(
+                        "relative overflow-hidden rounded-2xl p-4",
+                        isToday
+                          ? "bg-brand-foreground/10"
+                          : "bg-white/50 backdrop-blur-md border border-white/40",
+                      )}
+                    >
+                      <div className="relative flex items-baseline justify-between">
+                        <div>
+                          <div
+                            className={cn(
+                              "text-[10px] font-black uppercase tracking-[0.18em]",
+                              isToday ? "text-brand-foreground/80" : "text-muted-foreground",
+                            )}
+                          >
+                            {isToday ? "Сегодня" : isTomorrow ? "Завтра" : t(dayKey)}
+                          </div>
+                          <div
+                            className={cn(
+                              "font-heading text-3xl font-black leading-none",
+                              isToday ? "text-brand-foreground" : "text-foreground",
+                            )}
+                          >
+                            {d.getDate()}
+                          </div>
                         </div>
-                        <div
-                          className={cn(
-                            "font-heading text-3xl font-black leading-none",
-                            isToday && "text-brand",
-                          )}
-                        >
-                          {d.getDate()}
-                        </div>
-                      </div>
-                      <div className="text-right text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        <div>{lessons.length} занятий</div>
-                        <div className="mt-0.5 opacity-60">
-                          {d.toLocaleString("ru-RU", { month: "short" })}
+                        <div className="text-right text-[10px] font-semibold uppercase tracking-wider opacity-70">
+                          <div>{lessons.length} занятий</div>
+                          <div className="mt-0.5 opacity-60">
+                            {d.toLocaleString("ru-RU", { month: "short" })}
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Lessons */}
-                    <div className="relative flex flex-col gap-2">
+                    <div className="relative flex flex-col gap-3">
                       {lessons.map((l, i) => (
                         <LessonCapsule
                           key={i}
@@ -300,7 +344,6 @@ export function SchedulePreviewSection() {
               );
             })}
           </div>
-
 
           <AnimatePresence>
             {canLeft && <ScrollArrow direction="left" onClick={() => scroll("left")} />}
@@ -340,34 +383,39 @@ function LessonCapsule({
   onClick: () => void;
 }) {
   const tone = TONE[lesson.tone];
-  // Duration bar: 60min → 50%, 90min → 100%
-  const barPct = Math.min(100, Math.round((lesson.duration / 90) * 100));
 
   return (
     <motion.button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      whileHover={disabled ? undefined : { y: -2 }}
+      whileHover={disabled ? undefined : { y: -3 }}
       whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border-2 border-border/60 bg-background p-3 text-left shadow-sm transition-shadow",
-        !disabled && "hover:border-brand hover:shadow-float",
+        "group relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-4 text-left shadow-[0_12px_30px_-12px_rgba(0,0,0,0.06)] backdrop-blur-md transition-all",
+        tone.border,
+        "border-b-4",
+        !disabled && "hover:bg-white hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)]",
         disabled && "cursor-not-allowed",
       )}
     >
-      {/* Left color rail */}
-      <span className={cn("absolute inset-y-0 left-0 w-1.5", tone.bar)} />
+      {/* Subtle tone gradient wash */}
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity group-hover:opacity-100",
+          tone.gradient,
+        )}
+      />
 
-      <div className="pl-2.5">
+      <div className="relative">
         <div className="flex items-center justify-between gap-2">
           <div className="font-heading text-lg font-black tabular-nums leading-none text-foreground">
             {lesson.time}
           </div>
           <span
             className={cn(
-              "rounded-md px-2 py-1 text-[10px] font-black uppercase tracking-wider",
+              "rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider",
               tone.chip,
             )}
           >
@@ -375,8 +423,8 @@ function LessonCapsule({
           </span>
         </div>
 
-        <div className="mt-2 flex items-center gap-3 text-xs font-semibold text-foreground/80">
-          <span className="inline-flex items-center gap-1">
+        <div className="mt-3 flex items-center gap-3 text-xs font-semibold text-foreground/80">
+          <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2 py-1">
             <Clock className="h-3.5 w-3.5" />
             {lesson.duration} мин
           </span>
@@ -393,10 +441,8 @@ function LessonCapsule({
           </span>
           <span
             className={cn(
-              "ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5",
-              lesson.seatsLeft <= 1
-                ? "bg-brand/15 text-brand"
-                : "bg-muted text-muted-foreground",
+              "ml-auto inline-flex items-center gap-1 rounded-full px-2 py-1",
+              lesson.seatsLeft <= 1 ? tone.soft : "bg-muted text-muted-foreground",
             )}
           >
             <Users className="h-3 w-3" />
@@ -407,7 +453,6 @@ function LessonCapsule({
     </motion.button>
   );
 }
-
 
 function ScrollArrow({
   direction,
