@@ -172,24 +172,26 @@ export function TeamSection() {
                     {t(p.bioKey)}
                   </p>
 
-                  <Link
-                    to="/schedule"
-                    className="relative mt-6 inline-flex w-fit items-center gap-3 overflow-hidden px-8 py-4 text-base font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
-                    style={{
-                      borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
-                      backgroundColor: "var(--brand)",
-                    }}
-                  >
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[4rem] font-black leading-none tracking-tighter text-white/15"
-                      style={{ letterSpacing: "-0.05em" }}
+                  {tab === "teachers" && (
+                    <Link
+                      to="/schedule"
+                      className="relative mt-6 inline-flex w-fit items-center gap-3 overflow-hidden px-8 py-4 text-base font-semibold text-brand-foreground shadow-soft transition hover:shadow-float"
+                      style={{
+                        borderRadius: "62% 38% 58% 42% / 50% 55% 45% 50%",
+                        backgroundColor: "var(--brand)",
+                      }}
                     >
-                      学习汉语
-                    </span>
-                    <CalendarDays className="relative h-5 w-5" />
-                    <span className="relative">{t("team.cta.schedule")}</span>
-                  </Link>
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden font-display text-[4rem] font-black leading-none tracking-tighter text-white/15"
+                        style={{ letterSpacing: "-0.05em" }}
+                      >
+                        学习汉语
+                      </span>
+                      <CalendarDays className="relative h-5 w-5" />
+                      <span className="relative">{t("team.cta.schedule")}</span>
+                    </Link>
+                  )}
                 </div>
               </motion.article>
             ))}
