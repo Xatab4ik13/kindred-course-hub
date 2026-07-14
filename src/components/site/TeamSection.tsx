@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 import teacher1 from "@/assets/teachers/teacher-1.jpg";
 import teacher2 from "@/assets/teachers/teacher-2.jpg";
 import teacher3 from "@/assets/teachers/teacher-3.jpg";
+import lead1 from "@/assets/leadership/timofey.jpg";
+import lead2 from "@/assets/leadership/nikolay.jpg";
+import lead3 from "@/assets/leadership/vadim.jpg";
 
 type Tab = "teachers" | "leadership";
 
@@ -42,10 +45,22 @@ const TEACHERS: Person[] = [
 
 const LEADERSHIP: Person[] = [
   {
-    photo: teacher2,
+    photo: lead1,
     nameKey: "team.l1.name",
     roleKey: "team.l1.role",
     bioKey: "team.l1.bio",
+  },
+  {
+    photo: lead2,
+    nameKey: "team.l2.name",
+    roleKey: "team.l2.role",
+    bioKey: "team.l2.bio",
+  },
+  {
+    photo: lead3,
+    nameKey: "team.l3.name",
+    roleKey: "team.l3.role",
+    bioKey: "team.l3.bio",
   },
 ];
 
