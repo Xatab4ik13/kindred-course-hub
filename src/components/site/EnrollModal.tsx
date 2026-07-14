@@ -71,11 +71,11 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/70"
             onClick={onClose}
             aria-hidden
           />
@@ -83,12 +83,14 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
           <motion.div
             role="dialog"
             aria-modal="true"
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            style={{ willChange: "transform, opacity" }}
             className="relative z-10 w-full max-w-lg overflow-hidden rounded-[2rem] bg-background shadow-float"
           >
+
             {/* Decorative hanzi */}
             <div
               aria-hidden
@@ -139,15 +141,9 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
               </div>
 
               <div className="mt-6">
-                <AnimatePresence mode="wait" initial={false}>
-                  {tab === "form" ? (
-                    <motion.div
-                      key="form"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.18 }}
-                    >
+                {tab === "form" ? (
+                  <div>
+
                       {sent ? (
                         <div className="flex flex-col items-center py-10 text-center">
                           <div className="grid h-16 w-16 place-items-center rounded-full bg-brand text-brand-foreground shadow-glow">
@@ -221,41 +217,35 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                           </button>
                         </form>
                       )}
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="contact"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      <p className="text-sm leading-relaxed text-muted-foreground">
-                        {t("enroll.contact.lead")}
-                      </p>
-                      <div className="mt-5 space-y-3">
-                        <ContactLink
-                          href="https://t.me/china_ya"
-                          bg="bg-[#0088cc]"
-                          initials="TG"
-                          title="TELEGRAM"
-                          desc={t("enroll.contact.tgDesc")}
-                        />
-                        <ContactLink
-                          href="https://vk.com/chinaja"
-                          bg="bg-[#0077ff]"
-                          initials="VK"
-                          title="ВКОНТАКТЕ"
-                          desc={t("enroll.contact.vkDesc")}
-                        />
-                      </div>
-                      <p className="mt-6 text-center text-xs text-muted-foreground">
-                        {t("enroll.contact.footer")}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {t("enroll.contact.lead")}
+                    </p>
+                    <div className="mt-5 space-y-3">
+                      <ContactLink
+                        href="https://t.me/china_ya"
+                        bg="bg-[#0088cc]"
+                        initials="TG"
+                        title="TELEGRAM"
+                        desc={t("enroll.contact.tgDesc")}
+                      />
+                      <ContactLink
+                        href="https://vk.com/chinaja"
+                        bg="bg-[#0077ff]"
+                        initials="VK"
+                        title="ВКОНТАКТЕ"
+                        desc={t("enroll.contact.vkDesc")}
+                      />
+                    </div>
+                    <p className="mt-6 text-center text-xs text-muted-foreground">
+                      {t("enroll.contact.footer")}
+                    </p>
+                  </div>
+                )}
               </div>
+
             </div>
           </motion.div>
         </motion.div>
@@ -303,7 +293,7 @@ function ContactLink({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group flex items-center gap-4 rounded-2xl p-4 text-white shadow-soft transition hover:scale-[1.01] hover:shadow-float",
+        "group flex items-center gap-4 rounded-2xl p-4 text-white shadow-soft transition hover:shadow-float",
         bg,
       )}
     >
