@@ -31,13 +31,18 @@ export function ReviewsSection() {
   const { t, lang } = useI18n();
   return (
     <section className="relative bg-black">
-      {/* Черный кривой разделитель, который перекрывает низ расписания */}
+      {/* Плавный черный разделитель, который перекрывает низ расписания */}
+      <svg
+        aria-hidden
+        className="absolute -top-16 left-0 w-full h-16 text-black"
+        viewBox="0 0 1440 64"
+        preserveAspectRatio="none"
+        fill="currentColor"
+      >
+        <path d="M0,64 L0,32 C240,0 480,64 720,32 C960,0 1200,64 1440,32 L1440,64 Z" />
+      </svg>
+
       <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8">
-        <div
-          aria-hidden
-          className="absolute -top-20 inset-x-0 h-40 bg-black"
-          style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 55%, 52% 0, 0 45%)" }}
-        />
 
         <div className="text-sm font-semibold uppercase tracking-widest text-brand-foreground">
           {t("reviews.title")}
