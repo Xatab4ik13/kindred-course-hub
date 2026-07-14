@@ -109,6 +109,9 @@ export function Header() {
         </div>
       </header>
 
+      {/* Mobile header spacer */}
+      <div className="h-16 md:hidden" aria-hidden="true" />
+
       {/* Mobile drawer */}
       <AnimatePresence>
         {menuOpen && (
