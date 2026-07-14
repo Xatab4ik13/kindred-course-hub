@@ -181,7 +181,7 @@ function TeamSlider({
   }, [checkScroll]);
 
   return (
-    <div className="relative">
+    <div className="relative px-10 md:px-12">
       <motion.div
         ref={trackRef}
         initial="hidden"
