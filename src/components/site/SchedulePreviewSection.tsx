@@ -299,15 +299,19 @@ export function SchedulePreviewSection() {
                 />
 
                 <div className="flex flex-col gap-3">
-                  {lessons.map((l, i) => (
-                    <LessonCard
-                      key={i}
-                      lesson={l}
-                      groupNo={groupNumber(dow, i)}
-                      disabled={isPast}
-                      onClick={() => !isPast && setEnrollGoal(l.goalId)}
-                    />
-                  ))}
+                  {filtered.length === 0 ? (
+                    <EmptyDay text={t("schedule.filter.noResults")} />
+                  ) : (
+                    filtered.map(({ lesson, no }) => (
+                      <LessonCard
+                        key={no}
+                        lesson={lesson}
+                        groupNo={no}
+                        disabled={isPast}
+                        onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             );
