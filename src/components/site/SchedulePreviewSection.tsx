@@ -269,7 +269,7 @@ export function SchedulePreviewSection() {
             const dow = (d.getDay() + 6) % 7;
             const dayKey = DAY_KEYS[dow]!;
             const lessons = WEEK_TEMPLATE[dow]!;
-            const isToday = d.toDateString() === todayStr;
+            const filtered = filterDayLessons(lessons, dow, filter);
             const isPast = d.getTime() < todayTime;
             const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
 
