@@ -30,13 +30,14 @@ const REVIEWS = [
 export function ReviewsSection() {
   const { t, lang } = useI18n();
   return (
-    <section className="relative bg-black">
-      {/* Плавный черный разделитель, который перекрывает низ расписания */}
+    <section className="relative" style={{ background: "oklch(0.19 0.045 28)" }}>
+      {/* Плавный разделитель, который перекрывает низ расписания */}
       <svg
         aria-hidden
-        className="absolute -top-16 left-0 w-full h-16 text-black"
+        className="absolute -top-16 left-0 w-full h-16"
         viewBox="0 0 1440 64"
         preserveAspectRatio="none"
+        style={{ color: "oklch(0.19 0.045 28)" }}
         fill="currentColor"
       >
         <path d="M0,64 L0,32 C240,0 480,64 720,32 C960,0 1200,64 1440,32 L1440,64 Z" />
