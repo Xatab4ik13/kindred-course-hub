@@ -194,7 +194,7 @@ export const dict = {
     "cta.learnMore": "Learn more",
     "about.eyebrow": "About",
     "about.title.1": "Chinese language school",
-    "about.title.2": "for Russian speakers",
+    "about.title.2": "for students",
     "about.lead":
       "CHINAR is an online school created with one goal: to make Chinese accessible and clear for every Russian-speaking student. We believe language is a bridge between cultures.",
     "about.goal.title": "Goal is result",
