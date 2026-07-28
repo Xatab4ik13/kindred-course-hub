@@ -14,6 +14,7 @@ const GOALS: { id: string; key: DictKey }[] = [
   { id: "group", key: "enroll.goal.group" },
   { id: "ege", key: "enroll.goal.ege" },
   { id: "kids", key: "enroll.goal.kids" },
+  { id: "consultation", key: "enroll.goal.consultation" },
   { id: "other", key: "enroll.goal.other" },
 ];
 
