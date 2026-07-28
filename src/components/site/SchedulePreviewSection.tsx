@@ -17,14 +17,12 @@ import teacher2 from "@/assets/teachers/teacher-2.webp";
 import teacher3 from "@/assets/teachers/teacher-3.webp";
 import teacher4 from "@/assets/teachers/teacher-4.webp";
 
-// Mock-mapping инициалов на фото. В будущем фото придёт с бекенда
-// (тот же URL, что и на карточке преподавателя, ужатый до размера аватарки).
-// Если фото нет — рендерим инициалы.
+// Mock-mapping инициалов на фото. В будущем фото придёт с бекенда.
 export const TEACHER_PHOTOS: Record<string, string> = {
-  "ТБ": teacher1,
-  "НР": teacher2,
-  "ВГ": teacher3,
-  "АС": teacher4,
+  ТБ: teacher1,
+  НР: teacher2,
+  ВГ: teacher3,
+  АС: teacher4,
 };
 
 export const DAY_KEYS: DictKey[] = [
@@ -39,19 +37,18 @@ export const DAY_KEYS: DictKey[] = [
 
 export const DAY_SHORT_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-type LevelTone = "hsk1" | "hsk2" | "hsk3" | "kids" | "speak" | "individual";
+export type LevelTone = "hsk1" | "hsk2" | "hsk3" | "kids" | "speak" | "individual" | "ege";
 
 export interface Lesson {
   time: string;
   duration: number;
-  level: string;
   tone: LevelTone;
-  teacher: string;
-  teacherName: string;
+  levelKey: DictKey;
+  teacherKey: DictKey;
+  teacherInitials: string;
   goalId: string;
 }
 
-// Chip color per level — soft tinted bg + strong text
 const CHIP: Record<LevelTone, string> = {
   hsk1: "bg-brand/10 text-brand",
   hsk2: "bg-coral-deep/10 text-coral-deep",
@@ -59,67 +56,77 @@ const CHIP: Record<LevelTone, string> = {
   kids: "bg-accent/40 text-accent-foreground",
   speak: "bg-tiger/12 text-tiger",
   individual: "bg-muted text-muted-foreground",
+  ege: "bg-tiger/15 text-tiger",
 };
 
-// Mascot rotation for the days: today, tomorrow, +2 highlighted; rest muted
 export const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
+
+// Shortcuts for template
+const TB = { teacherKey: "schedule.teacher.tb" as DictKey, teacherInitials: "ТБ" };
+const NR = { teacherKey: "schedule.teacher.nr" as DictKey, teacherInitials: "НР" };
+const VG = { teacherKey: "schedule.teacher.vg" as DictKey, teacherInitials: "ВГ" };
 
 export const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
   [
-    { time: "09:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "11:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "13:30", duration: 90, level: "HSK 2", tone: "hsk2", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "17:00", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
-    { time: "18:30", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "20:00", duration: 60, level: "Индивид.", tone: "individual", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "individual" },
+    { time: "09:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "13:30", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
+    { time: "17:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
+    { time: "18:30", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "20:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
   ],
   // Tue
   [
-    { time: "10:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "12:00", duration: 90, level: "HSK 3", tone: "hsk3", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "16:00", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
-    { time: "18:00", duration: 90, level: "HSK 2", tone: "hsk2", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "20:00", duration: 60, level: "Индивид.", tone: "individual", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "individual" },
+    { time: "10:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "12:00", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
+    { time: "16:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
+    { time: "18:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
+    { time: "20:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...TB, goalId: "individual" },
   ],
   // Wed
   [
-    { time: "09:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "11:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "14:00", duration: 60, level: "Индивид.", tone: "individual", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "individual" },
-    { time: "17:30", duration: 90, level: "HSK 2", tone: "hsk2", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "19:30", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
+    { time: "09:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "14:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
+    { time: "17:30", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
+    { time: "19:30", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
   ],
   // Thu
   [
-    { time: "10:00", duration: 90, level: "HSK 3", tone: "hsk3", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "12:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "15:00", duration: 60, level: "ЕГЭ", tone: "individual", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "ege" },
-    { time: "18:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "19:30", duration: 90, level: "HSK 3", tone: "hsk3", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
+    { time: "10:00", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
+    { time: "12:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "15:00", duration: 60, tone: "ege", levelKey: "schedule.level.ege", ...VG, goalId: "ege" },
+    { time: "18:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "19:30", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
   ],
   // Fri
   [
-    { time: "09:00", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
-    { time: "11:00", duration: 90, level: "HSK 2", tone: "hsk2", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "14:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "17:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "19:00", duration: 60, level: "Индивид.", tone: "individual", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "individual" },
+    { time: "09:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
+    { time: "11:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
+    { time: "14:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "17:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "19:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
   ],
   // Sat
   [
-    { time: "10:00", duration: 90, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "12:00", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
-    { time: "14:00", duration: 90, level: "HSK 2", tone: "hsk2", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "hsk2" },
-    { time: "16:00", duration: 60, level: "ЕГЭ", tone: "individual", teacher: "ВГ", teacherName: "Вадим Г.", goalId: "ege" },
+    { time: "10:00", duration: 90, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "12:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
+    { time: "14:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
+    { time: "16:00", duration: 60, tone: "ege", levelKey: "schedule.level.ege", ...VG, goalId: "ege" },
   ],
   // Sun
   [
-    { time: "11:00", duration: 60, level: "Kids", tone: "kids", teacher: "НР", teacherName: "Николай Р.", goalId: "kids" },
-    { time: "13:00", duration: 90, level: "HSK 1", tone: "hsk1", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "hsk1" },
-    { time: "15:30", duration: 60, level: "Speak", tone: "speak", teacher: "ТБ", teacherName: "Тимофей Б.", goalId: "group" },
+    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
+    { time: "13:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
+    { time: "15:30", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
   ],
 ];
+
+// Deterministic group number per (dayIndex, lessonIndex) — stable and readable.
+export function groupNumber(dayIndex: number, lessonIndex: number) {
+  return String(dayIndex * 10 + lessonIndex + 35).padStart(3, "0");
+}
 
 function startOfWeek(d: Date) {
   const day = (d.getDay() + 6) % 7;
@@ -130,7 +137,8 @@ function startOfWeek(d: Date) {
 }
 
 export function SchedulePreviewSection() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const locale = lang === "ru" ? "ru-RU" : "en-US";
   const start = useMemo(() => startOfWeek(new Date()), []);
   const days = useMemo(
     () =>
@@ -173,7 +181,7 @@ export function SchedulePreviewSection() {
     window.addEventListener("resize", check, { passive: true });
     const today = todayRef.current;
     if (today) {
-      const left = today.offsetLeft - 24;
+      const left = today.offsetLeft - 16;
       el.scrollTo({ left: Math.max(0, left), behavior: "auto" });
     }
     return () => {
@@ -190,7 +198,7 @@ export function SchedulePreviewSection() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionHeader eyebrow={t("schedule.title")} title={t("schedule.subtitle")} />
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <HeaderArrow direction="left" disabled={!canLeft} onClick={() => scroll("left")} />
             <HeaderArrow direction="right" disabled={!canRight} onClick={() => scroll("right")} />
           </div>
@@ -210,70 +218,59 @@ export function SchedulePreviewSection() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="relative mt-10"
       >
-        {/* Mobile day pager */}
-        <div className="sm:hidden">
-          <MobileDayPager
-            days={days}
-            todayStr={todayStr}
-            todayTime={todayTime}
-            onEnroll={(g) => setEnrollGoal(g)}
-          />
-        </div>
+        <div
+          ref={trackRef}
+          className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-6 pt-2 sm:mx-0 sm:gap-6 sm:px-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {days.map((d, idx) => {
+            const dow = (d.getDay() + 6) % 7;
+            const dayKey = DAY_KEYS[dow]!;
+            const lessons = WEEK_TEMPLATE[dow]!;
+            const isToday = d.toDateString() === todayStr;
+            const isPast = d.getTime() < todayTime;
+            const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
 
-        {/* Desktop / tablet horizontal scroll */}
-        <div className="relative hidden sm:block">
-          <div
-            ref={trackRef}
-            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-2 pb-6 pt-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {days.map((d, idx) => {
-              const dow = (d.getDay() + 6) % 7;
-              const dayKey = DAY_KEYS[dow]!;
-              const lessons = WEEK_TEMPLATE[dow]!;
-              const isToday = d.toDateString() === todayStr;
-              const isPast = d.getTime() < todayTime;
-              const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
+            const monthShort = d.toLocaleString(locale, { month: "long" });
+            const dowShort = d.toLocaleString(locale, { weekday: "short" });
+            const dayLabel = isToday ? t("schedule.today") : t(dayKey);
 
-              const monthShort = d.toLocaleString("ru-RU", { month: "long" });
-              const dayLabel = isToday ? "Сегодня" : t(dayKey);
+            return (
+              <div
+                key={idx}
+                data-day-col
+                ref={isToday ? todayRef : undefined}
+                className={cn(
+                  "flex w-[82vw] max-w-[340px] shrink-0 snap-start flex-col gap-4 sm:w-[290px] xl:w-[310px]",
+                  isPast && "opacity-55",
+                )}
+              >
+                <DayPlaque
+                  day={d.getDate()}
+                  label={dayLabel}
+                  monthShort={monthShort}
+                  dowShort={dowShort}
+                  isToday={isToday}
+                  isPast={isPast}
+                  mascot={mascot}
+                />
 
-              return (
-                <div
-                  key={idx}
-                  data-day-col
-                  ref={isToday ? todayRef : undefined}
-                  className={cn(
-                    "flex w-[290px] max-w-[340px] shrink-0 snap-start flex-col gap-4 xl:w-[310px]",
-                    isPast && "opacity-55",
-                  )}
-                >
-                  <DayPlaque
-                    day={d.getDate()}
-                    label={dayLabel}
-                    monthShort={monthShort}
-                    dowShort={DAY_SHORT_RU[dow]!}
-                    isToday={isToday}
-                    isPast={isPast}
-                    mascot={mascot}
-                  />
-
-                  <div className="flex flex-col gap-3">
-                    {lessons.map((l, i) => (
-                      <LessonCard
-                        key={i}
-                        lesson={l}
-                        disabled={isPast}
-                        onClick={() => !isPast && setEnrollGoal(l.goalId)}
-                      />
-                    ))}
-                  </div>
+                <div className="flex flex-col gap-3">
+                  {lessons.map((l, i) => (
+                    <LessonCard
+                      key={i}
+                      lesson={l}
+                      groupNo={groupNumber(dow, i)}
+                      disabled={isPast}
+                      onClick={() => !isPast && setEnrollGoal(l.goalId)}
+                    />
+                  ))}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-3 sm:hidden">
+        <div className="mt-6 flex items-center justify-center gap-3 md:hidden">
           <Link
             to="/schedule"
             className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
@@ -289,144 +286,6 @@ export function SchedulePreviewSection() {
         defaultGoal={enrollGoal ?? undefined}
       />
     </section>
-  );
-}
-
-export function MobileDayPager({
-  days,
-  todayStr,
-  todayTime,
-  onEnroll,
-}: {
-  days: Date[];
-  todayStr: string;
-  todayTime: number;
-  onEnroll: (goalId: string) => void;
-}) {
-  const { t } = useI18n();
-  const initial = Math.max(
-    0,
-    days.findIndex((d) => d.toDateString() === todayStr),
-  );
-  const [index, setIndex] = useState(initial === -1 ? 0 : initial);
-  const [dir, setDir] = useState<1 | -1>(1);
-
-  const go = (delta: number) => {
-    const next = Math.min(days.length - 1, Math.max(0, index + delta));
-    if (next === index) return;
-    setDir(delta > 0 ? 1 : -1);
-    setIndex(next);
-  };
-
-  // touch swipe
-  const startX = useRef<number | null>(null);
-  const onTouchStart = (e: React.TouchEvent) => {
-    startX.current = e.touches[0]?.clientX ?? null;
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (startX.current == null) return;
-    const dx = (e.changedTouches[0]?.clientX ?? 0) - startX.current;
-    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
-    startX.current = null;
-  };
-
-  const d = days[index]!;
-  const dow = (d.getDay() + 6) % 7;
-  const dayKey = DAY_KEYS[dow]!;
-  const lessons = WEEK_TEMPLATE[dow]!;
-  const isToday = d.toDateString() === todayStr;
-  const isPast = d.getTime() < todayTime;
-  const mascot = MASCOT_POOL[index % MASCOT_POOL.length]!;
-  const monthShort = d.toLocaleString("ru-RU", { month: "long" });
-  const dayLabel = isToday ? "Сегодня" : t(dayKey);
-
-  return (
-    <div>
-      {/* pager header */}
-      <div className="flex items-center justify-between gap-3 pb-4">
-        <HeaderArrow
-          direction="left"
-          disabled={index === 0}
-          onClick={() => go(-1)}
-        />
-        <div className="text-center">
-          <div className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
-            {dayLabel}
-          </div>
-          <div className="font-heading text-lg font-black">
-            {d.getDate()} {monthShort}
-          </div>
-        </div>
-        <HeaderArrow
-          direction="right"
-          disabled={index === days.length - 1}
-          onClick={() => go(1)}
-        />
-      </div>
-
-      <div
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        className="relative overflow-hidden"
-        style={{ touchAction: "pan-y" }}
-      >
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: dir * 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          className={cn("flex flex-col gap-4", isPast && "opacity-55")}
-        >
-          <DayPlaque
-            day={d.getDate()}
-            label={dayLabel}
-            monthShort={monthShort}
-            dowShort={DAY_SHORT_RU[dow]!}
-            isToday={isToday}
-            isPast={isPast}
-            mascot={mascot}
-          />
-          <div className="flex flex-col gap-3">
-            {lessons.length === 0 && (
-              <div className="rounded-3xl border border-dashed border-border/60 bg-surface p-6 text-center text-sm text-muted-foreground">
-                Занятий нет
-              </div>
-            )}
-            {lessons.map((l, i) => (
-              <LessonCard
-                key={i}
-                lesson={l}
-                disabled={isPast}
-                onClick={() => !isPast && onEnroll(l.goalId)}
-              />
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* dots */}
-      <div className="mt-5 flex flex-wrap justify-center gap-1.5">
-        {days.map((dd, i) => {
-          const active = i === index;
-          const past = dd.getTime() < todayTime;
-          return (
-            <button
-              key={i}
-              type="button"
-              onClick={() => {
-                setDir(i > index ? 1 : -1);
-                setIndex(i);
-              }}
-              aria-label={`День ${i + 1}`}
-              className={cn(
-                "h-2 rounded-full transition-all",
-                active ? "w-6 bg-brand" : past ? "w-2 bg-foreground/15" : "w-2 bg-foreground/30",
-              )}
-            />
-          );
-        })}
-      </div>
-    </div>
   );
 }
 
@@ -495,13 +354,17 @@ export function DayPlaque({
 
 export function LessonCard({
   lesson,
+  groupNo,
   disabled,
   onClick,
 }: {
   lesson: Lesson;
+  groupNo: string;
   disabled: boolean;
   onClick: () => void;
 }) {
+  const { t } = useI18n();
+  const teacherName = t(lesson.teacherKey);
   return (
     <motion.button
       type="button"
@@ -517,30 +380,40 @@ export function LessonCard({
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <span className="font-heading text-2xl font-black tabular-nums leading-none text-foreground">
-          {lesson.time}
-        </span>
+        <div className="min-w-0">
+          <div className="font-heading text-2xl font-black tabular-nums leading-none text-foreground">
+            {lesson.time}
+          </div>
+          <div className="mt-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-muted-foreground">
+            {t("schedule.groupPrefix")}
+            {groupNo}
+          </div>
+        </div>
         <span
           className={cn(
-            "rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider",
+            "shrink-0 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider",
             CHIP[lesson.tone],
           )}
         >
-          {lesson.level}
+          {t(lesson.levelKey)}
         </span>
       </div>
 
       <div>
-        <p className="text-xs font-medium text-muted-foreground">Длительность</p>
-        <p className="text-sm font-bold text-foreground">{lesson.duration} минут</p>
+        <p className="text-xs font-medium text-muted-foreground">{t("schedule.duration")}</p>
+        <p className="text-sm font-bold text-foreground">
+          {lesson.duration} {t("schedule.minutes")}
+        </p>
       </div>
 
       <div className="flex items-center gap-3 border-t border-border/50 pt-3">
-        <TeacherAvatar initials={lesson.teacher} name={lesson.teacherName} />
+        <TeacherAvatar initials={lesson.teacherInitials} name={teacherName} />
 
-        <div className="flex flex-col">
-          <span className="text-[11px] font-medium text-muted-foreground">Преподаватель</span>
-          <span className="text-sm font-bold text-foreground">{lesson.teacherName}</span>
+        <div className="flex min-w-0 flex-col">
+          <span className="text-[11px] font-medium text-muted-foreground">
+            {t("schedule.teacherLabel")}
+          </span>
+          <span className="truncate text-sm font-bold text-foreground">{teacherName}</span>
         </div>
       </div>
     </motion.button>
@@ -585,7 +458,7 @@ function HeaderArrow({
       transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
       disabled={disabled}
-      aria-label={direction === "left" ? "Назад" : "Вперёд"}
+      aria-label={direction === "left" ? "←" : "→"}
       className={cn(
         "flex h-11 w-11 items-center justify-center rounded-full border border-border/60 bg-surface text-foreground shadow-[0_8px_24px_-16px_rgba(0,0,0,0.2)] transition-opacity",
         disabled ? "opacity-40 cursor-not-allowed" : "hover:shadow-glow",

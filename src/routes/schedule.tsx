@@ -8,11 +8,10 @@ import { EnrollModal } from "@/components/site/EnrollModal";
 import {
   DayPlaque,
   LessonCard,
-  MobileDayPager,
   WEEK_TEMPLATE,
   DAY_KEYS,
-  DAY_SHORT_RU,
   MASCOT_POOL,
+  groupNumber,
 } from "@/components/site/SchedulePreviewSection";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
@@ -44,16 +43,9 @@ function startOfWeek(d: Date) {
   return r;
 }
 
-function formatRange(start: Date) {
-  const end = new Date(start);
-  end.setDate(start.getDate() + 6);
-  const fmt = (d: Date) =>
-    d.toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
-  return `${fmt(start)} — ${fmt(end)}`;
-}
-
 function SchedulePage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const locale = lang === "ru" ? "ru-RU" : "en-US";
   const baseWeek = useMemo(() => startOfWeek(new Date()), []);
   const [offset, setOffset] = useState(0);
   const [enrollGoal, setEnrollGoal] = useState<string | null>(null);
@@ -74,8 +66,18 @@ function SchedulePage() {
     [weekStart],
   );
 
+  const formatRange = (start: Date) => {
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    const fmt = (d: Date) =>
+      d.toLocaleDateString(locale, { day: "numeric", month: "long" });
+    return `${fmt(start)} — ${fmt(end)}`;
+  };
+
   const todayStr = new Date().toDateString();
   const todayTime = new Date(todayStr).getTime();
+
+  const weekLabel = offset === 0 ? t("schedule.currentWeek") : t("schedule.nextWeek");
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -87,12 +89,11 @@ function SchedulePage() {
               {t("nav.schedule")}
             </span>
             <h1 className="mt-4 font-display text-[2.25rem] font-black leading-[1.05] tracking-tight md:text-5xl lg:text-6xl">
-              <span className="block">Расписание</span>
-              <span className="block text-brand">на любую неделю</span>
+              <span className="block">{t("schedule.pageTitle.1")}</span>
+              <span className="block text-brand">{t("schedule.pageTitle.2")}</span>
             </h1>
             <p className="mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-              Выбирайте удобное время и записывайтесь в один клик. Групповые и индивидуальные
-              занятия — онлайн и офлайн.
+              {t("schedule.pageLead")}
             </p>
           </div>
 
@@ -104,7 +105,7 @@ function SchedulePage() {
             />
             <div className="min-w-0 flex-1 text-center md:min-w-[220px] md:flex-none">
               <div className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-muted-foreground">
-                {offset === 0 ? "Текущая неделя" : offset > 0 ? `+${offset} нед.` : `${offset} нед.`}
+                {weekLabel}
               </div>
               <div className="mt-1 font-heading text-base font-black text-foreground md:text-lg">
                 {formatRange(weekStart)}
@@ -113,34 +114,71 @@ function SchedulePage() {
             <WeekArrow
               direction="right"
               onClick={() => setOffset((o) => o + 1)}
-              disabled={offset >= 8}
+              disabled={offset >= 1}
             />
           </div>
         </div>
 
-        {/* Mobile: single-day pager */}
+        {/* Mobile + tablet: horizontal scroll, same rhythm as home preview */}
         <motion.div
-          key={`m-${offset}`}
+          key={`h-${offset}`}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 sm:hidden"
+          className="mt-10 xl:hidden"
         >
-          <MobileDayPager
-            days={days}
-            todayStr={todayStr}
-            todayTime={todayTime}
-            onEnroll={(g) => setEnrollGoal(g)}
-          />
+          <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-6 pt-2 sm:gap-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {days.map((d, idx) => {
+              const dow = (d.getDay() + 6) % 7;
+              const dayKey = DAY_KEYS[dow]!;
+              const lessons = WEEK_TEMPLATE[dow]!;
+              const isToday = d.toDateString() === todayStr;
+              const isPast = d.getTime() < todayTime;
+              const mascot = MASCOT_POOL[(offset * 7 + idx) % MASCOT_POOL.length]!;
+              const monthShort = d.toLocaleString(locale, { month: "long" });
+              const dowShort = d.toLocaleString(locale, { weekday: "short" });
+              const label = isToday ? t("schedule.today") : t(dayKey);
+              return (
+                <div
+                  key={idx}
+                  className={cn(
+                    "flex w-[82vw] max-w-[340px] shrink-0 snap-start flex-col gap-4 sm:w-[290px]",
+                    isPast && "opacity-55",
+                  )}
+                >
+                  <DayPlaque
+                    day={d.getDate()}
+                    label={label}
+                    monthShort={monthShort}
+                    dowShort={dowShort}
+                    isToday={isToday}
+                    isPast={isPast}
+                    mascot={mascot}
+                  />
+                  <div className="flex flex-col gap-3">
+                    {lessons.map((l, i) => (
+                      <LessonCard
+                        key={i}
+                        lesson={l}
+                        groupNo={groupNumber(dow, i)}
+                        disabled={isPast}
+                        onClick={() => !isPast && setEnrollGoal(l.goalId)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
 
-        {/* Tablet+ grid */}
+        {/* Desktop grid — full week visible at once */}
         <motion.div
           key={offset}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-12 hidden gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7"
+          className="mt-12 hidden gap-6 xl:grid xl:grid-cols-7"
         >
           {days.map((d, idx) => {
             const dow = (d.getDay() + 6) % 7;
@@ -149,8 +187,9 @@ function SchedulePage() {
             const isToday = d.toDateString() === todayStr;
             const isPast = d.getTime() < todayTime;
             const mascot = MASCOT_POOL[(offset * 7 + idx) % MASCOT_POOL.length]!;
-            const monthShort = d.toLocaleString("ru-RU", { month: "long" });
-            const label = isToday ? "Сегодня" : t(dayKey);
+            const monthShort = d.toLocaleString(locale, { month: "long" });
+            const dowShort = d.toLocaleString(locale, { weekday: "short" });
+            const label = isToday ? t("schedule.today") : t(dayKey);
 
             return (
               <div
@@ -161,7 +200,7 @@ function SchedulePage() {
                   day={d.getDate()}
                   label={label}
                   monthShort={monthShort}
-                  dowShort={DAY_SHORT_RU[dow]!}
+                  dowShort={dowShort}
                   isToday={isToday}
                   isPast={isPast}
                   mascot={mascot}
@@ -171,6 +210,7 @@ function SchedulePage() {
                     <LessonCard
                       key={i}
                       lesson={l}
+                      groupNo={groupNumber(dow, i)}
                       disabled={isPast}
                       onClick={() => !isPast && setEnrollGoal(l.goalId)}
                     />
@@ -209,7 +249,7 @@ function WeekArrow({
       whileTap={disabled ? undefined : { scale: 0.94 }}
       onClick={onClick}
       disabled={disabled}
-      aria-label={direction === "left" ? "Предыдущая неделя" : "Следующая неделя"}
+      aria-label={direction === "left" ? "←" : "→"}
       className={cn(
         "flex h-12 w-12 items-center justify-center rounded-full border border-border/60 bg-surface text-foreground shadow-[0_8px_24px_-16px_rgba(0,0,0,0.2)] transition-opacity",
         disabled ? "opacity-40 cursor-not-allowed" : "hover:shadow-glow",

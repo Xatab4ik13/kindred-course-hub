@@ -14,6 +14,7 @@ const GOALS: { id: string; key: DictKey }[] = [
   { id: "group", key: "enroll.goal.group" },
   { id: "ege", key: "enroll.goal.ege" },
   { id: "kids", key: "enroll.goal.kids" },
+  { id: "consultation", key: "enroll.goal.consultation" },
   { id: "other", key: "enroll.goal.other" },
 ];
 
@@ -254,7 +255,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                         desc={t("enroll.contact.tgDesc")}
                       />
                       <ContactLink
-                        href="https://vk.com/chinaja"
+                        href="https://vk.ru/onlinechinar"
                         bg="bg-[#0077ff]"
                         initials="VK"
                         title="ВКОНТАКТЕ"

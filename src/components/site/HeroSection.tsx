@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useI18n } from "@/providers/i18n";
 
 /**
  * Hero — тишина и имя.
@@ -6,6 +7,7 @@ import { motion } from "motion/react";
  * Текст остаётся на сплошном градиенте, видео лишь едва проступает сквозь него.
  */
 export function HeroSection() {
+  const { t } = useI18n();
   return (
     <section className="relative isolate overflow-hidden text-brand-foreground">
       {/* Видео-фон */}
@@ -51,9 +53,9 @@ export function HeroSection() {
           className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
           style={{ fontSize: "clamp(1.35rem, 5.5vw, 5.5rem)" }}
         >
-          <span className="text-brand-foreground">Онлайн школа</span>
+          <span className="text-brand-foreground">{t("hero.main.line1")}</span>
           <br />
-          <span className="text-brand">китайского языка</span>
+          <span className="text-brand">{t("hero.main.line2")}</span>
         </motion.p>
       </div>
 

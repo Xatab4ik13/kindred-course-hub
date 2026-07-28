@@ -390,7 +390,7 @@ function PricingPage() {
                 className={cn(
                   "relative grid min-w-0 overflow-hidden rounded-[2rem] border shadow-soft md:rounded-[2.5rem] md:grid-cols-[1.35fr_1fr]",
                   isSpecial
-                    ? "border-ink bg-ink text-cream"
+                    ? "card-featured border-ink bg-ink text-cream"
                     : "border-border/60 bg-surface text-surface-foreground",
                 )}
               >
