@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useI18n } from "@/providers/i18n";
 
 /**
  * Hero — тишина и имя.
@@ -6,6 +7,7 @@ import { motion } from "motion/react";
  * Текст остаётся на сплошном градиенте, видео лишь едва проступает сквозь него.
  */
 export function HeroSection() {
+  const { t } = useI18n();
   return (
     <section className="relative isolate overflow-hidden text-brand-foreground">
       {/* Видео-фон */}
