@@ -250,6 +250,10 @@ export function SchedulePreviewSection() {
         </div>
       </div>
 
+      <div className="mt-8">
+        <ScheduleFilters value={filter} onChange={setFilter} showQuery={false} />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
