@@ -268,7 +268,7 @@ export const dict = {
     "team.t1.bio": "10 years of teaching. MA in Philology, Peking University, IPA certified. Prepares students for HSK and business Chinese.",
     "team.t2.name": "Anna Sokolova",
     "team.t2.role": "Methodist · HSK 1–3",
-    "team.t2.bio": "Lived 6 years in Shanghai. Author of a method for Russian speakers. Runs conversation clubs and beginner programmes.",
+    "team.t2.bio": "Lived 6 years in Shanghai. Author of a beginner-friendly method. Runs conversation clubs and starter programmes for all students.",
     "team.t3.name": "Zhang Wei",
     "team.t3.role": "Native · Conversation",
     "team.t3.bio": "Specialist in phonetics and calligraphy. Opens Chinese culture through live dialogue and tone work.",
