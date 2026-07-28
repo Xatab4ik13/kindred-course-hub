@@ -6,6 +6,7 @@ export const dict = {
     "nav.schedule": "Расписание",
     "nav.reviews": "Отзывы",
     "nav.contacts": "Контакты",
+    "nav.news": "Новости",
     "cta.enroll": "Записаться",
     "cta.learnMore": "Узнать больше",
     "about.eyebrow": "О нас",
