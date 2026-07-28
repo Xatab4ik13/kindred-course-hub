@@ -11,7 +11,10 @@ import {
   WEEK_TEMPLATE,
   DAY_KEYS,
   MASCOT_POOL,
-  groupNumber,
+  ScheduleFilters,
+  filterDayLessons,
+  EMPTY_FILTER,
+  type ScheduleFilter,
 } from "@/components/site/SchedulePreviewSection";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
@@ -49,6 +52,7 @@ function SchedulePage() {
   const baseWeek = useMemo(() => startOfWeek(new Date()), []);
   const [offset, setOffset] = useState(0);
   const [enrollGoal, setEnrollGoal] = useState<string | null>(null);
+  const [filter, setFilter] = useState<ScheduleFilter>(EMPTY_FILTER);
 
   const weekStart = useMemo(() => {
     const d = new Date(baseWeek);
@@ -118,6 +122,10 @@ function SchedulePage() {
             />
           </div>
         </div>
+        <div className="mt-8">
+          <ScheduleFilters value={filter} onChange={setFilter} />
+        </div>
+
 
         {/* Mobile + tablet: horizontal scroll, same rhythm as home preview */}
         <motion.div
@@ -132,6 +140,7 @@ function SchedulePage() {
               const dow = (d.getDay() + 6) % 7;
               const dayKey = DAY_KEYS[dow]!;
               const lessons = WEEK_TEMPLATE[dow]!;
+              const filtered = filterDayLessons(lessons, dow, filter);
               const isToday = d.toDateString() === todayStr;
               const isPast = d.getTime() < todayTime;
               const mascot = MASCOT_POOL[(offset * 7 + idx) % MASCOT_POOL.length]!;
@@ -156,15 +165,21 @@ function SchedulePage() {
                     mascot={mascot}
                   />
                   <div className="flex flex-col gap-3">
-                    {lessons.map((l, i) => (
-                      <LessonCard
-                        key={i}
-                        lesson={l}
-                        groupNo={groupNumber(dow, i)}
-                        disabled={isPast}
-                        onClick={() => !isPast && setEnrollGoal(l.goalId)}
-                      />
-                    ))}
+                    {filtered.length === 0 ? (
+                      <div className="rounded-3xl border border-dashed border-border/60 bg-surface/60 p-5 text-center text-xs font-semibold text-muted-foreground">
+                        {t("schedule.filter.noResults")}
+                      </div>
+                    ) : (
+                      filtered.map(({ lesson, no }) => (
+                        <LessonCard
+                          key={no}
+                          lesson={lesson}
+                          groupNo={no}
+                          disabled={isPast}
+                          onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
+                        />
+                      ))
+                    )}
                   </div>
                 </div>
               );
@@ -184,6 +199,7 @@ function SchedulePage() {
             const dow = (d.getDay() + 6) % 7;
             const dayKey = DAY_KEYS[dow]!;
             const lessons = WEEK_TEMPLATE[dow]!;
+            const filtered = filterDayLessons(lessons, dow, filter);
             const isToday = d.toDateString() === todayStr;
             const isPast = d.getTime() < todayTime;
             const mascot = MASCOT_POOL[(offset * 7 + idx) % MASCOT_POOL.length]!;
@@ -206,15 +222,21 @@ function SchedulePage() {
                   mascot={mascot}
                 />
                 <div className="flex flex-col gap-3">
-                  {lessons.map((l, i) => (
-                    <LessonCard
-                      key={i}
-                      lesson={l}
-                      groupNo={groupNumber(dow, i)}
-                      disabled={isPast}
-                      onClick={() => !isPast && setEnrollGoal(l.goalId)}
-                    />
-                  ))}
+                  {filtered.length === 0 ? (
+                    <div className="rounded-3xl border border-dashed border-border/60 bg-surface/60 p-5 text-center text-xs font-semibold text-muted-foreground">
+                      {t("schedule.filter.noResults")}
+                    </div>
+                  ) : (
+                    filtered.map(({ lesson, no }) => (
+                      <LessonCard
+                        key={no}
+                        lesson={lesson}
+                        groupNo={no}
+                        disabled={isPast}
+                        onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             );

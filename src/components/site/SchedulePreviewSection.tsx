@@ -66,6 +66,44 @@ const TB = { teacherKey: "schedule.teacher.tb" as DictKey, teacherInitials: "Т�
 const NR = { teacherKey: "schedule.teacher.nr" as DictKey, teacherInitials: "НР" };
 const VG = { teacherKey: "schedule.teacher.vg" as DictKey, teacherInitials: "ВГ" };
 
+export interface TeacherOption {
+  key: DictKey;
+  initials: string;
+}
+
+export const TEACHERS: TeacherOption[] = [
+  { key: "schedule.teacher.tb", initials: "ТБ" },
+  { key: "schedule.teacher.nr", initials: "НР" },
+  { key: "schedule.teacher.vg", initials: "ВГ" },
+];
+
+export interface ScheduleFilter {
+  teacherKey: DictKey | null;
+  query: string;
+}
+
+export const EMPTY_FILTER: ScheduleFilter = { teacherKey: null, query: "" };
+
+export interface FilteredLesson {
+  lesson: Lesson;
+  no: string;
+}
+
+export function filterDayLessons(
+  lessons: Lesson[],
+  dow: number,
+  filter: ScheduleFilter,
+): FilteredLesson[] {
+  const q = filter.query.trim().toLowerCase().replace(/^№|^#/, "");
+  return lessons
+    .map((lesson, i) => ({ lesson, no: groupNumber(dow, i) }))
+    .filter(({ lesson, no }) => {
+      if (filter.teacherKey && lesson.teacherKey !== filter.teacherKey) return false;
+      if (q && !no.includes(q)) return false;
+      return true;
+    });
+}
+
 export const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
   [
@@ -151,6 +189,7 @@ export function SchedulePreviewSection() {
   );
 
   const [enrollGoal, setEnrollGoal] = useState<string | null>(null);
+  const [filter, setFilter] = useState<ScheduleFilter>(EMPTY_FILTER);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const todayRef = useRef<HTMLDivElement | null>(null);
   const [canLeft, setCanLeft] = useState(false);
@@ -211,6 +250,10 @@ export function SchedulePreviewSection() {
         </div>
       </div>
 
+      <div className="mt-8">
+        <ScheduleFilters value={filter} onChange={setFilter} showQuery={false} />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -226,6 +269,7 @@ export function SchedulePreviewSection() {
             const dow = (d.getDay() + 6) % 7;
             const dayKey = DAY_KEYS[dow]!;
             const lessons = WEEK_TEMPLATE[dow]!;
+            const filtered = filterDayLessons(lessons, dow, filter);
             const isToday = d.toDateString() === todayStr;
             const isPast = d.getTime() < todayTime;
             const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
@@ -255,15 +299,19 @@ export function SchedulePreviewSection() {
                 />
 
                 <div className="flex flex-col gap-3">
-                  {lessons.map((l, i) => (
-                    <LessonCard
-                      key={i}
-                      lesson={l}
-                      groupNo={groupNumber(dow, i)}
-                      disabled={isPast}
-                      onClick={() => !isPast && setEnrollGoal(l.goalId)}
-                    />
-                  ))}
+                  {filtered.length === 0 ? (
+                    <EmptyDay text={t("schedule.filter.noResults")} />
+                  ) : (
+                    filtered.map(({ lesson, no }) => (
+                      <LessonCard
+                        key={no}
+                        lesson={lesson}
+                        groupNo={no}
+                        disabled={isPast}
+                        onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             );
@@ -466,5 +514,112 @@ function HeaderArrow({
     >
       <Icon className="h-5 w-5" />
     </motion.button>
+  );
+}
+
+export function ScheduleFilters({
+  value,
+  onChange,
+  showQuery = true,
+}: {
+  value: ScheduleFilter;
+  onChange: (next: ScheduleFilter) => void;
+  showQuery?: boolean;
+}) {
+  const { t } = useI18n();
+  const mode: "all" | "byTeacher" = value.teacherKey ? "byTeacher" : "all";
+
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+      {/* Mode segments */}
+      <div className="inline-flex rounded-full bg-muted/60 p-1 text-sm font-bold self-start">
+        <button
+          type="button"
+          onClick={() => onChange({ ...value, teacherKey: null })}
+          className={cn(
+            "rounded-full px-4 py-1.5 transition",
+            mode === "all"
+              ? "bg-surface text-foreground shadow-soft"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {t("schedule.filter.all")}
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange({ ...value, teacherKey: TEACHERS[0]!.key })}
+          className={cn(
+            "rounded-full px-4 py-1.5 transition",
+            mode === "byTeacher"
+              ? "bg-surface text-foreground shadow-soft"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {t("schedule.filter.byTeacher")}
+        </button>
+      </div>
+
+      {/* Teacher chips */}
+      {mode === "byTeacher" && (
+        <div className="flex flex-wrap items-center gap-2">
+          {TEACHERS.map((teacher) => {
+            const active = value.teacherKey === teacher.key;
+            const photo = TEACHER_PHOTOS[teacher.initials];
+            return (
+              <button
+                key={teacher.initials}
+                type="button"
+                onClick={() => onChange({ ...value, teacherKey: teacher.key })}
+                className={cn(
+                  "flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-sm font-bold transition",
+                  active
+                    ? "border-brand bg-brand text-brand-foreground shadow-soft"
+                    : "border-border/60 bg-surface text-foreground hover:border-brand/60",
+                )}
+              >
+                {photo ? (
+                  <img
+                    src={photo}
+                    alt=""
+                    className="h-7 w-7 rounded-full object-cover ring-1 ring-white/40"
+                  />
+                ) : (
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-accent/40 text-[10px] font-black text-accent-foreground">
+                    {teacher.initials}
+                  </span>
+                )}
+                <span className="truncate">{t(teacher.key)}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Group number search */}
+      {showQuery && (
+        <div className="sm:ml-auto">
+          <label className="relative block">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-black text-muted-foreground">
+              №
+            </span>
+            <input
+              inputMode="numeric"
+              value={value.query}
+              onChange={(e) => onChange({ ...value, query: e.target.value })}
+              placeholder={t("schedule.filter.searchByNo")}
+              className="h-11 w-full rounded-full border border-border/60 bg-surface pl-9 pr-4 text-sm font-semibold text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15 sm:w-56"
+            />
+          </label>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EmptyDay({ text }: { text: string }) {
+  return (
+    <div className="rounded-3xl border border-dashed border-border/60 bg-surface/60 p-5 text-center text-xs font-semibold text-muted-foreground">
+      {text}
+    </div>
   );
 }
