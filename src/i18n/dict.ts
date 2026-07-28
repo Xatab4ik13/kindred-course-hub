@@ -193,6 +193,7 @@ export const dict = {
     "nav.schedule": "Schedule",
     "nav.reviews": "Reviews",
     "nav.contacts": "Contacts",
+    "nav.news": "News",
     "cta.enroll": "Enroll",
     "cta.learnMore": "Learn more",
     "about.eyebrow": "About",
