@@ -81,6 +81,13 @@ export function Header() {
               >
                 {t("nav.schedule")}
               </Link>
+              <Link
+                to="/news"
+                className="rounded-full px-4 py-2 text-[15px] font-extrabold uppercase tracking-tight text-foreground hover:bg-muted transition"
+                activeProps={{ className: "bg-muted text-foreground" }}
+              >
+                {t("nav.news")}
+              </Link>
             </nav>
           </div>
 
@@ -224,6 +231,7 @@ function MobileMenu({
               { type: "scroll" as const, id: "team", label: t("nav.team") },
               { type: "link" as const, to: "/pricing", label: t("nav.pricing") },
               { type: "link" as const, to: "/schedule", label: t("nav.schedule") },
+              { type: "link" as const, to: "/news", label: t("nav.news") },
             ].map((item, i) => (
               <motion.li
                 key={item.label}

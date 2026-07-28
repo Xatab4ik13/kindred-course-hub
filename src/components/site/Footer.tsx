@@ -3,7 +3,7 @@ import { useI18n } from "@/providers/i18n";
 export function Footer() {
   const { t } = useI18n();
   return (
-    <footer className="bg-black text-white/90 border-t border-white/10">
+    <footer className="text-white/90 border-t border-white/10" style={{ background: "oklch(0.17 0.04 28)" }}>
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-3 md:px-8">
         <div>
           <div className="flex items-center gap-2">
