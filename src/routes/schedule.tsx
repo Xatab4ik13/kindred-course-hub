@@ -52,6 +52,7 @@ function SchedulePage() {
   const baseWeek = useMemo(() => startOfWeek(new Date()), []);
   const [offset, setOffset] = useState(0);
   const [enrollGoal, setEnrollGoal] = useState<string | null>(null);
+  const [filter, setFilter] = useState<ScheduleFilter>(EMPTY_FILTER);
 
   const weekStart = useMemo(() => {
     const d = new Date(baseWeek);
