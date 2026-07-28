@@ -168,13 +168,14 @@ export const dict = {
     "enroll.goal.group": "Групповые занятия для начинающих",
     "enroll.goal.ege": "ЕГЭ по китайскому",
     "enroll.goal.kids": "Китайский для школьников",
+    "enroll.goal.consultation": "Консультация",
 
     "enroll.submit": "Отправить заявку",
     "enroll.success.title": "Заявка отправлена!",
     "enroll.success.text": "Мы свяжемся с вами в ближайшее время. 谢谢!",
     "enroll.contact.lead": "Напишите нам напрямую — ответим быстро и расскажем о курсах, расписании и ценах.",
     "enroll.contact.tgDesc": "@china_ya · Ответим в течение часа",
-    "enroll.contact.vkDesc": "vk.ru/chinaja · Группа школы",
+    "enroll.contact.vkDesc": "vk.ru/onlinechinar · Группа школы",
     
     "enroll.error.name": "Введите имя",
     "enroll.error.phone": "Введите корректный телефон",
