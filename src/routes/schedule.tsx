@@ -11,7 +11,10 @@ import {
   WEEK_TEMPLATE,
   DAY_KEYS,
   MASCOT_POOL,
-  groupNumber,
+  ScheduleFilters,
+  filterDayLessons,
+  EMPTY_FILTER,
+  type ScheduleFilter,
 } from "@/components/site/SchedulePreviewSection";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
