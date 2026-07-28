@@ -53,9 +53,9 @@ export function HeroSection() {
           className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
           style={{ fontSize: "clamp(1.35rem, 5.5vw, 5.5rem)" }}
         >
-          <span className="text-brand-foreground">Онлайн школа</span>
+          <span className="text-brand-foreground">{t("hero.main.line1")}</span>
           <br />
-          <span className="text-brand">китайского языка</span>
+          <span className="text-brand">{t("hero.main.line2")}</span>
         </motion.p>
       </div>
 
