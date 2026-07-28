@@ -56,7 +56,7 @@ export function PricingSection() {
               className={cn(
                 "relative flex flex-col overflow-hidden rounded-[2rem] p-8 border transition-shadow",
                 isSpecial
-                  ? "bg-ink text-cream border-ink shadow-float"
+                  ? "card-featured bg-ink text-cream border-ink shadow-float"
                   : "bg-surface text-surface-foreground border-border/60 shadow-soft",
               )}
             >
