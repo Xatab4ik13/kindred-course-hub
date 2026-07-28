@@ -277,7 +277,7 @@ export const dict = {
     "team.t4.bio": "Teaches conversational Chinese for beginners and intermediate learners. Creates a friendly atmosphere where speaking and making mistakes feel safe.",
     "team.l1.name": "Timofey",
     "team.l1.role": "Founder of the school",
-    "team.l1.bio": "Founder of CHINAR. Created the school with a dream to make Chinese close and understandable for every Russian-speaking student.",
+    "team.l1.bio": "Founder of CHINAR. Created the school with a dream to make Chinese close and understandable for every student.",
     "team.l2.name": "Nikolai Romanov",
     "team.l2.role": "General Director",
     "team.l2.bio": "Responsible for the school's operations: schedules, student communication, teacher coordination and teaching quality. An experienced manager in education.",
