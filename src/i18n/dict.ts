@@ -131,6 +131,8 @@ export const dict = {
     "schedule.filter.all": "Общее расписание",
     "schedule.filter.byTeacher": "По преподавателю",
     "schedule.filter.allTeachers": "Все преподаватели",
+    "schedule.filter.searchByNo": "Поиск по №",
+    "schedule.filter.noResults": "По фильтру занятий нет",
     "schedule.level.hsk1": "HSK 1",
     "schedule.level.hsk2": "HSK 2",
     "schedule.level.hsk3": "HSK 3",
