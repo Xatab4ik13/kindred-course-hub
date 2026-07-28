@@ -66,6 +66,44 @@ const TB = { teacherKey: "schedule.teacher.tb" as DictKey, teacherInitials: "Т�
 const NR = { teacherKey: "schedule.teacher.nr" as DictKey, teacherInitials: "НР" };
 const VG = { teacherKey: "schedule.teacher.vg" as DictKey, teacherInitials: "ВГ" };
 
+export interface TeacherOption {
+  key: DictKey;
+  initials: string;
+}
+
+export const TEACHERS: TeacherOption[] = [
+  { key: "schedule.teacher.tb", initials: "ТБ" },
+  { key: "schedule.teacher.nr", initials: "НР" },
+  { key: "schedule.teacher.vg", initials: "ВГ" },
+];
+
+export interface ScheduleFilter {
+  teacherKey: DictKey | null;
+  query: string;
+}
+
+export const EMPTY_FILTER: ScheduleFilter = { teacherKey: null, query: "" };
+
+export interface FilteredLesson {
+  lesson: Lesson;
+  no: string;
+}
+
+export function filterDayLessons(
+  lessons: Lesson[],
+  dow: number,
+  filter: ScheduleFilter,
+): FilteredLesson[] {
+  const q = filter.query.trim().toLowerCase().replace(/^№|^#/, "");
+  return lessons
+    .map((lesson, i) => ({ lesson, no: groupNumber(dow, i) }))
+    .filter(({ lesson, no }) => {
+      if (filter.teacherKey && lesson.teacherKey !== filter.teacherKey) return false;
+      if (q && !no.includes(q)) return false;
+      return true;
+    });
+}
+
 export const WEEK_TEMPLATE: Lesson[][] = [
   // Mon
   [
