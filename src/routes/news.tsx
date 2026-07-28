@@ -31,22 +31,7 @@ interface Post {
 
 const STORAGE_KEY = "chinar.news";
 
-const SEED: Post[] = [
-  {
-    id: "seed-1",
-    title: "Открываем набор в новую группу HSK 1",
-    text: "Стартуем 15 сентября. Занятия дважды в неделю по 90 минут, мини-группы до 4 человек. Осталось 3 места.",
-    image: "",
-    date: "2026-07-15T09:00:00.000Z",
-  },
-  {
-    id: "seed-2",
-    title: "Разговорный клуб в эту субботу",
-    text: "В эту субботу в 17:00 — свободный разговорный клуб с носителем. Тема: чай и китайская культура.",
-    image: "",
-    date: "2026-07-22T12:00:00.000Z",
-  },
-];
+const SEED: Post[] = [];
 
 function loadPosts(): Post[] {
   if (typeof window === "undefined") return SEED;
