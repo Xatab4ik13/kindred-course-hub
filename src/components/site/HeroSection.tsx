@@ -40,8 +40,8 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full text-center font-display font-black text-black leading-[0.85] tracking-[-0.04em]"
-          style={{ fontSize: "clamp(3.5rem, 18vw, 20rem)" }}
+          className="w-full text-center font-display font-black leading-[0.85] tracking-[-0.04em]"
+          style={{ fontSize: "clamp(3.5rem, 18vw, 20rem)", color: "oklch(0.24 0.06 32)" }}
         >
           CHINAR
         </motion.h1>
@@ -53,7 +53,7 @@ export function HeroSection() {
           className="mt-3 md:mt-5 text-center font-display font-black uppercase leading-[1.05] tracking-[0.01em]"
           style={{ fontSize: "clamp(1.35rem, 5.5vw, 5.5rem)" }}
         >
-          <span className="text-brand-foreground">{t("hero.main.line1")}</span>
+          <span style={{ color: "oklch(0.28 0.07 32)" }}>{t("hero.main.line1")}</span>
           <br />
           <span className="text-brand">{t("hero.main.line2")}</span>
         </motion.p>
