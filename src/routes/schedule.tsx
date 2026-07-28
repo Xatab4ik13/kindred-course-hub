@@ -122,6 +122,10 @@ function SchedulePage() {
             />
           </div>
         </div>
+        <div className="mt-8">
+          <ScheduleFilters value={filter} onChange={setFilter} />
+        </div>
+
 
         {/* Mobile + tablet: horizontal scroll, same rhythm as home preview */}
         <motion.div
