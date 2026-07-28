@@ -255,7 +255,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                         desc={t("enroll.contact.tgDesc")}
                       />
                       <ContactLink
-                        href="https://vk.com/chinaja"
+                        href="https://vk.ru/onlinechinar"
                         bg="bg-[#0077ff]"
                         initials="VK"
                         title="ВКОНТАКТЕ"
