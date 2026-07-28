@@ -316,6 +316,8 @@ export const dict = {
     "schedule.filter.all": "All lessons",
     "schedule.filter.byTeacher": "By teacher",
     "schedule.filter.allTeachers": "All teachers",
+    "schedule.filter.searchByNo": "Search by #",
+    "schedule.filter.noResults": "No lessons match filter",
     "schedule.level.hsk1": "HSK 1",
     "schedule.level.hsk2": "HSK 2",
     "schedule.level.hsk3": "HSK 3",
