@@ -198,7 +198,7 @@ export const dict = {
     "about.title.1": "Chinese language school",
     "about.title.2": "for students",
     "about.lead":
-      "CHINAR is an online school created with one goal: to make Chinese accessible and clear for every Russian-speaking student. We believe language is a bridge between cultures.",
+      "CHINAR is an online school created with one goal: to make Chinese accessible and clear for every student. We believe language is a bridge between cultures.",
     "about.goal.title": "Goal is result",
     "about.goal.text": "Our programme is built on the communicative method: you speak from lesson one.",
     "about.teachers.title": "Experienced teachers",
