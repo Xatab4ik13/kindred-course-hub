@@ -156,6 +156,16 @@ export const dict = {
     "hero.main.line2": "китайского языка",
 
 
+    "news.title": "Новости школы",
+    "news.subtitle": "Всё, что происходит в CHINAR",
+    "news.byAdmin": "Администрация CHINAR",
+    "news.empty": "Пока новостей нет",
+    "news.add.title": "Добавить новость",
+    "news.add.titlePh": "Заголовок",
+    "news.add.textPh": "Текст поста (необязательно)",
+    "news.add.imagePh": "URL картинки (необязательно)",
+    "news.add.submit": "Опубликовать",
+    "news.delete": "Удалить",
     "enroll.title": "Записаться на обучение",
     "enroll.tab.form": "Оставить заявку",
     "enroll.tab.contact": "Написать нам",
