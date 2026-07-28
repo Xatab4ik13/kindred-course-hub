@@ -189,6 +189,7 @@ export function SchedulePreviewSection() {
   );
 
   const [enrollGoal, setEnrollGoal] = useState<string | null>(null);
+  const [filter, setFilter] = useState<ScheduleFilter>(EMPTY_FILTER);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const todayRef = useRef<HTMLDivElement | null>(null);
   const [canLeft, setCanLeft] = useState(false);
