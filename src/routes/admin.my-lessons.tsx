@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAdmin } from "@/components/admin/store";
 import { Badge, Btn, Field, Modal, PageHeader, Panel, Select, Stat, TextInput } from "@/components/admin/ui";
+import { CANCEL_REASONS } from "@/lib/admin-data";
 
 export const Route = createFileRoute("/admin/my-lessons")({ component: MyLessonsPage });
 
-const REASONS = ["Болезнь преподавателя", "Отмена по просьбе группы", "Технические проблемы", "Праздничный день", "Другое"];
+const REASONS = CANCEL_REASONS;
 
 function MyLessonsPage() {
   const { session, lessons, setLessons } = useAdmin();
