@@ -78,7 +78,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       signIn: (login, password) => {
-        const acc = DEMO_ACCOUNTS.find((a) => a.login === login && a.password === password);
+        const acc = accounts.find((a) => a.login === login && a.password === password);
         if (!acc) return false;
         const next: Session = { login: acc.login, name: acc.name, role: acc.role, ...(acc.teacherId ? { teacherId: acc.teacherId } : {}) };
         setSession(next);
@@ -89,6 +89,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         setSession(null);
         window.sessionStorage.removeItem(SESSION_KEY);
       },
+      accounts,
+      setAccounts,
       requests,
       setRequests,
       teachers,
