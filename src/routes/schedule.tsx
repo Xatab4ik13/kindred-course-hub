@@ -48,7 +48,9 @@ function startOfWeek(d: Date) {
 function SchedulePage() {
   const { t, lang } = useI18n();
   const locale = lang === "ru" ? "ru-RU" : "en-US";
+  const { lessons, teachers } = usePublicContent();
   const start = useMemo(() => startOfWeek(new Date()), []);
+
   const days = useMemo(
     () =>
       Array.from({ length: 14 }, (_, i) => {
