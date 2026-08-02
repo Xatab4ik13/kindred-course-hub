@@ -8,22 +8,23 @@ import type { DictKey } from "@/i18n/dict";
 import { viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { EnrollModal } from "@/components/site/EnrollModal";
+import { usePublicContent } from "@/lib/public-content";
+import type { Teacher } from "@/lib/admin-data";
+import {
+  dateKey,
+  dayLessons,
+  EMPTY_FILTER,
+  type LessonView,
+  type LevelTone,
+  type ScheduleFilter,
+} from "@/lib/schedule-view";
 import mascotDay1 from "@/assets/mascot/day-1.png";
 import mascotDay2 from "@/assets/mascot/day-2.png";
 import mascotDay3 from "@/assets/mascot/day-3.png";
 import mascotDay4 from "@/assets/mascot/day-4.png";
-import teacher1 from "@/assets/teachers/teacher-1.webp";
-import teacher2 from "@/assets/teachers/teacher-2.webp";
-import teacher3 from "@/assets/teachers/teacher-3.webp";
-import teacher4 from "@/assets/teachers/teacher-4.webp";
 
-// Mock-mapping инициалов на фото. В будущем фото придёт с бекенда.
-export const TEACHER_PHOTOS: Record<string, string> = {
-  ТБ: teacher1,
-  НР: teacher2,
-  ВГ: teacher3,
-  АС: teacher4,
-};
+export { EMPTY_FILTER, dayLessons, dateKey };
+export type { ScheduleFilter, LessonView };
 
 export const DAY_KEYS: DictKey[] = [
   "days.mon",
@@ -34,20 +35,6 @@ export const DAY_KEYS: DictKey[] = [
   "days.sat",
   "days.sun",
 ];
-
-export const DAY_SHORT_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-
-export type LevelTone = "hsk1" | "hsk2" | "hsk3" | "kids" | "speak" | "individual" | "ege";
-
-export interface Lesson {
-  time: string;
-  duration: number;
-  tone: LevelTone;
-  levelKey: DictKey;
-  teacherKey: DictKey;
-  teacherInitials: string;
-  goalId: string;
-}
 
 const CHIP: Record<LevelTone, string> = {
   hsk1: "bg-brand/10 text-brand",
@@ -61,111 +48,6 @@ const CHIP: Record<LevelTone, string> = {
 
 export const MASCOT_POOL = [mascotDay1, mascotDay2, mascotDay3, mascotDay4];
 
-// Shortcuts for template
-const TB = { teacherKey: "schedule.teacher.tb" as DictKey, teacherInitials: "ТБ" };
-const NR = { teacherKey: "schedule.teacher.nr" as DictKey, teacherInitials: "НР" };
-const VG = { teacherKey: "schedule.teacher.vg" as DictKey, teacherInitials: "ВГ" };
-
-export interface TeacherOption {
-  key: DictKey;
-  initials: string;
-}
-
-export const TEACHERS: TeacherOption[] = [
-  { key: "schedule.teacher.tb", initials: "ТБ" },
-  { key: "schedule.teacher.nr", initials: "НР" },
-  { key: "schedule.teacher.vg", initials: "ВГ" },
-];
-
-export interface ScheduleFilter {
-  teacherKey: DictKey | null;
-  query: string;
-}
-
-export const EMPTY_FILTER: ScheduleFilter = { teacherKey: null, query: "" };
-
-export interface FilteredLesson {
-  lesson: Lesson;
-  no: string;
-}
-
-export function filterDayLessons(
-  lessons: Lesson[],
-  dow: number,
-  filter: ScheduleFilter,
-): FilteredLesson[] {
-  const q = filter.query.trim().toLowerCase().replace(/^№|^#/, "");
-  return lessons
-    .map((lesson, i) => ({ lesson, no: groupNumber(dow, i) }))
-    .filter(({ lesson, no }) => {
-      if (filter.teacherKey && lesson.teacherKey !== filter.teacherKey) return false;
-      if (q && !no.includes(q)) return false;
-      return true;
-    });
-}
-
-export const WEEK_TEMPLATE: Lesson[][] = [
-  // Mon
-  [
-    { time: "09:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "13:30", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
-    { time: "17:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-    { time: "18:30", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "20:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
-  ],
-  // Tue
-  [
-    { time: "10:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "12:00", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
-    { time: "16:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-    { time: "18:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
-    { time: "20:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...TB, goalId: "individual" },
-  ],
-  // Wed
-  [
-    { time: "09:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "14:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
-    { time: "17:30", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
-    { time: "19:30", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-  ],
-  // Thu
-  [
-    { time: "10:00", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
-    { time: "12:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "15:00", duration: 60, tone: "ege", levelKey: "schedule.level.ege", ...VG, goalId: "ege" },
-    { time: "18:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "19:30", duration: 90, tone: "hsk3", levelKey: "schedule.level.hsk3", ...VG, goalId: "hsk2" },
-  ],
-  // Fri
-  [
-    { time: "09:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-    { time: "11:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
-    { time: "14:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "17:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "19:00", duration: 60, tone: "individual", levelKey: "schedule.level.individual", ...VG, goalId: "individual" },
-  ],
-  // Sat
-  [
-    { time: "10:00", duration: 90, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "12:00", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-    { time: "14:00", duration: 90, tone: "hsk2", levelKey: "schedule.level.hsk2", ...VG, goalId: "hsk2" },
-    { time: "16:00", duration: 60, tone: "ege", levelKey: "schedule.level.ege", ...VG, goalId: "ege" },
-  ],
-  // Sun
-  [
-    { time: "11:00", duration: 60, tone: "kids", levelKey: "schedule.level.kids", ...NR, goalId: "kids" },
-    { time: "13:00", duration: 90, tone: "hsk1", levelKey: "schedule.level.hsk1", ...TB, goalId: "hsk1" },
-    { time: "15:30", duration: 60, tone: "speak", levelKey: "schedule.level.speak", ...TB, goalId: "group" },
-  ],
-];
-
-// Deterministic group number per (dayIndex, lessonIndex) — stable and readable.
-export function groupNumber(dayIndex: number, lessonIndex: number) {
-  return String(dayIndex * 10 + lessonIndex + 35).padStart(3, "0");
-}
-
 function startOfWeek(d: Date) {
   const day = (d.getDay() + 6) % 7;
   const r = new Date(d);
@@ -177,6 +59,7 @@ function startOfWeek(d: Date) {
 export function SchedulePreviewSection() {
   const { t, lang } = useI18n();
   const locale = lang === "ru" ? "ru-RU" : "en-US";
+  const { lessons, teachers } = usePublicContent();
   const start = useMemo(() => startOfWeek(new Date()), []);
   const days = useMemo(
     () =>
@@ -251,7 +134,7 @@ export function SchedulePreviewSection() {
       </div>
 
       <div className="mt-8">
-        <ScheduleFilters value={filter} onChange={setFilter} showQuery={false} />
+        <ScheduleFilters value={filter} onChange={setFilter} teachers={teachers} showQuery={false} />
       </div>
 
       <motion.div
@@ -268,8 +151,7 @@ export function SchedulePreviewSection() {
           {days.map((d, idx) => {
             const dow = (d.getDay() + 6) % 7;
             const dayKey = DAY_KEYS[dow]!;
-            const lessons = WEEK_TEMPLATE[dow]!;
-            const filtered = filterDayLessons(lessons, dow, filter);
+            const filtered = dayLessons(lessons, teachers, dateKey(d), filter);
             const isToday = d.toDateString() === todayStr;
             const isPast = d.getTime() < todayTime;
             const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
@@ -302,11 +184,10 @@ export function SchedulePreviewSection() {
                   {filtered.length === 0 ? (
                     <EmptyDay text={t("schedule.filter.noResults")} />
                   ) : (
-                    filtered.map(({ lesson, no }) => (
+                    filtered.map((lesson) => (
                       <LessonCard
-                        key={no}
+                        key={lesson.id}
                         lesson={lesson}
-                        groupNo={no}
                         disabled={isPast}
                         onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
                       />
@@ -402,17 +283,14 @@ export function DayPlaque({
 
 export function LessonCard({
   lesson,
-  groupNo,
   disabled,
   onClick,
 }: {
-  lesson: Lesson;
-  groupNo: string;
+  lesson: LessonView;
   disabled: boolean;
   onClick: () => void;
 }) {
   const { t } = useI18n();
-  const teacherName = t(lesson.teacherKey);
   return (
     <motion.button
       type="button"
@@ -434,7 +312,7 @@ export function LessonCard({
           </div>
           <div className="mt-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-muted-foreground">
             {t("schedule.groupPrefix")}
-            {groupNo}
+            {lesson.group}
           </div>
         </div>
         <span
@@ -443,7 +321,7 @@ export function LessonCard({
             CHIP[lesson.tone],
           )}
         >
-          {t(lesson.levelKey)}
+          {lesson.level}
         </span>
       </div>
 
@@ -455,21 +333,32 @@ export function LessonCard({
       </div>
 
       <div className="flex items-center gap-3 border-t border-border/50 pt-3">
-        <TeacherAvatar initials={lesson.teacherInitials} name={teacherName} />
+        <TeacherAvatar
+          initials={lesson.teacherInitials}
+          name={lesson.teacherName}
+          photo={lesson.teacherPhoto}
+        />
 
         <div className="flex min-w-0 flex-col">
           <span className="text-[11px] font-medium text-muted-foreground">
             {t("schedule.teacherLabel")}
           </span>
-          <span className="truncate text-sm font-bold text-foreground">{teacherName}</span>
+          <span className="truncate text-sm font-bold text-foreground">{lesson.teacherName}</span>
         </div>
       </div>
     </motion.button>
   );
 }
 
-function TeacherAvatar({ initials, name }: { initials: string; name: string }) {
-  const photo = TEACHER_PHOTOS[initials];
+function TeacherAvatar({
+  initials,
+  name,
+  photo,
+}: {
+  initials: string;
+  name: string;
+  photo?: string;
+}) {
   if (photo) {
     return (
       <img
@@ -520,14 +409,16 @@ function HeaderArrow({
 export function ScheduleFilters({
   value,
   onChange,
+  teachers,
   showQuery = true,
 }: {
   value: ScheduleFilter;
   onChange: (next: ScheduleFilter) => void;
+  teachers: Teacher[];
   showQuery?: boolean;
 }) {
   const { t } = useI18n();
-  const mode: "all" | "byTeacher" = value.teacherKey ? "byTeacher" : "all";
+  const mode: "all" | "byTeacher" = value.teacherId ? "byTeacher" : "all";
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
@@ -535,7 +426,7 @@ export function ScheduleFilters({
       <div className="inline-flex rounded-full bg-muted/60 p-1 text-sm font-bold self-start">
         <button
           type="button"
-          onClick={() => onChange({ ...value, teacherKey: null })}
+          onClick={() => onChange({ ...value, teacherId: null })}
           className={cn(
             "rounded-full px-4 py-1.5 transition",
             mode === "all"
@@ -547,9 +438,10 @@ export function ScheduleFilters({
         </button>
         <button
           type="button"
-          onClick={() => onChange({ ...value, teacherKey: TEACHERS[0]!.key })}
+          disabled={teachers.length === 0}
+          onClick={() => onChange({ ...value, teacherId: teachers[0]?.id ?? null })}
           className={cn(
-            "rounded-full px-4 py-1.5 transition",
+            "rounded-full px-4 py-1.5 transition disabled:opacity-40",
             mode === "byTeacher"
               ? "bg-surface text-foreground shadow-soft"
               : "text-muted-foreground hover:text-foreground",
@@ -562,14 +454,13 @@ export function ScheduleFilters({
       {/* Teacher chips */}
       {mode === "byTeacher" && (
         <div className="flex flex-wrap items-center gap-2">
-          {TEACHERS.map((teacher) => {
-            const active = value.teacherKey === teacher.key;
-            const photo = TEACHER_PHOTOS[teacher.initials];
+          {teachers.map((teacher) => {
+            const active = value.teacherId === teacher.id;
             return (
               <button
-                key={teacher.initials}
+                key={teacher.id}
                 type="button"
-                onClick={() => onChange({ ...value, teacherKey: teacher.key })}
+                onClick={() => onChange({ ...value, teacherId: teacher.id })}
                 className={cn(
                   "flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-sm font-bold transition",
                   active
@@ -577,9 +468,9 @@ export function ScheduleFilters({
                     : "border-border/60 bg-surface text-foreground hover:border-brand/60",
                 )}
               >
-                {photo ? (
+                {teacher.photo ? (
                   <img
-                    src={photo}
+                    src={teacher.photo}
                     alt=""
                     className="h-7 w-7 rounded-full object-cover ring-1 ring-white/40"
                   />
@@ -588,7 +479,7 @@ export function ScheduleFilters({
                     {teacher.initials}
                   </span>
                 )}
-                <span className="truncate">{t(teacher.key)}</span>
+                <span className="truncate">{teacher.name}</span>
               </button>
             );
           })}
