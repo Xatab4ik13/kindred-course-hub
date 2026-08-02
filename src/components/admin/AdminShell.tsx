@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import {
+  Newspaper, useEffect, useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
@@ -44,6 +45,7 @@ const ADMIN_NAV: { group: string; items: NavItem[] }[] = [
     items: [
       { to: "/admin/leadership", label: "Руководство", icon: Users },
       { to: "/admin/reviews", label: "Отзывы", icon: MessageSquareQuote },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
       { to: "/admin/pricing", label: "Цены", icon: Tags },
       { to: "/admin/settings", label: "Контакты и реквизиты", icon: Receipt },
     ],
