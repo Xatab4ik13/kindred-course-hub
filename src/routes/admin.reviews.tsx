@@ -58,7 +58,10 @@ function ReviewsPage() {
       <Modal open={creating} onClose={() => setCreating(false)} title="Новый отзыв">
         <div className="space-y-4">
           <Field label="Автор">
-            <TextInput value={draft.name} placeholder="Анна, HSK 3" onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+            <TextInput value={draft.author} placeholder="Анна" onChange={(e) => setDraft({ ...draft, author: e.target.value })} />
+          </Field>
+          <Field label="Уровень">
+            <TextInput value={draft.level} placeholder="HSK 3" onChange={(e) => setDraft({ ...draft, level: e.target.value })} />
           </Field>
           <Field label="Текст">
             <TextArea value={draft.text} onChange={(e) => setDraft({ ...draft, text: e.target.value })} />
