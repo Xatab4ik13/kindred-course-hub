@@ -25,11 +25,7 @@ function MyProfilePage() {
 
       <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
         <Panel className="p-5">
-          <img src={me.photo} alt={me.name} className="w-full rounded-2xl object-cover" />
-          <Btn variant="outline" size="sm" className="mt-3 w-full" disabled>
-            Заменить фото
-          </Btn>
-          <p className="mt-2 text-xs text-[oklch(0.6_0.03_45)]">Загрузка фото появится после подключения бекенда.</p>
+          <PhotoPicker value={me.photo} onChange={(photo) => update({ photo })} />
         </Panel>
 
         <Panel className="p-6">
