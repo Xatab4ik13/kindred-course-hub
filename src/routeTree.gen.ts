@@ -20,6 +20,7 @@ import { Route as AdminTeachersRouteImport } from './routes/admin.teachers'
 import { Route as AdminScheduleRouteImport } from './routes/admin.schedule'
 import { Route as AdminRequestsRouteImport } from './routes/admin.requests'
 import { Route as AdminLessonsRouteImport } from './routes/admin.lessons'
+import { Route as AdminLeadershipRouteImport } from './routes/admin.leadership'
 
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
@@ -76,6 +77,11 @@ const AdminLessonsRoute = AdminLessonsRouteImport.update({
   path: '/lessons',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLeadershipRoute = AdminLeadershipRouteImport.update({
+  id: '/leadership',
+  path: '/leadership',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/lessons': typeof AdminLessonsRoute
   '/admin/requests': typeof AdminRequestsRoute
   '/admin/schedule': typeof AdminScheduleRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/lessons': typeof AdminLessonsRoute
   '/admin/requests': typeof AdminRequestsRoute
   '/admin/schedule': typeof AdminScheduleRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
   '/admin/lessons': typeof AdminLessonsRoute
   '/admin/requests': typeof AdminRequestsRoute
   '/admin/schedule': typeof AdminScheduleRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/pricing'
     | '/schedule'
+    | '/admin/leadership'
     | '/admin/lessons'
     | '/admin/requests'
     | '/admin/schedule'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/pricing'
     | '/schedule'
+    | '/admin/leadership'
     | '/admin/lessons'
     | '/admin/requests'
     | '/admin/schedule'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/pricing'
     | '/schedule'
+    | '/admin/leadership'
     | '/admin/lessons'
     | '/admin/requests'
     | '/admin/schedule'
@@ -245,10 +257,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLessonsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/leadership': {
+      id: '/admin/leadership'
+      path: '/leadership'
+      fullPath: '/admin/leadership'
+      preLoaderRoute: typeof AdminLeadershipRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminLeadershipRoute: typeof AdminLeadershipRoute
   AdminLessonsRoute: typeof AdminLessonsRoute
   AdminRequestsRoute: typeof AdminRequestsRoute
   AdminScheduleRoute: typeof AdminScheduleRoute
@@ -257,6 +277,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminLeadershipRoute: AdminLeadershipRoute,
   AdminLessonsRoute: AdminLessonsRoute,
   AdminRequestsRoute: AdminRequestsRoute,
   AdminScheduleRoute: AdminScheduleRoute,
