@@ -5,6 +5,7 @@ import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
 import { Badge, Btn, Field, Modal, PageHeader, Panel, Select, TextInput } from "@/components/admin/ui";
 import type { Lesson } from "@/lib/admin-data";
+import { dateKey } from "@/lib/schedule-view";
 
 export const Route = createFileRoute("/admin/schedule")({ component: () => <AdminOnly><SchedulePage /></AdminOnly> });
 
@@ -18,10 +19,12 @@ export function ScheduleBoard({ teacherId, canEdit }: { teacherId: string | "all
     teacherId: teacherId === "all" ? (teachers[0]?.id ?? "t1") : teacherId,
     group: "№040",
     level: "HSK 1",
-    date: new Date().toISOString().slice(0, 10),
+    date: dateKey(new Date()),
     time: "18:00",
+    duration: 90,
     status: "planned",
   });
+
 
   const days = useMemo(() => {
     const start = new Date();
