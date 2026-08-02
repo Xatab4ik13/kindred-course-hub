@@ -8,16 +8,15 @@ import { EnrollModal } from "@/components/site/EnrollModal";
 import {
   DayPlaque,
   LessonCard,
-  WEEK_TEMPLATE,
   DAY_KEYS,
   MASCOT_POOL,
   ScheduleFilters,
-  filterDayLessons,
-  EMPTY_FILTER,
-  type ScheduleFilter,
 } from "@/components/site/SchedulePreviewSection";
+import { dateKey, dayLessons, EMPTY_FILTER, type ScheduleFilter } from "@/lib/schedule-view";
+import { usePublicContent } from "@/lib/public-content";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/schedule")({
   head: () => ({
