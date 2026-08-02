@@ -12,12 +12,4 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  vite: {
-    server: {
-      // В разработке /api проксируется на локальный бекенд из папки server/
-      proxy: {
-        "/api": { target: process.env['API_PROXY'] ?? "http://127.0.0.1:4000", changeOrigin: true },
-      },
-    },
-  },
 });
