@@ -6,6 +6,7 @@ import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import type { DictKey } from "@/i18n/dict";
 import { cn } from "@/lib/utils";
+import { usePublicContent } from "@/lib/public-content";
 import teacher1 from "@/assets/teachers/teacher-1.webp";
 import teacher2 from "@/assets/teachers/teacher-2.webp";
 import teacher3 from "@/assets/teachers/teacher-3.webp";
@@ -17,13 +18,14 @@ import lead3 from "@/assets/leadership/vadim.jpg";
 type Tab = "teachers" | "leadership";
 
 type Person = {
+  id: string;
   photo: string;
-  nameKey: DictKey;
-  roleKey: DictKey;
-  bioKey: DictKey;
+  name: string;
+  role: string;
+  bio: string;
 };
 
-const TEACHERS: Person[] = [
+const FALLBACK_TEACHERS: { photo: string; nameKey: DictKey; roleKey: DictKey; bioKey: DictKey }[] = [
   {
     photo: teacher1,
     nameKey: "team.t1.name",
@@ -50,7 +52,7 @@ const TEACHERS: Person[] = [
   },
 ];
 
-const LEADERSHIP: Person[] = [
+const FALLBACK_LEADERSHIP: { photo: string; nameKey: DictKey; roleKey: DictKey; bioKey: DictKey }[] = [
   {
     photo: lead1,
     nameKey: "team.l1.name",
@@ -90,7 +92,7 @@ function PersonCard({
       >
         <img
           src={person.photo}
-          alt={t(person.nameKey)}
+          alt={person.name}
           loading="eager"
           decoding="async"
           fetchPriority="high"
@@ -109,10 +111,15 @@ function PersonCard({
 
       <div className="mt-6 flex flex-1 flex-col">
         <h3 className="font-display text-2xl font-bold leading-tight">
-          {t(person.nameKey)}
+          {person.name}
         </h3>
+        {person.role && (
+          <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-brand">
+            {person.role}
+          </p>
+        )}
         <p className="mt-4 flex-1 text-base leading-relaxed text-muted-foreground">
-          {t(person.bioKey)}
+          {person.bio}
         </p>
 
         {showSchedule && (
@@ -198,7 +205,7 @@ function TeamSlider({
       >
         {people.map((person) => (
           <motion.div
-            key={person.nameKey}
+            key={person.id}
             data-team-card
             variants={{
               hidden: { opacity: 0, y: 18 },
@@ -264,6 +271,15 @@ export function TeamSection() {
   const { t } = useI18n();
   const [tab, setTab] = useState<Tab>("teachers");
   const isTeachers = tab === "teachers";
+  const { teachers, leaders } = usePublicContent();
+
+  const people: Person[] = isTeachers
+    ? teachers.length
+      ? teachers.map((x) => ({ id: x.id, photo: x.photo, name: x.name, role: x.role, bio: x.bio }))
+      : FALLBACK_TEACHERS.map((x, i) => ({ id: `ft${i}`, photo: x.photo, name: t(x.nameKey), role: t(x.roleKey), bio: t(x.bioKey) }))
+    : leaders.length
+      ? leaders.map((x) => ({ id: x.id, photo: x.photo, name: x.name, role: x.role, bio: x.bio }))
+      : FALLBACK_LEADERSHIP.map((x, i) => ({ id: `fl${i}`, photo: x.photo, name: t(x.nameKey), role: t(x.roleKey), bio: t(x.bioKey) }));
 
   return (
     <section
@@ -329,7 +345,7 @@ export function TeamSection() {
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
               <TeamSlider
-                people={isTeachers ? TEACHERS : LEADERSHIP}
+                people={people}
                 showSchedule={isTeachers}
               />
             </motion.div>
