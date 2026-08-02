@@ -70,7 +70,7 @@ function ReviewsPage() {
             <Btn
               onClick={() => {
                 setReviews((p) => [...p, { id: `r${Date.now()}`, ...draft }]);
-                setDraft({ name: "", text: "", visible: true });
+                setDraft({ author: "", level: "", text: "", visible: true });
                 setCreating(false);
               }}
             >
