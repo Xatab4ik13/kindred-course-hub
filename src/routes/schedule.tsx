@@ -130,7 +130,7 @@ function SchedulePage() {
         </div>
 
         <div className="mt-8">
-          <ScheduleFilters value={filter} onChange={setFilter} showQuery />
+          <ScheduleFilters value={filter} onChange={setFilter} teachers={teachers} showQuery />
         </div>
 
         <motion.div
@@ -146,8 +146,8 @@ function SchedulePage() {
             {days.map((d, idx) => {
               const dow = (d.getDay() + 6) % 7;
               const dayKey = DAY_KEYS[dow]!;
-              const lessons = WEEK_TEMPLATE[dow]!;
-              const filtered = filterDayLessons(lessons, dow, filter);
+              const filtered = dayLessons(lessons, teachers, dateKey(d), filter);
+
               const isToday = d.toDateString() === todayStr;
               const isPast = d.getTime() < todayTime;
               const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
