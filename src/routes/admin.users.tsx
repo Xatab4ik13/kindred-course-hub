@@ -9,12 +9,13 @@ import type { Role } from "@/lib/admin-data";
 export const Route = createFileRoute("/admin/users")({ component: () => <AdminOnly><UsersPage /></AdminOnly> });
 
 function UsersPage() {
-  const { users, setUsers } = useAdmin();
+  const { users, setUsers, saveAccount, deleteAccount } = useAdmin();
   const [inviting, setInviting] = useState(false);
-  const [draft, setDraft] = useState<{ name: string; email: string; login: string; role: Role }>({
+  const [draft, setDraft] = useState<{ name: string; email: string; login: string; password: string; role: Role }>({
     name: "",
     email: "",
     login: "",
+    password: "",
     role: "teacher",
   });
 
@@ -45,12 +46,19 @@ function UsersPage() {
                 <Select
                   className="w-44"
                   value={u.role}
-                  onChange={(e) => setUsers((p) => p.map((x) => (x.id === u.id ? { ...x, role: e.target.value as Role } : x)))}
+                  onChange={(e) => {
+                    const role = e.target.value as Role;
+                    setUsers((p) => p.map((x) => (x.id === u.id ? { ...x, role } : x)));
+                    void saveAccount({ login: u.login, role, name: u.name }).catch(() => undefined);
+                  }}
                 >
                   <option value="admin">Администратор</option>
                   <option value="teacher">Преподаватель</option>
                 </Select>
-                <Btn variant="ghost" size="sm" className="text-[oklch(0.55_0.2_27)]" onClick={() => setUsers((p) => p.filter((x) => x.id !== u.id))}>
+                <Btn variant="ghost" size="sm" className="text-[oklch(0.55_0.2_27)]" onClick={() => {
+                    setUsers((p) => p.filter((x) => x.id !== u.id));
+                    void deleteAccount(u.login).catch(() => undefined);
+                  }}>
                   <Trash2 className="h-4 w-4" />
                 </Btn>
               </div>
@@ -70,6 +78,9 @@ function UsersPage() {
           <Field label="Логин">
             <TextInput value={draft.login} onChange={(e) => setDraft({ ...draft, login: e.target.value })} />
           </Field>
+          <Field label="Пароль" hint="Пароль для входа в панель">
+            <TextInput value={draft.password} onChange={(e) => setDraft({ ...draft, password: e.target.value })} />
+          </Field>
           <Field label="Роль" hint="Роль назначается заранее — приглашённый сразу получит нужные права">
             <Select value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value as Role })}>
               <option value="teacher">Преподаватель</option>
@@ -78,19 +89,22 @@ function UsersPage() {
           </Field>
           <div className="flex gap-2">
             <Btn
+              disabled={!draft.login.trim() || !draft.password.trim() || !draft.name.trim()}
               onClick={() => {
-                setUsers((p) => [...p, { id: `u${Date.now()}`, ...draft, status: "invited" }]);
-                setDraft({ name: "", email: "", login: "", role: "teacher" });
+                const { password, ...rest } = draft;
+                setUsers((p) => [...p, { id: `u${Date.now()}`, ...rest, status: "active" }]);
+                void saveAccount({ login: draft.login, password, role: draft.role, name: draft.name }).catch(() => undefined);
+                setDraft({ name: "", email: "", login: "", password: "", role: "teacher" });
                 setInviting(false);
               }}
             >
-              <Mail className="h-4 w-4" /> Отправить приглашение
+              <Mail className="h-4 w-4" /> Создать доступ
             </Btn>
             <Btn variant="outline" onClick={() => setInviting(false)}>
               Отмена
             </Btn>
           </div>
-          <p className="text-xs text-[oklch(0.6_0.03_45)]">Письмо будет отправляться после подключения бекенда.</p>
+          <p className="text-xs text-[oklch(0.6_0.03_45)]">Логин и пароль передайте пользователю — он сразу сможет войти в панель.</p>
         </div>
       </Modal>
     </>
