@@ -61,11 +61,41 @@ function PricingAdminPage() {
                 <TextArea
                   className="min-h-28"
                   value={p.features.join("\n")}
-                  onChange={(e) =>
-                    setPrices((v) => v.map((x) => (x.id === p.id ? { ...x, features: e.target.value.split("\n") } : x)))
-                  }
+                  onChange={(e) => patch(p.id, { features: e.target.value.split("\n") })}
                 />
               </Field>
+              <details className="rounded-2xl border border-[oklch(0.92_0.02_60)] p-3">
+                <summary className="cursor-pointer text-sm font-semibold">Детали для страницы «Все программы»</summary>
+                <div className="mt-3 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field label="Иероглиф">
+                      <TextInput value={p.hanzi ?? ""} onChange={(e) => patch(p.id, { hanzi: e.target.value })} />
+                    </Field>
+                    <Field label="Подзаголовок">
+                      <TextInput value={p.tag ?? ""} onChange={(e) => patch(p.id, { tag: e.target.value })} />
+                    </Field>
+                    <Field label="Формат">
+                      <TextInput value={p.format ?? ""} onChange={(e) => patch(p.id, { format: e.target.value })} />
+                    </Field>
+                    <Field label="Размер группы">
+                      <TextInput value={p.groupSize ?? ""} onChange={(e) => patch(p.id, { groupSize: e.target.value })} />
+                    </Field>
+                    <Field label="Длительность">
+                      <TextInput value={p.duration ?? ""} onChange={(e) => patch(p.id, { duration: e.target.value })} />
+                    </Field>
+                    <Field label="Уровень">
+                      <TextInput value={p.level ?? ""} onChange={(e) => patch(p.id, { level: e.target.value })} />
+                    </Field>
+                  </div>
+                  <Field label="Итоговая фраза">
+                    <TextArea className="min-h-16" value={p.footer ?? ""} onChange={(e) => patch(p.id, { footer: e.target.value })} />
+                  </Field>
+                  <Field label="Плашка (акция)">
+                    <TextInput value={p.highlight ?? ""} onChange={(e) => patch(p.id, { highlight: e.target.value })} />
+                  </Field>
+                </div>
+              </details>
+
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <Toggle checked={p.visible} label="На сайте" onChange={(val) => setPrices((v) => v.map((x) => (x.id === p.id ? { ...x, visible: val } : x)))} />
                 <Btn
