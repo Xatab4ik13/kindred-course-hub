@@ -53,6 +53,7 @@ const SESSION_KEY = "chinar.admin.session";
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [accounts, setAccounts] = useState<Account[]>(DEMO_ACCOUNTS);
   const [requests, setRequests] = useState(SEED_REQUESTS);
   const [teachers, setTeachers] = useState(SEED_TEACHERS);
   const [leaders, setLeaders] = useState(SEED_LEADERS);
