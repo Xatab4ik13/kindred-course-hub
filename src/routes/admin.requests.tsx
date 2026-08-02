@@ -102,9 +102,6 @@ function RequestsPage() {
           {rows.length === 0 ? <div className="py-10 text-center text-sm text-[oklch(0.55_0.03_45)]">Заявок не найдено</div> : null}
         </div>
 
-        <div className="mt-4 text-xs text-[oklch(0.6_0.03_45)]">
-          Данные демонстрационные: изменения не сохраняются до подключения бекенда.
-        </div>
         <Btn variant="outline" size="sm" className="mt-3" onClick={() => setRequests((p) => [...p])}>
           Обновить
         </Btn>
