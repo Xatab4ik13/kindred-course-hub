@@ -13,7 +13,21 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTeachersRouteImport } from './routes/admin.teachers'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminScheduleRouteImport } from './routes/admin.schedule'
+import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
+import { Route as AdminRequestsRouteImport } from './routes/admin.requests'
+import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminMyScheduleRouteImport } from './routes/admin.my-schedule'
+import { Route as AdminMyProfileRouteImport } from './routes/admin.my-profile'
+import { Route as AdminMyLessonsRouteImport } from './routes/admin.my-lessons'
+import { Route as AdminLessonsRouteImport } from './routes/admin.lessons'
+import { Route as AdminLeadershipRouteImport } from './routes/admin.leadership'
 
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
@@ -35,18 +49,102 @@ const ContactsRoute = ContactsRouteImport.update({
   path: '/contacts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeachersRoute = AdminTeachersRouteImport.update({
+  id: '/teachers',
+  path: '/teachers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminScheduleRoute = AdminScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReviewsRoute = AdminReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRequestsRoute = AdminRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMyScheduleRoute = AdminMyScheduleRouteImport.update({
+  id: '/my-schedule',
+  path: '/my-schedule',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMyProfileRoute = AdminMyProfileRouteImport.update({
+  id: '/my-profile',
+  path: '/my-profile',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMyLessonsRoute = AdminMyLessonsRouteImport.update({
+  id: '/my-lessons',
+  path: '/my-lessons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLessonsRoute = AdminLessonsRouteImport.update({
+  id: '/lessons',
+  path: '/lessons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLeadershipRoute = AdminLeadershipRouteImport.update({
+  id: '/leadership',
+  path: '/leadership',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
+  '/admin/lessons': typeof AdminLessonsRoute
+  '/admin/my-lessons': typeof AdminMyLessonsRoute
+  '/admin/my-profile': typeof AdminMyProfileRoute
+  '/admin/my-schedule': typeof AdminMyScheduleRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/schedule': typeof AdminScheduleRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teachers': typeof AdminTeachersRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,25 +152,110 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
+  '/admin/lessons': typeof AdminLessonsRoute
+  '/admin/my-lessons': typeof AdminMyLessonsRoute
+  '/admin/my-profile': typeof AdminMyProfileRoute
+  '/admin/my-schedule': typeof AdminMyScheduleRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/schedule': typeof AdminScheduleRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teachers': typeof AdminTeachersRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/leadership': typeof AdminLeadershipRoute
+  '/admin/lessons': typeof AdminLessonsRoute
+  '/admin/my-lessons': typeof AdminMyLessonsRoute
+  '/admin/my-profile': typeof AdminMyProfileRoute
+  '/admin/my-schedule': typeof AdminMyScheduleRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/requests': typeof AdminRequestsRoute
+  '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/schedule': typeof AdminScheduleRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teachers': typeof AdminTeachersRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacts' | '/news' | '/pricing' | '/schedule'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/contacts'
+    | '/news'
+    | '/pricing'
+    | '/schedule'
+    | '/admin/leadership'
+    | '/admin/lessons'
+    | '/admin/my-lessons'
+    | '/admin/my-profile'
+    | '/admin/my-schedule'
+    | '/admin/pricing'
+    | '/admin/requests'
+    | '/admin/reviews'
+    | '/admin/schedule'
+    | '/admin/settings'
+    | '/admin/teachers'
+    | '/admin/users'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacts' | '/news' | '/pricing' | '/schedule'
-  id: '__root__' | '/' | '/contacts' | '/news' | '/pricing' | '/schedule'
+  to:
+    | '/'
+    | '/contacts'
+    | '/news'
+    | '/pricing'
+    | '/schedule'
+    | '/admin/leadership'
+    | '/admin/lessons'
+    | '/admin/my-lessons'
+    | '/admin/my-profile'
+    | '/admin/my-schedule'
+    | '/admin/pricing'
+    | '/admin/requests'
+    | '/admin/reviews'
+    | '/admin/schedule'
+    | '/admin/settings'
+    | '/admin/teachers'
+    | '/admin/users'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/contacts'
+    | '/news'
+    | '/pricing'
+    | '/schedule'
+    | '/admin/leadership'
+    | '/admin/lessons'
+    | '/admin/my-lessons'
+    | '/admin/my-profile'
+    | '/admin/my-schedule'
+    | '/admin/pricing'
+    | '/admin/requests'
+    | '/admin/reviews'
+    | '/admin/schedule'
+    | '/admin/settings'
+    | '/admin/teachers'
+    | '/admin/users'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   NewsRoute: typeof NewsRoute
   PricingRoute: typeof PricingRoute
@@ -109,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -116,11 +306,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/teachers': {
+      id: '/admin/teachers'
+      path: '/teachers'
+      fullPath: '/admin/teachers'
+      preLoaderRoute: typeof AdminTeachersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/schedule': {
+      id: '/admin/schedule'
+      path: '/schedule'
+      fullPath: '/admin/schedule'
+      preLoaderRoute: typeof AdminScheduleRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reviews': {
+      id: '/admin/reviews'
+      path: '/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AdminReviewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/requests': {
+      id: '/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AdminRequestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/my-schedule': {
+      id: '/admin/my-schedule'
+      path: '/my-schedule'
+      fullPath: '/admin/my-schedule'
+      preLoaderRoute: typeof AdminMyScheduleRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/my-profile': {
+      id: '/admin/my-profile'
+      path: '/my-profile'
+      fullPath: '/admin/my-profile'
+      preLoaderRoute: typeof AdminMyProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/my-lessons': {
+      id: '/admin/my-lessons'
+      path: '/my-lessons'
+      fullPath: '/admin/my-lessons'
+      preLoaderRoute: typeof AdminMyLessonsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/lessons': {
+      id: '/admin/lessons'
+      path: '/lessons'
+      fullPath: '/admin/lessons'
+      preLoaderRoute: typeof AdminLessonsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/leadership': {
+      id: '/admin/leadership'
+      path: '/leadership'
+      fullPath: '/admin/leadership'
+      preLoaderRoute: typeof AdminLeadershipRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminLeadershipRoute: typeof AdminLeadershipRoute
+  AdminLessonsRoute: typeof AdminLessonsRoute
+  AdminMyLessonsRoute: typeof AdminMyLessonsRoute
+  AdminMyProfileRoute: typeof AdminMyProfileRoute
+  AdminMyScheduleRoute: typeof AdminMyScheduleRoute
+  AdminPricingRoute: typeof AdminPricingRoute
+  AdminRequestsRoute: typeof AdminRequestsRoute
+  AdminReviewsRoute: typeof AdminReviewsRoute
+  AdminScheduleRoute: typeof AdminScheduleRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTeachersRoute: typeof AdminTeachersRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLeadershipRoute: AdminLeadershipRoute,
+  AdminLessonsRoute: AdminLessonsRoute,
+  AdminMyLessonsRoute: AdminMyLessonsRoute,
+  AdminMyProfileRoute: AdminMyProfileRoute,
+  AdminMyScheduleRoute: AdminMyScheduleRoute,
+  AdminPricingRoute: AdminPricingRoute,
+  AdminRequestsRoute: AdminRequestsRoute,
+  AdminReviewsRoute: AdminReviewsRoute,
+  AdminScheduleRoute: AdminScheduleRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminTeachersRoute: AdminTeachersRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContactsRoute: ContactsRoute,
   NewsRoute: NewsRoute,
   PricingRoute: PricingRoute,
@@ -129,13 +445,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
