@@ -21,12 +21,15 @@ import {
 } from "@/lib/admin-data";
 
 export type Session = { login: string; name: string; role: Role; teacherId?: string };
+export type Account = { login: string; password: string; role: Role; name: string; teacherId?: string };
 
 type Store = {
   session: Session | null;
   signIn: (login: string, password: string) => boolean;
   signOut: () => void;
 
+  accounts: Account[];
+  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   requests: EnrollRequest[];
   setRequests: React.Dispatch<React.SetStateAction<EnrollRequest[]>>;
   teachers: Teacher[];
