@@ -1,8 +1,8 @@
-import {
-  Newspaper, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
+  Newspaper,
   CalendarDays,
   ClipboardList,
   GraduationCap,
