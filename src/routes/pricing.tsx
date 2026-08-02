@@ -424,18 +424,9 @@ function PricingPage() {
           className="space-y-8"
         >
           {visiblePrograms.map((p, i) => {
-            const admin = priceById.get(p.id);
-            const base = p[lang];
-            const c: ProgramCopy = admin
-              ? {
-                  ...base,
-                  name: admin.title || base.name,
-                  price: admin.price || base.price,
-                  unit: admin.period || base.unit,
-                  bullets: admin.features?.length ? admin.features : base.bullets,
-                }
-              : base;
-            const isSpecial = admin ? Boolean(admin.featured) : !!p.popular;
+            const c = p.c;
+            const isSpecial = p.isSpecial;
+
             const reverse = i % 2 === 1;
             const meta = [
               { icon: Calendar, label: c.format },
