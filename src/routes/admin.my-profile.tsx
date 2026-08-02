@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAdmin } from "@/components/admin/store";
-import { Btn, Field, PageHeader, Panel, TextArea, TextInput, Toggle } from "@/components/admin/ui";
+import { Field, PageHeader, Panel, PhotoPicker, TextArea, TextInput, Toggle } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/my-profile")({ component: MyProfilePage });
 
