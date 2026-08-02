@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/reviews")({ component: () => <Admin
 function ReviewsPage() {
   const { reviews, setReviews } = useAdmin();
   const [creating, setCreating] = useState(false);
-  const [draft, setDraft] = useState({ name: "", text: "", visible: true });
+  const [draft, setDraft] = useState({ author: "", level: "", text: "", visible: true });
 
   return (
     <>
