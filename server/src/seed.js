@@ -49,54 +49,20 @@ const TEACHERS = [
     phone: "+7 900 333-44-55",
     visible: true,
   },
-  {
-    id: "t4",
-    name: "Анна Соколова",
-    initials: "АС",
-    photo: "/media/teacher-4.webp",
-    role: "Преподаватель · ЕГЭ и школьники",
-    bio: "Готовит к ЕГЭ и олимпиадам, 7 лет практики в языковых школах.",
-    email: "sokolova@onlinechinar.ru",
-    phone: "+7 900 444-55-66",
-    visible: true,
-  },
 ];
 
-const LEVELS = ["HSK 1", "HSK 2", "HSK 3", "Дети", "Разговорный", "ЕГЭ"];
-const TIMES = ["10:00", "12:00", "16:00", "18:00", "19:30"];
 
-const LESSONS = Array.from({ length: 48 }, (_, i) => {
-  const teacher = TEACHERS[i % 4];
-  const offset = (i % 14) - 7;
-  const past = offset < 0;
-  const cancelled = past && i % 9 === 0;
-  return {
-    id: `l${i + 1}`,
-    teacherId: teacher.id,
-    group: `№0${30 + (i % 8)}`,
-    level: LEVELS[i % LEVELS.length],
-    date: iso(offset),
-    time: TIMES[i % TIMES.length],
-    status: cancelled ? "cancelled" : past ? "done" : "planned",
-    ...(cancelled ? { cancelReason: CANCEL_REASONS[i % CANCEL_REASONS.length] } : {}),
-  };
-});
+
 
 export const SEED = {
-  requests: [
-    { id: "r1", name: "Анна Кузнецова", phone: "+7 912 445-10-22", program: "HSK 1 · Группа", createdAt: iso(-1), source: "Сайт", status: "new" },
-    { id: "r2", name: "Игорь Лапшин", phone: "+7 903 118-77-04", program: "Индивидуально", createdAt: iso(-2), source: "Сайт", status: "progress" },
-    { id: "r3", name: "Мария Орлова", phone: "+7 921 700-31-88", program: "Школьники", createdAt: iso(-3), source: "VK", status: "enrolled" },
-    { id: "r4", name: "Дмитрий Белов", phone: "+7 999 004-52-13", program: "ЕГЭ", createdAt: iso(-4), source: "Телефон", status: "declined", comment: "Не подошло расписание" },
-    { id: "r5", name: "Ксения Титова", phone: "+7 916 220-66-90", program: "HSK 2 · Группа", createdAt: iso(-5), source: "Сайт", status: "enrolled" },
-  ],
+  requests: [],
   teachers: TEACHERS,
   leaders: [
     { id: "l1", name: "Тимофей", photo: "/media/timofey.jpg", role: "Основатель школы", bio: "Отвечает за развитие школы и партнёрские программы.", visible: true },
     { id: "l2", name: "Николай", photo: "/media/nikolay.jpg", role: "Руководитель направления", bio: "Курирует методику и качество преподавания.", visible: true },
     { id: "l3", name: "Вадим", photo: "/media/vadim.jpg", role: "Операционный директор", bio: "Организация учебного процесса и расписания.", visible: true },
   ],
-  lessons: LESSONS,
+  lessons: [],
   reviews: [
     { id: "rv1", author: "Анна", level: "HSK 3", text: "За полгода прошла с нуля до уверенных диалогов. Атмосфера как в чайной — тепло и по делу.", visible: true },
     { id: "rv2", author: "Игорь", level: "Бизнес-курс", text: "Готовился к переговорам в Шанхае — за месяц собрали лексику, кейсы, этикет. Сделка закрыта.", visible: true },

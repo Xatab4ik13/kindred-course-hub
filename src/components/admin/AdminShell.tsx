@@ -97,7 +97,7 @@ function LoginScreen() {
           }}
         >
           <Field label="Логин">
-            <TextInput value={login} onChange={(e) => setLogin(e.target.value)} autoComplete="username" placeholder="AdminChinar1" />
+            <TextInput value={login} onChange={(e) => setLogin(e.target.value)} autoComplete="username" placeholder="Введите логин" />
           </Field>
           <Field label="Пароль">
             <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="••••••••" />
