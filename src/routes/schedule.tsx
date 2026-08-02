@@ -180,15 +180,15 @@ function SchedulePage() {
                         {t("schedule.filter.noResults")}
                       </div>
                     ) : (
-                      filtered.map(({ lesson, no }) => (
+                      filtered.map((lesson) => (
                         <LessonCard
-                          key={no}
+                          key={lesson.id}
                           lesson={lesson}
-                          groupNo={no}
                           disabled={isPast}
                           onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
                         />
                       ))
+
                     )}
                   </div>
                 </div>
