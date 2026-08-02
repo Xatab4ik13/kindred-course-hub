@@ -21,12 +21,15 @@ import {
 } from "@/lib/admin-data";
 
 export type Session = { login: string; name: string; role: Role; teacherId?: string };
+export type Account = { login: string; password: string; role: Role; name: string; teacherId?: string };
 
 type Store = {
   session: Session | null;
   signIn: (login: string, password: string) => boolean;
   signOut: () => void;
 
+  accounts: Account[];
+  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   requests: EnrollRequest[];
   setRequests: React.Dispatch<React.SetStateAction<EnrollRequest[]>>;
   teachers: Teacher[];
@@ -50,6 +53,7 @@ const SESSION_KEY = "chinar.admin.session";
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [accounts, setAccounts] = useState<Account[]>(DEMO_ACCOUNTS);
   const [requests, setRequests] = useState(SEED_REQUESTS);
   const [teachers, setTeachers] = useState(SEED_TEACHERS);
   const [leaders, setLeaders] = useState(SEED_LEADERS);
@@ -74,7 +78,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       signIn: (login, password) => {
-        const acc = DEMO_ACCOUNTS.find((a) => a.login === login && a.password === password);
+        const acc = accounts.find((a) => a.login === login && a.password === password);
         if (!acc) return false;
         const next: Session = { login: acc.login, name: acc.name, role: acc.role, ...(acc.teacherId ? { teacherId: acc.teacherId } : {}) };
         setSession(next);
@@ -85,6 +89,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         setSession(null);
         window.sessionStorage.removeItem(SESSION_KEY);
       },
+      accounts,
+      setAccounts,
       requests,
       setRequests,
       teachers,
@@ -102,7 +108,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       org,
       setOrg,
     }),
-    [session, requests, teachers, leaders, lessons, reviews, prices, users, org],
+    [session, accounts, requests, teachers, leaders, lessons, reviews, prices, users, org],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
