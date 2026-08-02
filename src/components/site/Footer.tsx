@@ -1,7 +1,9 @@
 import { useI18n } from "@/providers/i18n";
+import { usePublicContent } from "@/lib/public-content";
 
 export function Footer() {
   const { t } = useI18n();
+  const { org } = usePublicContent();
   return (
     <footer className="text-white/90 border-t border-white/10" style={{ background: "oklch(0.17 0.04 28)" }}>
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-3 md:px-8">
@@ -19,17 +21,24 @@ export function Footer() {
         <div className="text-sm">
           <div className="font-semibold mb-2 text-white">{t("nav.contacts")}</div>
           <div className="text-white/60 space-y-1">
-            <div>hello@chinar.school</div>
-            <div>+7 (000) 000-00-00</div>
-            <div>Москва, ул. Пекинская, 1</div>
+            {org.email && <div>{org.email}</div>}
+            {org.phone && <div>{org.phone}</div>}
+            {org.address && <div>{org.address}</div>}
+            {org.vk && (
+              <div>
+                <a href={org.vk} target="_blank" rel="noreferrer" className="hover:text-white">
+                  ВКонтакте
+                </a>
+              </div>
+            )}
           </div>
         </div>
         <div className="text-sm">
           <div className="font-semibold mb-2 text-white">{t("footer.legal")}</div>
           <div className="text-white/60 space-y-1">
-            <div>ООО «Чинар»</div>
-            <div>ИНН 0000000000</div>
-            <div>ОГРН 0000000000000</div>
+            {org.legalName && <div>{org.legalName}</div>}
+            {org.inn && <div>ИНН {org.inn}</div>}
+            {org.ogrn && <div>ОГРН {org.ogrn}</div>}
           </div>
         </div>
       </div>

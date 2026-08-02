@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/providers/i18n";
 import { EnrollModal } from "@/components/site/EnrollModal";
 import { useState } from "react";
+import { usePublicContent } from "@/lib/public-content";
 
 export const Route = createFileRoute("/contacts")({
   head: () => ({
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/contacts")({
 function ContactsPage() {
   const { t } = useI18n();
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const { org } = usePublicContent();
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 md:px-8">
@@ -42,26 +44,44 @@ function ContactsPage() {
       </p>
 
       <div className="mt-10 space-y-6 rounded-3xl bg-card p-6 md:p-10 shadow-soft">
-        <div>
-          <h2 className="font-display text-xl font-bold">Telegram / WhatsApp</h2>
-          <a
-            href="https://t.me/chinar_school"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-1 inline-block text-lg text-brand hover:underline"
-          >
-            @chinar_school
-          </a>
-        </div>
-        <div>
-          <h2 className="font-display text-xl font-bold">Email</h2>
-          <a
-            href="mailto:hello@chinar.school"
-            className="mt-1 inline-block text-lg text-brand hover:underline"
-          >
-            hello@chinar.school
-          </a>
-        </div>
+        {org.phone && (
+          <div>
+            <h2 className="font-display text-xl font-bold">Телефон</h2>
+            <a href={`tel:${org.phone.replace(/[^+\d]/g, "")}`} className="mt-1 inline-block text-lg text-brand hover:underline">
+              {org.phone}
+            </a>
+          </div>
+        )}
+        {org.telegram && (
+          <div>
+            <h2 className="font-display text-xl font-bold">Telegram</h2>
+            <a href={org.telegram} target="_blank" rel="noreferrer" className="mt-1 inline-block text-lg text-brand hover:underline">
+              {org.telegram}
+            </a>
+          </div>
+        )}
+        {org.vk && (
+          <div>
+            <h2 className="font-display text-xl font-bold">ВКонтакте</h2>
+            <a href={org.vk} target="_blank" rel="noreferrer" className="mt-1 inline-block text-lg text-brand hover:underline">
+              {org.vk}
+            </a>
+          </div>
+        )}
+        {org.email && (
+          <div>
+            <h2 className="font-display text-xl font-bold">Email</h2>
+            <a href={`mailto:${org.email}`} className="mt-1 inline-block text-lg text-brand hover:underline">
+              {org.email}
+            </a>
+          </div>
+        )}
+        {org.address && (
+          <div>
+            <h2 className="font-display text-xl font-bold">Адрес</h2>
+            <p className="mt-1 text-lg">{org.address}</p>
+          </div>
+        )}
       </div>
 
       <button
