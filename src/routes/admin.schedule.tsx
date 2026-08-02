@@ -60,7 +60,7 @@ export function ScheduleBoard({ teacherId, canEdit }: { teacherId: string | "all
 
       <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         {days.map((d) => {
-          const key = d.toISOString().slice(0, 10);
+          const key = dateKey(d);
           const items = visible.filter((l) => l.date === key).sort((a, b) => a.time.localeCompare(b.time));
           return (
             <div key={key} className="rounded-2xl border border-[oklch(0.92_0.02_60)] p-3">
@@ -134,6 +134,14 @@ export function ScheduleBoard({ teacherId, canEdit }: { teacherId: string | "all
             <Field label="Группа">
               <TextInput value={draft.group} onChange={(e) => setDraft({ ...draft, group: e.target.value })} />
             </Field>
+            <Field label="Длительность, мин">
+              <TextInput
+                type="number"
+                value={String(draft.duration ?? 90)}
+                onChange={(e) => setDraft({ ...draft, duration: Number(e.target.value) || 90 })}
+              />
+            </Field>
+
           </div>
           <div className="flex gap-2">
             <Btn
