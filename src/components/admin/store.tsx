@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { api, setToken, getToken, ApiError } from "@/lib/api";
 import type { AppUser, EnrollRequest, Leader, Lesson, OrgInfo, PricePlan, Review, Role, Teacher } from "@/lib/admin-data";
+import type { NewsItem } from "@/lib/public-content";
 
 export type Session = { login: string; name: string; role: Role; teacherId?: string };
 export type Account = { login: string; name: string; role: Role; teacherId?: string | null };
@@ -14,6 +15,7 @@ type ServerState = {
   prices: PricePlan[];
   users: AppUser[];
   org: OrgInfo;
+  news: NewsItem[];
   accounts: Account[];
 };
 
@@ -55,6 +57,8 @@ type Store = {
   setUsers: Setter<AppUser[]>;
   org: OrgInfo;
   setOrg: Setter<OrgInfo>;
+  news: NewsItem[];
+  setNews: Setter<NewsItem[]>;
 
   accounts: Account[];
   saveAccount: (input: { login: string; password?: string; role: Role; name: string; teacherId?: string | null }) => Promise<void>;
@@ -77,6 +81,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [prices, setPricesRaw] = useState<PricePlan[]>([]);
   const [users, setUsersRaw] = useState<AppUser[]>([]);
   const [org, setOrgRaw] = useState<OrgInfo>(EMPTY_ORG);
+  const [news, setNewsRaw] = useState<NewsItem[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
@@ -100,6 +105,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setPricesRaw(state.prices ?? []);
     setUsersRaw(state.users ?? []);
     setOrgRaw(state.org ?? EMPTY_ORG);
+    setNewsRaw(state.news ?? []);
     setAccounts(state.accounts ?? []);
   }, []);
 
@@ -180,6 +186,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setUsers: makeSetter("users", setUsersRaw),
       org,
       setOrg: makeSetter("org", setOrgRaw),
+      news,
+      setNews: makeSetter("news", setNewsRaw),
       accounts,
       saveAccount: async (input) => {
         const res = await api<{ accounts: Account[] }>("/accounts", { method: "POST", body: JSON.stringify(input) });
@@ -194,7 +202,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         refreshAccounts(res);
       },
     };
-  }, [session, loading, error, requests, teachers, leaders, lessons, reviews, prices, users, org, accounts, makeSetter, load, applyState]);
+  }, [session, loading, error, requests, teachers, leaders, lessons, reviews, prices, users, org, news, accounts, makeSetter, load, applyState]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

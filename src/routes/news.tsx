@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { useI18n } from "@/providers/i18n";
+import { usePublicContent } from "@/lib/public-content";
 
 export const Route = createFileRoute("/news")({
   head: () => ({
@@ -20,36 +21,10 @@ export const Route = createFileRoute("/news")({
   component: NewsPage,
 });
 
-interface Post {
-  id: string;
-  title: string;
-  text: string;
-  image: string;
-  date: string; // ISO
-}
-
-const STORAGE_KEY = "chinar.news";
-
-function loadPosts(): Post[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as Post[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
 function NewsPage() {
   const { t, lang } = useI18n();
   const locale = lang === "ru" ? "ru-RU" : "en-US";
-  const [posts, setPosts] = useState<Post[]>([]);
-
-  useEffect(() => {
-    setPosts(loadPosts());
-  }, []);
+  const { news: posts } = usePublicContent();
 
   const sorted = useMemo(
     () => [...posts].sort((a, b) => b.date.localeCompare(a.date)),
@@ -93,9 +68,9 @@ function NewsPage() {
               transition={{ duration: 0.35 }}
               className="overflow-hidden rounded-3xl border border-border/60 bg-surface shadow-soft"
             >
-              {p.image && (
+              {p.photo && (
                 <img
-                  src={p.image}
+                  src={p.photo}
                   alt=""
                   className="h-64 w-full object-cover"
                   loading="lazy"
@@ -114,7 +89,7 @@ function NewsPage() {
                   </p>
                 )}
                 <div className="mt-6 text-xs font-semibold uppercase tracking-widest text-brand">
-                  {t("news.byAdmin")}
+                  {p.author || t("news.byAdmin")}
                 </div>
               </div>
             </motion.article>
