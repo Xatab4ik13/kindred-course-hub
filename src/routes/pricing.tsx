@@ -322,12 +322,20 @@ const PROGRAMS: Program[] = [
   },
 ];
 
+type ProgramView = {
+  id: string;
+  hanzi: string;
+  goalId: string;
+  isSpecial: boolean;
+  c: ProgramCopy;
+};
+
 function PricingPage() {
   const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<string | undefined>();
   const { prices } = usePublicContent();
-  const priceById = new Map(prices.map((x) => [x.id, x]));
+  const staticById = new Map(PROGRAMS.map((p) => [p.id, p]));
 
   const openWith = (goalId?: string) => {
     setSelectedGoal(goalId);
@@ -335,17 +343,51 @@ function PricingPage() {
   };
 
   const heroTitle = lang === "ru" ? "Все программы" : "All programmes";
-  const visiblePrograms = prices.length
-    ? PROGRAMS.filter((p) => {
-        const admin = priceById.get(p.id);
-        return !admin || admin.visible !== false;
-      })
-    : PROGRAMS;
+
+  // Источник правды — программы из админки. Английская версия и иероглиф
+  // берутся из статичного словаря для уже известных программ.
+  const visiblePrograms: ProgramView[] = prices.length
+    ? prices
+        .filter((x) => x.visible !== false)
+        .map((x) => {
+          const known = staticById.get(x.id);
+          const base = known?.[lang];
+          const c: ProgramCopy = {
+            name: lang === "en" && base ? base.name : x.title,
+            tag: x.tag ?? base?.tag ?? "",
+            price: x.price || base?.price || "",
+            unit: x.period || base?.unit || "",
+            format: x.format ?? base?.format ?? "",
+            group: x.groupSize ?? base?.group ?? "",
+            duration: x.duration ?? base?.duration ?? "",
+            level: x.level ?? base?.level ?? "",
+            bullets: lang === "en" && base?.bullets.length ? base.bullets : (x.features ?? []),
+            ...(x.footer ?? base?.footer ? { footer: (lang === "en" ? base?.footer : x.footer) ?? x.footer ?? base?.footer } : {}),
+            ...(x.highlight ?? base?.highlight
+              ? { highlight: (lang === "en" ? base?.highlight : x.highlight) ?? x.highlight ?? base?.highlight }
+              : {}),
+          };
+          return {
+            id: x.id,
+            hanzi: x.hanzi ?? known?.hanzi ?? "学",
+            goalId: x.goalId ?? known?.goalId ?? x.id,
+            isSpecial: Boolean(x.featured),
+            c,
+          };
+        })
+    : PROGRAMS.map((p) => ({
+        id: p.id,
+        hanzi: p.hanzi,
+        goalId: p.goalId,
+        isSpecial: !!p.popular,
+        c: p[lang],
+      }));
   const heroLead =
     lang === "ru"
       ? "От первого 你好 до сдачи HSK и ЕГЭ — выберите формат под свою цель и возраст. Все программы ведут преподаватели с уровнем HSK 5–6."
       : "From your first 你好 to HSK and EGE — pick the format that fits your goal and age. Every programme is led by teachers with HSK 5–6.";
   const eyebrow = lang === "ru" ? "Каталог" : "Catalogue";
+
 
   return (
     <div className="min-h-screen bg-background">
