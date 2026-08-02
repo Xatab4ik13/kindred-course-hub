@@ -44,15 +44,16 @@ export function PricingSection() {
         .slice(0, 3)
         .map((x, i) => ({
           id: x.id,
-          hanzi: HANZI[i % HANZI.length] as string,
-          goalId: x.id,
+          hanzi: x.hanzi ?? (HANZI[i % HANZI.length] as string),
+          goalId: x.goalId ?? x.id,
           special: Boolean(x.featured),
           title: x.title,
-          tag: "",
+          tag: x.tag ?? "",
           price: x.price,
           unit: x.period,
           features: x.features ?? [],
         }))
+
     : FALLBACK_PLANS.map((p) => ({
         id: p.id,
         hanzi: p.hanzi,

@@ -10,7 +10,25 @@ export const Route = createFileRoute("/admin/pricing")({ component: () => <Admin
 function PricingAdminPage() {
   const { prices, setPrices } = useAdmin();
   const [creating, setCreating] = useState(false);
-  const [draft, setDraft] = useState({ title: "", price: "", period: "в месяц", features: "", featured: false, visible: true });
+  const [draft, setDraft] = useState({
+    title: "",
+    price: "",
+    period: "/ мес",
+    features: "",
+    featured: false,
+    visible: true,
+    hanzi: "",
+    tag: "",
+    format: "",
+    groupSize: "",
+    duration: "",
+    level: "",
+    footer: "",
+    highlight: "",
+  });
+  const patch = (id: string, part: Record<string, unknown>) =>
+    setPrices((v) => v.map((x) => (x.id === id ? { ...x, ...part } : x)));
+
 
   return (
     <>
