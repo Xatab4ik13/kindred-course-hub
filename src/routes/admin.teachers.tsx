@@ -25,14 +25,14 @@ const emptyDraft = (): Draft => ({
 });
 
 function TeachersPage() {
-  const { teachers, setTeachers, lessons, accounts, setAccounts, users, setUsers } = useAdmin();
+  const { teachers, setTeachers, lessons, accounts, saveAccount, deleteAccountsByTeacher, users, setUsers } = useAdmin();
   const [draft, setDraft] = useState<Draft | null>(null);
   const [isNew, setIsNew] = useState(false);
 
   const openEdit = (t: Teacher) => {
     const acc = accounts.find((a) => a.teacherId === t.id);
     setIsNew(false);
-    setDraft({ ...t, login: acc?.login ?? "", password: acc?.password ?? "" });
+    setDraft({ ...t, login: acc?.login ?? "", password: "" });
   };
 
   const openNew = () => {
@@ -58,14 +58,16 @@ function TeachersPage() {
     setTeachers((prev) => (isNew ? [...prev, teacher] : prev.map((x) => (x.id === id ? teacher : x))));
 
     if (draft.login) {
-      setAccounts((prev) => {
-        const exists = prev.some((a) => a.teacherId === id);
-        const next = { login: draft.login, password: draft.password, role: "teacher" as const, name: draft.name, teacherId: id };
-        return exists ? prev.map((a) => (a.teacherId === id ? next : a)) : [...prev, next];
-      });
+      void saveAccount({
+        login: draft.login,
+        ...(draft.password ? { password: draft.password } : {}),
+        role: "teacher",
+        name: draft.name,
+        teacherId: id,
+      }).catch(() => undefined);
       setUsers((prev) => {
-        const exists = prev.some((u) => u.login === draft.login || u.email === draft.email);
-        if (exists) return prev.map((u) => (u.login === draft.login || u.email === draft.email ? { ...u, name: draft.name, email: draft.email, login: draft.login } : u));
+        const exists = prev.some((u) => u.login === draft.login);
+        if (exists) return prev.map((u) => (u.login === draft.login ? { ...u, name: draft.name, email: draft.email } : u));
         return [...prev, { id: `u${Date.now()}`, name: draft.name, email: draft.email, login: draft.login, role: "teacher", status: "active" }];
       });
     }
@@ -74,7 +76,7 @@ function TeachersPage() {
 
   const remove = (t: Teacher) => {
     setTeachers((prev) => prev.filter((x) => x.id !== t.id));
-    setAccounts((prev) => prev.filter((a) => a.teacherId !== t.id));
+    void deleteAccountsByTeacher(t.id).catch(() => undefined);
   };
 
   return (
@@ -182,7 +184,7 @@ function TeachersPage() {
               <Field label="Логин" hint="Для входа в кабинет преподавателя">
                 <TextInput value={draft.login} onChange={(e) => setDraft({ ...draft, login: e.target.value })} />
               </Field>
-              <Field label="Пароль">
+              <Field label="Пароль" hint={isNew ? undefined : "Оставьте пустым, чтобы не менять"}>
                 <TextInput value={draft.password} onChange={(e) => setDraft({ ...draft, password: e.target.value })} />
               </Field>
             </div>

@@ -2,8 +2,9 @@ import { motion } from "motion/react";
 import { SoftCard } from "@/components/site/SoftCard";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
+import { usePublicContent } from "@/lib/public-content";
 
-const REVIEWS = [
+const FALLBACK_REVIEWS = [
   {
     name: { ru: "Анна, HSK 3", en: "Anna, HSK 3" },
     text: {
@@ -29,6 +30,11 @@ const REVIEWS = [
 
 export function ReviewsSection() {
   const { t, lang } = useI18n();
+  const { reviews } = usePublicContent();
+
+  const items = reviews.length
+    ? reviews.map((r) => ({ id: r.id, name: r.level ? `${r.author}, ${r.level}` : r.author, text: r.text }))
+    : FALLBACK_REVIEWS.map((r) => ({ id: r.name.en, name: r.name[lang], text: r.text[lang] }));
   return (
     <section className="relative" style={{ background: "oklch(0.19 0.045 28)" }}>
       {/* Плавный разделитель, который перекрывает низ расписания */}
@@ -59,16 +65,16 @@ export function ReviewsSection() {
           variants={stagger(0.1)}
           className="mt-12 grid gap-5 md:grid-cols-3"
         >
-          {REVIEWS.map((r) => (
-            <motion.div key={r.name.en} variants={fadeUp}>
+          {items.map((r) => (
+            <motion.div key={r.id} variants={fadeUp}>
               <SoftCard className="p-7 h-full bg-white/5 border-white/10 text-white/90">
                 <div className="font-hanzi text-5xl leading-none text-white/60">"</div>
-                <p className="mt-2">{r.text[lang]}</p>
+                <p className="mt-2">{r.text}</p>
                 <div className="mt-6 flex items-center gap-3">
                   <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-soft text-brand font-bold">
-                    {r.name[lang].charAt(0)}
+                    {r.name.charAt(0)}
                   </div>
-                  <div className="text-sm font-semibold text-white">{r.name[lang]}</div>
+                  <div className="text-sm font-semibold text-white">{r.name}</div>
                 </div>
               </SoftCard>
             </motion.div>

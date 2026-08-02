@@ -15,6 +15,7 @@ import { EnrollModal } from "@/components/site/EnrollModal";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { usePublicContent } from "@/lib/public-content";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -325,6 +326,8 @@ function PricingPage() {
   const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<string | undefined>();
+  const { prices } = usePublicContent();
+  const priceById = new Map(prices.map((x) => [x.id, x]));
 
   const openWith = (goalId?: string) => {
     setSelectedGoal(goalId);
@@ -332,6 +335,12 @@ function PricingPage() {
   };
 
   const heroTitle = lang === "ru" ? "Все программы" : "All programmes";
+  const visiblePrograms = prices.length
+    ? PROGRAMS.filter((p) => {
+        const admin = priceById.get(p.id);
+        return !admin || admin.visible !== false;
+      })
+    : PROGRAMS;
   const heroLead =
     lang === "ru"
       ? "От первого 你好 до сдачи HSK и ЕГЭ — выберите формат под свою цель и возраст. Все программы ведут преподаватели с уровнем HSK 5–6."
@@ -372,9 +381,19 @@ function PricingPage() {
           variants={stagger(0.08)}
           className="space-y-8"
         >
-          {PROGRAMS.map((p, i) => {
-            const c = p[lang];
-            const isSpecial = !!p.popular;
+          {visiblePrograms.map((p, i) => {
+            const admin = priceById.get(p.id);
+            const base = p[lang];
+            const c: ProgramCopy = admin
+              ? {
+                  ...base,
+                  name: admin.title || base.name,
+                  price: admin.price || base.price,
+                  unit: admin.period || base.unit,
+                  bullets: admin.features?.length ? admin.features : base.bullets,
+                }
+              : base;
+            const isSpecial = admin ? Boolean(admin.featured) : !!p.popular;
             const reverse = i % 2 === 1;
             const meta = [
               { icon: Calendar, label: c.format },

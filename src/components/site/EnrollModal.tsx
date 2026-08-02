@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { submitEnrollRequest } from "@/lib/public-content";
 import { AnimatePresence, motion } from "motion/react";
 import { X, Phone, Send, Check } from "lucide-react";
 import { useI18n } from "@/providers/i18n";
@@ -32,6 +33,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
   const [goal, setGoal] = useState<string | null>(defaultGoal ?? null);
   const [errors, setErrors] = useState<{ name?: string; phone?: string; goal?: string }>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -75,13 +77,20 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (sending) return;
     const errs: typeof errors = {};
     if (name.trim().length < 2) errs.name = t("enroll.error.name");
     if (phone.replace(/\D/g, "").length < 7) errs.phone = t("enroll.error.phone");
     if (!goal) errs.goal = t("enroll.error.goal");
     setErrors(errs);
     if (Object.keys(errs).length) return;
-    setSent(true);
+    setSending(true);
+    void submitEnrollRequest({ name: name.trim(), phone: phone.trim(), program: goal ?? "" })
+      .catch(() => undefined)
+      .finally(() => {
+        setSending(false);
+        setSent(true);
+      });
   };
 
   return (
@@ -234,6 +243,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                           </Field>
                           <button
                             type="submit"
+                            disabled={sending}
                             className="mt-2 inline-flex h-14 w-full items-center justify-center rounded-full bg-brand text-base font-bold uppercase tracking-wider text-brand-foreground shadow-float transition hover:opacity-95 hover:shadow-glow"
                           >
                             {t("enroll.submit")}

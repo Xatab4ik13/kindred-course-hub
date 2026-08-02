@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
+  Newspaper,
   CalendarDays,
   ClipboardList,
   GraduationCap,
@@ -44,6 +45,7 @@ const ADMIN_NAV: { group: string; items: NavItem[] }[] = [
     items: [
       { to: "/admin/leadership", label: "Руководство", icon: Users },
       { to: "/admin/reviews", label: "Отзывы", icon: MessageSquareQuote },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
       { to: "/admin/pricing", label: "Цены", icon: Tags },
       { to: "/admin/settings", label: "Контакты и реквизиты", icon: Receipt },
     ],
@@ -71,6 +73,7 @@ function LoginScreen() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[oklch(0.97_0.02_60)] px-4 py-10">
@@ -87,7 +90,10 @@ function LoginScreen() {
           className="mt-7 space-y-4"
           onSubmit={(e) => {
             e.preventDefault();
-            setError(!signIn(login.trim(), password));
+            setBusy(true);
+            void signIn(login.trim(), password)
+              .then((ok) => setError(!ok))
+              .finally(() => setBusy(false));
           }}
         >
           <Field label="Логин">
@@ -97,8 +103,8 @@ function LoginScreen() {
             <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="••••••••" />
           </Field>
           {error ? <div className="rounded-2xl bg-[oklch(0.95_0.05_27)] px-4 py-2.5 text-sm text-[oklch(0.5_0.19_27)]">Неверный логин или пароль</div> : null}
-          <Btn type="submit" className="w-full">
-            Войти
+          <Btn type="submit" className="w-full" disabled={busy}>
+            {busy ? "Входим…" : "Войти"}
           </Btn>
         </form>
 
@@ -111,7 +117,7 @@ function LoginScreen() {
 }
 
 export function AdminShell() {
-  const { session, signOut } = useAdmin();
+  const { session, signOut, loading } = useAdmin();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -128,6 +134,14 @@ export function AdminShell() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[oklch(0.97_0.02_60)] text-sm text-[oklch(0.55_0.03_45)]">
+        Загружаем данные…
+      </div>
+    );
+  }
 
   if (!session) return <LoginScreen />;
 

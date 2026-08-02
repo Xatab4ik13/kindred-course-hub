@@ -6,28 +6,64 @@ import { SectionHeader } from "@/components/site/FeaturesSection";
 import { useI18n } from "@/providers/i18n";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { usePublicContent } from "@/lib/public-content";
 import { EnrollModal } from "@/components/site/EnrollModal";
 import type { DictKey } from "@/i18n/dict";
 
 type Plan = {
-  id: "p1" | "p2" | "p3";
+  id: string;
   hanzi: string;
   goalId: string;
-  special?: boolean;
+  special: boolean;
+  title: string;
+  tag: string;
+  price: string;
+  unit: string;
+  features: string[];
 };
 
-
-const PLANS: Plan[] = [
-  { id: "p1", hanzi: "一", goalId: "hsk1", special: true },
-  { id: "p2", hanzi: "个", goalId: "individual" },
-  { id: "p3", hanzi: "百", goalId: "ege" },
+const FALLBACK_PLANS = [
+  { id: "p1" as const, hanzi: "一", goalId: "hsk1", special: true },
+  { id: "p2" as const, hanzi: "个", goalId: "individual", special: false },
+  { id: "p3" as const, hanzi: "百", goalId: "ege", special: false },
 ];
+
+const HANZI = ["一", "个", "百", "学", "汉", "语"];
 
 export function PricingSection() {
   const { t } = useI18n();
-  const k = (id: Plan["id"], suffix: string) => `pricing.${id}.${suffix}` as DictKey;
+  const k = (id: string, suffix: string) => `pricing.${id}.${suffix}` as DictKey;
   const [open, setOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<string | undefined>(undefined);
+
+  const { prices } = usePublicContent();
+
+  const plans: Plan[] = prices.length
+    ? prices
+        .filter((x) => x.visible !== false)
+        .slice(0, 3)
+        .map((x, i) => ({
+          id: x.id,
+          hanzi: HANZI[i % HANZI.length] as string,
+          goalId: x.id,
+          special: Boolean(x.featured),
+          title: x.title,
+          tag: "",
+          price: x.price,
+          unit: x.period,
+          features: x.features ?? [],
+        }))
+    : FALLBACK_PLANS.map((p) => ({
+        id: p.id,
+        hanzi: p.hanzi,
+        goalId: p.goalId,
+        special: p.special,
+        title: t(k(p.id, "name")),
+        tag: t(k(p.id, "tag")),
+        price: t(k(p.id, "price")),
+        unit: t(k(p.id, "unit")),
+        features: (["b1", "b2", "b3"] as const).map((b) => t(k(p.id, b))),
+      }));
 
   const openWith = (goalId?: string) => {
     setSelectedGoal(goalId);
@@ -47,7 +83,7 @@ export function PricingSection() {
         variants={stagger(0.08)}
         className="mt-12 grid gap-6 md:grid-cols-3"
       >
-        {PLANS.map((p) => {
+        {plans.map((p) => {
           const isSpecial = p.special;
           return (
             <motion.article
@@ -84,19 +120,14 @@ export function PricingSection() {
                   isSpecial ? "text-cream" : "text-foreground",
                 )}
               >
-                {t(k(p.id, "name"))}
+                {p.title}
               </h3>
-              <p
-                className={cn(
-                  "mt-2 text-sm font-semibold",
-                  isSpecial ? "text-brand" : "text-brand",
-                )}
-              >
-                {t(k(p.id, "tag"))}
-              </p>
+              {p.tag && (
+                <p className="mt-2 text-sm font-semibold text-brand">{p.tag}</p>
+              )}
 
               <ul className="mt-6 space-y-3 flex-1">
-                {(["b1", "b2", "b3"] as const).map((b) => (
+                {p.features.map((b) => (
                   <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed">
                     <span
                       className={cn(
@@ -107,7 +138,7 @@ export function PricingSection() {
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </span>
                     <span className={isSpecial ? "text-cream/85" : "text-surface-foreground/85"}>
-                      {t(k(p.id, b))}
+                      {b}
                     </span>
                   </li>
                 ))}
@@ -120,14 +151,14 @@ export function PricingSection() {
                 )}
               >
                 <div className="flex items-baseline gap-2 whitespace-nowrap font-display text-[2.25rem] font-extrabold leading-none">
-                  {t(k(p.id, "price"))}
+                  {p.price}
                   <span
                     className={cn(
                       "text-xs uppercase tracking-wider",
                       isSpecial ? "text-cream/60" : "text-muted-foreground",
                     )}
                   >
-                    {t(k(p.id, "unit"))}
+                    {p.unit}
                   </span>
                 </div>
 

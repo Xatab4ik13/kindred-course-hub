@@ -1,115 +1,208 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import {
-  DEMO_ACCOUNTS,
-  SEED_LEADERS,
-  SEED_LESSONS,
-  SEED_ORG,
-  SEED_PRICES,
-  SEED_REQUESTS,
-  SEED_REVIEWS,
-  SEED_TEACHERS,
-  SEED_USERS,
-  type AppUser,
-  type EnrollRequest,
-  type Leader,
-  type Lesson,
-  type OrgInfo,
-  type PricePlan,
-  type Review,
-  type Role,
-  type Teacher,
-} from "@/lib/admin-data";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { api, setToken, getToken, ApiError } from "@/lib/api";
+import type { AppUser, EnrollRequest, Leader, Lesson, OrgInfo, PricePlan, Review, Role, Teacher } from "@/lib/admin-data";
+import type { NewsItem } from "@/lib/public-content";
 
 export type Session = { login: string; name: string; role: Role; teacherId?: string };
-export type Account = { login: string; password: string; role: Role; name: string; teacherId?: string };
+export type Account = { login: string; name: string; role: Role; teacherId?: string | null };
+
+type ServerState = {
+  requests: EnrollRequest[];
+  teachers: Teacher[];
+  leaders: Leader[];
+  lessons: Lesson[];
+  reviews: Review[];
+  prices: PricePlan[];
+  users: AppUser[];
+  org: OrgInfo;
+  news: NewsItem[];
+  accounts: Account[];
+};
+
+const EMPTY_ORG: OrgInfo = {
+  phone: "",
+  email: "",
+  address: "",
+  vk: "",
+  telegram: "",
+  legalName: "",
+  inn: "",
+  ogrn: "",
+  bank: "",
+  account: "",
+};
+
+type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
 
 type Store = {
   session: Session | null;
-  signIn: (login: string, password: string) => boolean;
+  loading: boolean;
+  error: string | null;
+  signIn: (login: string, password: string) => Promise<boolean>;
   signOut: () => void;
 
-  accounts: Account[];
-  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   requests: EnrollRequest[];
-  setRequests: React.Dispatch<React.SetStateAction<EnrollRequest[]>>;
+  setRequests: Setter<EnrollRequest[]>;
   teachers: Teacher[];
-  setTeachers: React.Dispatch<React.SetStateAction<Teacher[]>>;
+  setTeachers: Setter<Teacher[]>;
   leaders: Leader[];
-  setLeaders: React.Dispatch<React.SetStateAction<Leader[]>>;
+  setLeaders: Setter<Leader[]>;
   lessons: Lesson[];
-  setLessons: React.Dispatch<React.SetStateAction<Lesson[]>>;
+  setLessons: Setter<Lesson[]>;
   reviews: Review[];
-  setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
+  setReviews: Setter<Review[]>;
   prices: PricePlan[];
-  setPrices: React.Dispatch<React.SetStateAction<PricePlan[]>>;
+  setPrices: Setter<PricePlan[]>;
   users: AppUser[];
-  setUsers: React.Dispatch<React.SetStateAction<AppUser[]>>;
+  setUsers: Setter<AppUser[]>;
   org: OrgInfo;
-  setOrg: React.Dispatch<React.SetStateAction<OrgInfo>>;
+  setOrg: Setter<OrgInfo>;
+  news: NewsItem[];
+  setNews: Setter<NewsItem[]>;
+
+  accounts: Account[];
+  saveAccount: (input: { login: string; password?: string; role: Role; name: string; teacherId?: string | null }) => Promise<void>;
+  deleteAccount: (login: string) => Promise<void>;
+  deleteAccountsByTeacher: (teacherId: string) => Promise<void>;
 };
 
 const Ctx = createContext<Store | null>(null);
-const SESSION_KEY = "chinar.admin.session";
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [accounts, setAccounts] = useState<Account[]>(DEMO_ACCOUNTS);
-  const [requests, setRequests] = useState(SEED_REQUESTS);
-  const [teachers, setTeachers] = useState(SEED_TEACHERS);
-  const [leaders, setLeaders] = useState(SEED_LEADERS);
-  const [lessons, setLessons] = useState(SEED_LESSONS);
-  const [reviews, setReviews] = useState(SEED_REVIEWS);
-  const [prices, setPrices] = useState(SEED_PRICES);
-  const [users, setUsers] = useState(SEED_USERS);
-  const [org, setOrg] = useState(SEED_ORG);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const raw = typeof window !== "undefined" ? window.sessionStorage.getItem(SESSION_KEY) : null;
-    if (raw) {
-      try {
-        setSession(JSON.parse(raw) as Session);
-      } catch {
-        /* ignore */
-      }
-    }
+  const [requests, setRequestsRaw] = useState<EnrollRequest[]>([]);
+  const [teachers, setTeachersRaw] = useState<Teacher[]>([]);
+  const [leaders, setLeadersRaw] = useState<Leader[]>([]);
+  const [lessons, setLessonsRaw] = useState<Lesson[]>([]);
+  const [reviews, setReviewsRaw] = useState<Review[]>([]);
+  const [prices, setPricesRaw] = useState<PricePlan[]>([]);
+  const [users, setUsersRaw] = useState<AppUser[]>([]);
+  const [org, setOrgRaw] = useState<OrgInfo>(EMPTY_ORG);
+  const [news, setNewsRaw] = useState<NewsItem[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  const save = useCallback((key: string, data: unknown) => {
+    const existing = timers.current[key];
+    if (existing) clearTimeout(existing);
+    timers.current[key] = setTimeout(() => {
+      void api(`/state/${key}`, { method: "PUT", body: JSON.stringify({ data }) }).catch((e: unknown) => {
+        setError(e instanceof Error ? e.message : "Не удалось сохранить изменения");
+      });
+    }, 350);
   }, []);
 
-  const value = useMemo<Store>(
-    () => ({
+  const applyState = useCallback((state: Partial<ServerState>) => {
+    setRequestsRaw(state.requests ?? []);
+    setTeachersRaw(state.teachers ?? []);
+    setLeadersRaw(state.leaders ?? []);
+    setLessonsRaw(state.lessons ?? []);
+    setReviewsRaw(state.reviews ?? []);
+    setPricesRaw(state.prices ?? []);
+    setUsersRaw(state.users ?? []);
+    setOrgRaw(state.org ?? EMPTY_ORG);
+    setNewsRaw(state.news ?? []);
+    setAccounts(state.accounts ?? []);
+  }, []);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [me, state] = await Promise.all([api<Session>("/auth/me"), api<ServerState>("/state")]);
+      setSession(me);
+      applyState(state);
+      setError(null);
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setToken(null);
+        setSession(null);
+      } else {
+        setError(e instanceof Error ? e.message : "Сервер недоступен");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [applyState]);
+
+  useEffect(() => {
+    if (getToken()) void load();
+    else setLoading(false);
+  }, [load]);
+
+  const makeSetter = useCallback(
+    <T,>(key: string, setLocal: Setter<T>): Setter<T> =>
+      (update) => {
+        setLocal((prev) => {
+          const next = typeof update === "function" ? (update as (p: T) => T)(prev) : update;
+          save(key, next);
+          return next;
+        });
+      },
+    [save],
+  );
+
+  const value = useMemo<Store>(() => {
+    const refreshAccounts = (res: { accounts: Account[] }) => setAccounts(res.accounts);
+    return {
       session,
-      signIn: (login, password) => {
-        const acc = accounts.find((a) => a.login === login && a.password === password);
-        if (!acc) return false;
-        const next: Session = { login: acc.login, name: acc.name, role: acc.role, ...(acc.teacherId ? { teacherId: acc.teacherId } : {}) };
-        setSession(next);
-        window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(next));
-        return true;
+      loading,
+      error,
+      signIn: async (login, password) => {
+        try {
+          const res = await api<{ token: string; session: Session }>("/auth/login", {
+            method: "POST",
+            body: JSON.stringify({ login, password }),
+          });
+          setToken(res.token);
+          setSession(res.session);
+          await load();
+          return true;
+        } catch {
+          return false;
+        }
       },
       signOut: () => {
+        setToken(null);
         setSession(null);
-        window.sessionStorage.removeItem(SESSION_KEY);
+        applyState({});
       },
-      accounts,
-      setAccounts,
       requests,
-      setRequests,
+      setRequests: makeSetter("requests", setRequestsRaw),
       teachers,
-      setTeachers,
+      setTeachers: makeSetter("teachers", setTeachersRaw),
       leaders,
-      setLeaders,
+      setLeaders: makeSetter("leaders", setLeadersRaw),
       lessons,
-      setLessons,
+      setLessons: makeSetter("lessons", setLessonsRaw),
       reviews,
-      setReviews,
+      setReviews: makeSetter("reviews", setReviewsRaw),
       prices,
-      setPrices,
+      setPrices: makeSetter("prices", setPricesRaw),
       users,
-      setUsers,
+      setUsers: makeSetter("users", setUsersRaw),
       org,
-      setOrg,
-    }),
-    [session, accounts, requests, teachers, leaders, lessons, reviews, prices, users, org],
-  );
+      setOrg: makeSetter("org", setOrgRaw),
+      news,
+      setNews: makeSetter("news", setNewsRaw),
+      accounts,
+      saveAccount: async (input) => {
+        const res = await api<{ accounts: Account[] }>("/accounts", { method: "POST", body: JSON.stringify(input) });
+        refreshAccounts(res);
+      },
+      deleteAccount: async (login) => {
+        const res = await api<{ accounts: Account[] }>(`/accounts/${encodeURIComponent(login)}`, { method: "DELETE" });
+        refreshAccounts(res);
+      },
+      deleteAccountsByTeacher: async (teacherId) => {
+        const res = await api<{ accounts: Account[] }>(`/accounts/by-teacher/${encodeURIComponent(teacherId)}`, { method: "DELETE" });
+        refreshAccounts(res);
+      },
+    };
+  }, [session, loading, error, requests, teachers, leaders, lessons, reviews, prices, users, org, news, accounts, makeSetter, load, applyState]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
