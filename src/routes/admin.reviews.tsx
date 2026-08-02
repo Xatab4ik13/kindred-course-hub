@@ -27,9 +27,14 @@ function ReviewsPage() {
       <div className="grid gap-4 md:grid-cols-2">
         {reviews.map((r) => (
           <Panel key={r.id} className="p-5">
-            <Field label="Автор">
-              <TextInput value={r.name} onChange={(e) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, name: e.target.value } : x)))} />
-            </Field>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field label="Автор">
+                <TextInput value={r.author} onChange={(e) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, author: e.target.value } : x)))} />
+              </Field>
+              <Field label="Уровень">
+                <TextInput value={r.level} onChange={(e) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, level: e.target.value } : x)))} />
+              </Field>
+            </div>
             <div className="mt-3">
               <Field label="Текст отзыва">
                 <TextArea value={r.text} onChange={(e) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, text: e.target.value } : x)))} />
