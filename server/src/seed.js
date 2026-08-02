@@ -51,25 +51,8 @@ const TEACHERS = [
   },
 ];
 
-const LEVELS = ["HSK 1", "HSK 2", "HSK 3", "Дети", "Разговорный", "ЕГЭ"];
-const TIMES = ["10:00", "12:00", "16:00", "18:00", "19:30"];
 
-const LESSONS = Array.from({ length: 48 }, (_, i) => {
-  const teacher = TEACHERS[i % 4];
-  const offset = (i % 14) - 7;
-  const past = offset < 0;
-  const cancelled = past && i % 9 === 0;
-  return {
-    id: `l${i + 1}`,
-    teacherId: teacher.id,
-    group: `№0${30 + (i % 8)}`,
-    level: LEVELS[i % LEVELS.length],
-    date: iso(offset),
-    time: TIMES[i % TIMES.length],
-    status: cancelled ? "cancelled" : past ? "done" : "planned",
-    ...(cancelled ? { cancelReason: CANCEL_REASONS[i % CANCEL_REASONS.length] } : {}),
-  };
-});
+
 
 export const SEED = {
   requests: [],
