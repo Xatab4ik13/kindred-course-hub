@@ -69,6 +69,37 @@ export function Select({ className, ...rest }: SelectHTMLAttributes<HTMLSelectEl
   return <select className={cn(controlCls, "pr-8", className)} {...rest} />;
 }
 
+export function PhotoPicker({ value, onChange, label = "Фотография" }: { value: string; onChange: (dataUrl: string) => void; label?: string }) {
+  return (
+    <div>
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">{label}</span>
+      <div className="flex items-center gap-4">
+        {value ? (
+          <img src={value} alt="" className="h-20 w-20 rounded-2xl object-cover" />
+        ) : (
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[oklch(0.95_0.02_60)] text-xs text-[oklch(0.6_0.03_45)]">нет фото</div>
+        )}
+        <label className="cursor-pointer rounded-full border border-[oklch(0.88_0.03_50)] bg-white px-4 py-2 text-sm font-semibold hover:bg-[oklch(0.97_0.02_60)]">
+          Загрузить фото
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => onChange(String(reader.result));
+              reader.readAsDataURL(file);
+              e.target.value = "";
+            }}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
+
 export function Badge({ tone = "neutral", children }: { tone?: "neutral" | "green" | "red" | "amber" | "brand"; children: ReactNode }) {
   const tones: Record<string, string> = {
     neutral: "bg-[oklch(0.95_0.01_60)] text-[oklch(0.4_0.02_45)]",
