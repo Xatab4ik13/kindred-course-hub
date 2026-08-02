@@ -50,9 +50,11 @@ export type Lesson = {
   level: string;
   date: string; // ISO date
   time: string; // 18:00
+  duration?: number; // минуты
   status: "planned" | "done" | "cancelled";
   cancelReason?: string;
 };
+
 
 export const CANCEL_REASONS = [
   "Болезнь преподавателя",
@@ -79,7 +81,18 @@ export type PricePlan = {
   features: string[];
   featured: boolean;
   visible: boolean;
+  /** Расширенные поля для страницы «Все программы» */
+  hanzi?: string;
+  goalId?: string;
+  tag?: string;
+  format?: string;
+  groupSize?: string;
+  duration?: string;
+  level?: string;
+  footer?: string;
+  highlight?: string;
 };
+
 
 export type AppUser = {
   id: string;

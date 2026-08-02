@@ -10,7 +10,25 @@ export const Route = createFileRoute("/admin/pricing")({ component: () => <Admin
 function PricingAdminPage() {
   const { prices, setPrices } = useAdmin();
   const [creating, setCreating] = useState(false);
-  const [draft, setDraft] = useState({ title: "", price: "", period: "в месяц", features: "", featured: false, visible: true });
+  const [draft, setDraft] = useState({
+    title: "",
+    price: "",
+    period: "/ мес",
+    features: "",
+    featured: false,
+    visible: true,
+    hanzi: "",
+    tag: "",
+    format: "",
+    groupSize: "",
+    duration: "",
+    level: "",
+    footer: "",
+    highlight: "",
+  });
+  const patch = (id: string, part: Record<string, unknown>) =>
+    setPrices((v) => v.map((x) => (x.id === id ? { ...x, ...part } : x)));
+
 
   return (
     <>
@@ -43,11 +61,41 @@ function PricingAdminPage() {
                 <TextArea
                   className="min-h-28"
                   value={p.features.join("\n")}
-                  onChange={(e) =>
-                    setPrices((v) => v.map((x) => (x.id === p.id ? { ...x, features: e.target.value.split("\n") } : x)))
-                  }
+                  onChange={(e) => patch(p.id, { features: e.target.value.split("\n") })}
                 />
               </Field>
+              <details className="rounded-2xl border border-[oklch(0.92_0.02_60)] p-3">
+                <summary className="cursor-pointer text-sm font-semibold">Детали для страницы «Все программы»</summary>
+                <div className="mt-3 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field label="Иероглиф">
+                      <TextInput value={p.hanzi ?? ""} onChange={(e) => patch(p.id, { hanzi: e.target.value })} />
+                    </Field>
+                    <Field label="Подзаголовок">
+                      <TextInput value={p.tag ?? ""} onChange={(e) => patch(p.id, { tag: e.target.value })} />
+                    </Field>
+                    <Field label="Формат">
+                      <TextInput value={p.format ?? ""} onChange={(e) => patch(p.id, { format: e.target.value })} />
+                    </Field>
+                    <Field label="Размер группы">
+                      <TextInput value={p.groupSize ?? ""} onChange={(e) => patch(p.id, { groupSize: e.target.value })} />
+                    </Field>
+                    <Field label="Длительность">
+                      <TextInput value={p.duration ?? ""} onChange={(e) => patch(p.id, { duration: e.target.value })} />
+                    </Field>
+                    <Field label="Уровень">
+                      <TextInput value={p.level ?? ""} onChange={(e) => patch(p.id, { level: e.target.value })} />
+                    </Field>
+                  </div>
+                  <Field label="Итоговая фраза">
+                    <TextArea className="min-h-16" value={p.footer ?? ""} onChange={(e) => patch(p.id, { footer: e.target.value })} />
+                  </Field>
+                  <Field label="Плашка (акция)">
+                    <TextInput value={p.highlight ?? ""} onChange={(e) => patch(p.id, { highlight: e.target.value })} />
+                  </Field>
+                </div>
+              </details>
+
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <Toggle checked={p.visible} label="На сайте" onChange={(val) => setPrices((v) => v.map((x) => (x.id === p.id ? { ...x, visible: val } : x)))} />
                 <Btn
@@ -82,6 +130,32 @@ function PricingAdminPage() {
           <Field label="Что входит (по строке на пункт)">
             <TextArea className="min-h-28" value={draft.features} onChange={(e) => setDraft({ ...draft, features: e.target.value })} />
           </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Иероглиф">
+              <TextInput value={draft.hanzi} placeholder="学" onChange={(e) => setDraft({ ...draft, hanzi: e.target.value })} />
+            </Field>
+            <Field label="Подзаголовок">
+              <TextInput value={draft.tag} onChange={(e) => setDraft({ ...draft, tag: e.target.value })} />
+            </Field>
+            <Field label="Формат">
+              <TextInput value={draft.format} placeholder="Онлайн, мини-группа" onChange={(e) => setDraft({ ...draft, format: e.target.value })} />
+            </Field>
+            <Field label="Размер группы">
+              <TextInput value={draft.groupSize} placeholder="До 4 человек" onChange={(e) => setDraft({ ...draft, groupSize: e.target.value })} />
+            </Field>
+            <Field label="Длительность">
+              <TextInput value={draft.duration} onChange={(e) => setDraft({ ...draft, duration: e.target.value })} />
+            </Field>
+            <Field label="Уровень">
+              <TextInput value={draft.level} onChange={(e) => setDraft({ ...draft, level: e.target.value })} />
+            </Field>
+          </div>
+          <Field label="Итоговая фраза">
+            <TextArea className="min-h-16" value={draft.footer} onChange={(e) => setDraft({ ...draft, footer: e.target.value })} />
+          </Field>
+          <Field label="Плашка (акция)">
+            <TextInput value={draft.highlight} onChange={(e) => setDraft({ ...draft, highlight: e.target.value })} />
+          </Field>
           <div className="flex gap-2">
             <Btn
               onClick={() => {
@@ -89,10 +163,26 @@ function PricingAdminPage() {
                   ...v,
                   { id: `p${Date.now()}`, ...draft, features: draft.features.split("\n").filter(Boolean) },
                 ]);
-                setDraft({ title: "", price: "", period: "в месяц", features: "", featured: false, visible: true });
+                setDraft({
+                  title: "",
+                  price: "",
+                  period: "/ мес",
+                  features: "",
+                  featured: false,
+                  visible: true,
+                  hanzi: "",
+                  tag: "",
+                  format: "",
+                  groupSize: "",
+                  duration: "",
+                  level: "",
+                  footer: "",
+                  highlight: "",
+                });
                 setCreating(false);
               }}
             >
+
               Добавить
             </Btn>
             <Btn variant="outline" onClick={() => setCreating(false)}>

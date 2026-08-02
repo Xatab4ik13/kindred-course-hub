@@ -8,16 +8,15 @@ import { EnrollModal } from "@/components/site/EnrollModal";
 import {
   DayPlaque,
   LessonCard,
-  WEEK_TEMPLATE,
   DAY_KEYS,
   MASCOT_POOL,
   ScheduleFilters,
-  filterDayLessons,
-  EMPTY_FILTER,
-  type ScheduleFilter,
 } from "@/components/site/SchedulePreviewSection";
+import { dateKey, dayLessons, EMPTY_FILTER, type ScheduleFilter } from "@/lib/schedule-view";
+import { usePublicContent } from "@/lib/public-content";
 import { useI18n } from "@/providers/i18n";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/schedule")({
   head: () => ({
@@ -49,7 +48,9 @@ function startOfWeek(d: Date) {
 function SchedulePage() {
   const { t, lang } = useI18n();
   const locale = lang === "ru" ? "ru-RU" : "en-US";
+  const { lessons, teachers } = usePublicContent();
   const start = useMemo(() => startOfWeek(new Date()), []);
+
   const days = useMemo(
     () =>
       Array.from({ length: 14 }, (_, i) => {
@@ -129,7 +130,7 @@ function SchedulePage() {
         </div>
 
         <div className="mt-8">
-          <ScheduleFilters value={filter} onChange={setFilter} showQuery />
+          <ScheduleFilters value={filter} onChange={setFilter} teachers={teachers} showQuery />
         </div>
 
         <motion.div
@@ -145,8 +146,8 @@ function SchedulePage() {
             {days.map((d, idx) => {
               const dow = (d.getDay() + 6) % 7;
               const dayKey = DAY_KEYS[dow]!;
-              const lessons = WEEK_TEMPLATE[dow]!;
-              const filtered = filterDayLessons(lessons, dow, filter);
+              const filtered = dayLessons(lessons, teachers, dateKey(d), filter);
+
               const isToday = d.toDateString() === todayStr;
               const isPast = d.getTime() < todayTime;
               const mascot = MASCOT_POOL[idx % MASCOT_POOL.length]!;
@@ -179,15 +180,15 @@ function SchedulePage() {
                         {t("schedule.filter.noResults")}
                       </div>
                     ) : (
-                      filtered.map(({ lesson, no }) => (
+                      filtered.map((lesson) => (
                         <LessonCard
-                          key={no}
+                          key={lesson.id}
                           lesson={lesson}
-                          groupNo={no}
                           disabled={isPast}
                           onClick={() => !isPast && setEnrollGoal(lesson.goalId)}
                         />
                       ))
+
                     )}
                   </div>
                 </div>
