@@ -65,7 +65,7 @@ function RequestsPage() {
                     {r.phone} · {r.program}
                   </div>
                   <div className="mt-1 text-xs text-[oklch(0.6_0.03_45)]">
-                    {r.date ?? r.createdAt} · источник: {r.source}
+                    {r.createdAt} · источник: {r.source}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

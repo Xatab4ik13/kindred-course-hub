@@ -16,6 +16,7 @@ import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminRequestsRouteImport } from './routes/admin.requests'
 
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
@@ -52,6 +53,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRequestsRoute = AdminRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRoute
   '/pricing': typeof PricingRoute
   '/schedule': typeof ScheduleRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -89,9 +98,17 @@ export interface FileRouteTypes {
     | '/news'
     | '/pricing'
     | '/schedule'
+    | '/admin/requests'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacts' | '/news' | '/pricing' | '/schedule' | '/admin'
+  to:
+    | '/'
+    | '/contacts'
+    | '/news'
+    | '/pricing'
+    | '/schedule'
+    | '/admin/requests'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -100,6 +117,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/pricing'
     | '/schedule'
+    | '/admin/requests'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -163,14 +181,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/requests': {
+      id: '/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AdminRequestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminRequestsRoute: typeof AdminRequestsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminRequestsRoute: AdminRequestsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
