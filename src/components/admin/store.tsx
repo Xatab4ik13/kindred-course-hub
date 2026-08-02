@@ -108,7 +108,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       org,
       setOrg,
     }),
-    [session, requests, teachers, leaders, lessons, reviews, prices, users, org],
+    [session, accounts, requests, teachers, leaders, lessons, reviews, prices, users, org],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
