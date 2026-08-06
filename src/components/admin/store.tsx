@@ -1,10 +1,41 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { api, setToken, getToken, ApiError } from "@/lib/api";
-import type { AppUser, EnrollRequest, Leader, Lesson, OrgInfo, PricePlan, Review, Role, Teacher } from "@/lib/admin-data";
+import type {
+  AppUser,
+  EnrollRequest,
+  Leader,
+  Lesson,
+  OrgInfo,
+  PricePlan,
+  Review,
+  Role,
+  Teacher,
+} from "@/lib/admin-data";
 import type { NewsItem } from "@/lib/public-content";
 
-export type Session = { login: string; name: string; role: Role; teacherId?: string; isSuper?: boolean };
-export type Account = { login: string; name: string; role: Role; teacherId?: string | null; isSuper?: number | boolean };
+export type Session = {
+  login: string;
+  name: string;
+  role: Role;
+  teacherId?: string;
+  isSuper?: boolean;
+};
+export type Account = {
+  login: string;
+  name: string;
+  role: Role;
+  teacherId?: string | null;
+  isSuper?: number | boolean;
+};
 
 type ServerState = {
   requests: EnrollRequest[];
@@ -63,7 +94,13 @@ type Store = {
   accounts: Account[];
   deleteRequest: (id: string) => Promise<void>;
   clearRequests: () => Promise<void>;
-  saveAccount: (input: { login: string; password?: string; role: Role; name: string; teacherId?: string | null }) => Promise<void>;
+  saveAccount: (input: {
+    login: string;
+    password?: string;
+    role: Role;
+    name: string;
+    teacherId?: string | null;
+  }) => Promise<void>;
   deleteAccount: (login: string) => Promise<void>;
   deleteAccountsByTeacher: (teacherId: string) => Promise<void>;
 };
@@ -92,9 +129,11 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     const existing = timers.current[key];
     if (existing) clearTimeout(existing);
     timers.current[key] = setTimeout(() => {
-      void api(`/state/${key}`, { method: "PUT", body: JSON.stringify({ data }) }).catch((e: unknown) => {
-        setError(e instanceof Error ? e.message : "Не удалось сохранить изменения");
-      });
+      void api(`/state/${key}`, { method: "PUT", body: JSON.stringify({ data }) }).catch(
+        (e: unknown) => {
+          setError(e instanceof Error ? e.message : "Не удалось сохранить изменения");
+        },
+      );
     }, 350);
   }, []);
 
@@ -192,7 +231,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setNews: makeSetter("news", setNewsRaw),
       accounts,
       deleteRequest: async (id) => {
-        const res = await api<{ data: EnrollRequest[] }>(`/requests/${encodeURIComponent(id)}`, { method: "DELETE" });
+        const res = await api<{ data: EnrollRequest[] }>(`/requests/${encodeURIComponent(id)}`, {
+          method: "DELETE",
+        });
         setRequestsRaw(res.data);
       },
       clearRequests: async () => {
@@ -200,19 +241,44 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         setRequestsRaw(res.data);
       },
       saveAccount: async (input) => {
-        const res = await api<{ accounts: Account[] }>("/accounts", { method: "POST", body: JSON.stringify(input) });
+        const res = await api<{ accounts: Account[] }>("/accounts", {
+          method: "POST",
+          body: JSON.stringify(input),
+        });
         refreshAccounts(res);
       },
       deleteAccount: async (login) => {
-        const res = await api<{ accounts: Account[] }>(`/accounts/${encodeURIComponent(login)}`, { method: "DELETE" });
+        const res = await api<{ accounts: Account[] }>(`/accounts/${encodeURIComponent(login)}`, {
+          method: "DELETE",
+        });
         refreshAccounts(res);
       },
       deleteAccountsByTeacher: async (teacherId) => {
-        const res = await api<{ accounts: Account[] }>(`/accounts/by-teacher/${encodeURIComponent(teacherId)}`, { method: "DELETE" });
+        const res = await api<{ accounts: Account[] }>(
+          `/accounts/by-teacher/${encodeURIComponent(teacherId)}`,
+          { method: "DELETE" },
+        );
         refreshAccounts(res);
       },
     };
-  }, [session, loading, error, requests, teachers, leaders, lessons, reviews, prices, users, org, news, accounts, makeSetter, load, applyState]);
+  }, [
+    session,
+    loading,
+    error,
+    requests,
+    teachers,
+    leaders,
+    lessons,
+    reviews,
+    prices,
+    users,
+    org,
+    news,
+    accounts,
+    makeSetter,
+    load,
+    applyState,
+  ]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

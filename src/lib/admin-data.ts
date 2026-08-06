@@ -62,7 +62,6 @@ export type Lesson = {
   cancelReason?: string;
 };
 
-
 export const CANCEL_REASONS = [
   "Болезнь преподавателя",
   "Болезнь учеников",
@@ -100,7 +99,6 @@ export type PricePlan = {
   footer?: string;
   highlight?: string;
 };
-
 
 export type AppUser = {
   id: string;

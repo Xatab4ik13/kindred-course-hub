@@ -4,7 +4,13 @@ import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
 import { Badge, Bar, Btn, PageHeader, Panel, Select, Stat, TextInput } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/admin/lessons")({ component: () => <AdminOnly roles={["admin", "manager"]}><LessonStatsPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/lessons")({
+  component: () => (
+    <AdminOnly roles={["admin", "manager"]}>
+      <LessonStatsPage />
+    </AdminOnly>
+  ),
+});
 
 function LessonStatsPage() {
   const { lessons, teachers } = useAdmin();
@@ -15,7 +21,10 @@ function LessonStatsPage() {
   const rows = useMemo(
     () =>
       lessons.filter(
-        (l) => (teacherId === "all" || l.teacherId === teacherId) && (!from || l.date >= from) && (!to || l.date <= to),
+        (l) =>
+          (teacherId === "all" || l.teacherId === teacherId) &&
+          (!from || l.date >= from) &&
+          (!to || l.date <= to),
       ),
     [lessons, teacherId, from, to],
   );
@@ -27,16 +36,30 @@ function LessonStatsPage() {
 
   const reasons = useMemo(() => {
     const map = new Map<string, number>();
-    rows.filter((l) => l.status === "cancelled").forEach((l) => map.set(l.cancelReason ?? "Без причины", (map.get(l.cancelReason ?? "Без причины") ?? 0) + 1));
+    rows
+      .filter((l) => l.status === "cancelled")
+      .forEach((l) =>
+        map.set(
+          l.cancelReason ?? "Без причины",
+          (map.get(l.cancelReason ?? "Без причины") ?? 0) + 1,
+        ),
+      );
     return [...map.entries()].sort((a, b) => b[1] - a[1]);
   }, [rows]);
 
   return (
     <>
-      <PageHeader title="Статистика занятий" subtitle="Проведённые и отменённые занятия с причинами отмены" />
+      <PageHeader
+        title="Статистика занятий"
+        subtitle="Проведённые и отменённые занятия с причинами отмены"
+      />
 
       <Panel className="mb-4 flex flex-wrap items-center gap-3 p-4">
-        <Select className="max-w-xs" value={teacherId} onChange={(e) => setTeacherId(e.target.value)}>
+        <Select
+          className="max-w-xs"
+          value={teacherId}
+          onChange={(e) => setTeacherId(e.target.value)}
+        >
           <option value="all">Все преподаватели</option>
           {teachers.map((t) => (
             <option key={t.id} value={t.id}>
@@ -46,14 +69,31 @@ function LessonStatsPage() {
         </Select>
         <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
           С
-          <TextInput type="date" className="w-40" value={from} onChange={(e) => setFrom(e.target.value)} />
+          <TextInput
+            type="date"
+            className="w-40"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
         </label>
         <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
           По
-          <TextInput type="date" className="w-40" value={to} onChange={(e) => setTo(e.target.value)} />
+          <TextInput
+            type="date"
+            className="w-40"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
         </label>
         {from || to ? (
-          <Btn variant="ghost" size="sm" onClick={() => { setFrom(""); setTo(""); }}>
+          <Btn
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setFrom("");
+              setTo("");
+            }}
+          >
             Сбросить даты
           </Btn>
         ) : null}
@@ -99,14 +139,20 @@ function LessonStatsPage() {
                 <Bar value={cancelled ? (n / cancelled) * 100 : 0} />
               </div>
             ))}
-            {reasons.length === 0 ? <div className="py-6 text-center text-sm text-[oklch(0.6_0.03_45)]">Отменённых занятий нет</div> : null}
+            {reasons.length === 0 ? (
+              <div className="py-6 text-center text-sm text-[oklch(0.6_0.03_45)]">
+                Отменённых занятий нет
+              </div>
+            ) : null}
           </div>
         </Panel>
       </div>
 
       <Panel className="mt-6 p-5">
         <h2 className="font-display text-lg font-extrabold">Журнал занятий</h2>
-        <p className="mt-1 text-xs text-[oklch(0.6_0.03_45)]">Новые занятия сверху, учитываются выбранные фильтры</p>
+        <p className="mt-1 text-xs text-[oklch(0.6_0.03_45)]">
+          Новые занятия сверху, учитываются выбранные фильтры
+        </p>
         <div className="mt-4 divide-y divide-[oklch(0.94_0.01_60)]">
           {rows
             .slice()
@@ -125,8 +171,16 @@ function LessonStatsPage() {
                       {l.cancelReason ? ` · причина: ${l.cancelReason}` : ""}
                     </div>
                   </div>
-                  <Badge tone={l.status === "done" ? "green" : l.status === "cancelled" ? "red" : "brand"}>
-                    {l.status === "done" ? "Проведено" : l.status === "cancelled" ? "Отменено" : "План"}
+                  <Badge
+                    tone={
+                      l.status === "done" ? "green" : l.status === "cancelled" ? "red" : "brand"
+                    }
+                  >
+                    {l.status === "done"
+                      ? "Проведено"
+                      : l.status === "cancelled"
+                        ? "Отменено"
+                        : "План"}
                   </Badge>
                 </div>
               );

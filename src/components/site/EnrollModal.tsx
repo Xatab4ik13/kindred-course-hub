@@ -120,11 +120,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
           onTouchMove={(e) => e.stopPropagation()}
         >
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-ink/70"
-            onClick={onClose}
-            aria-hidden
-          />
+          <div className="fixed inset-0 bg-ink/70" onClick={onClose} aria-hidden />
 
           <motion.div
             role="dialog"
@@ -136,7 +132,6 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
             style={{ willChange: "transform, opacity" }}
             className="relative z-10 flex max-h-[100dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[2rem] bg-background shadow-float sm:max-h-[calc(100dvh-2rem)] sm:rounded-[2rem]"
           >
-
             {/* Decorative hanzi */}
             <div
               aria-hidden
@@ -189,83 +184,75 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
               <div className="mt-6">
                 {tab === "form" ? (
                   <div>
-
-                      {sent ? (
-                        <div className="flex flex-col items-center py-10 text-center">
-                          <div className="grid h-16 w-16 place-items-center rounded-full bg-brand text-brand-foreground shadow-glow">
-                            <Check className="h-8 w-8" strokeWidth={3} />
-                          </div>
-                          <h3 className="mt-5 font-display text-xl font-extrabold uppercase">
-                            {t("enroll.success.title")}
-                          </h3>
-                          <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                            {t("enroll.success.text")}
-                          </p>
+                    {sent ? (
+                      <div className="flex flex-col items-center py-10 text-center">
+                        <div className="grid h-16 w-16 place-items-center rounded-full bg-brand text-brand-foreground shadow-glow">
+                          <Check className="h-8 w-8" strokeWidth={3} />
                         </div>
-                      ) : (
-                        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                          <Field
-                            label={t("enroll.name.label")}
-                            error={errors.name}
-                          >
-                            <input
-                              type="text"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                              placeholder={t("enroll.name.placeholder")}
-                              maxLength={80}
-                              className="h-12 w-full rounded-2xl border border-border/60 bg-surface px-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15"
-                            />
-                          </Field>
-                          <Field
-                            label={t("enroll.phone.label")}
-                            error={errors.phone}
-                          >
-                            <input
-                              type="tel"
-                              value={phone}
-                              onChange={(e) => setPhone(maskPhone(e.target.value))}
-                              onFocus={() => { if (!phone) setPhone("+7 ("); }}
-                              inputMode="tel"
-                              placeholder="+7 (___) ___-__-__"
-                              maxLength={18}
-                              className="h-12 w-full rounded-2xl border border-border/60 bg-surface px-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15"
-                            />
-                          </Field>
-                          <Field
-                            label={t("enroll.goal.label")}
-                            error={errors.goal}
-                          >
-                            <div className="flex flex-wrap gap-2">
-                              {GOALS.map((g) => {
-                                const active = goal === g.id;
-                                return (
-                                  <button
-                                    key={g.id}
-                                    type="button"
-                                    onClick={() => setGoal(g.id)}
-                                    className={cn(
-                                      "rounded-full border px-4 py-2 text-sm font-semibold transition",
-                                      active
-                                        ? "border-brand bg-brand text-brand-foreground shadow-soft"
-                                        : "border-border/70 bg-surface text-foreground hover:border-brand/60 hover:text-brand",
-                                    )}
-                                  >
-                                    {t(g.key)}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </Field>
-                          <button
-                            type="submit"
-                            disabled={sending}
-                            className="mt-2 inline-flex h-14 w-full items-center justify-center rounded-full bg-brand text-base font-bold uppercase tracking-wider text-brand-foreground shadow-float transition hover:opacity-95 hover:shadow-glow"
-                          >
-                            {t("enroll.submit")}
-                          </button>
-                        </form>
-                      )}
+                        <h3 className="mt-5 font-display text-xl font-extrabold uppercase">
+                          {t("enroll.success.title")}
+                        </h3>
+                        <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+                          {t("enroll.success.text")}
+                        </p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                        <Field label={t("enroll.name.label")} error={errors.name}>
+                          <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder={t("enroll.name.placeholder")}
+                            maxLength={80}
+                            className="h-12 w-full rounded-2xl border border-border/60 bg-surface px-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15"
+                          />
+                        </Field>
+                        <Field label={t("enroll.phone.label")} error={errors.phone}>
+                          <input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(maskPhone(e.target.value))}
+                            onFocus={() => {
+                              if (!phone) setPhone("+7 (");
+                            }}
+                            inputMode="tel"
+                            placeholder="+7 (___) ___-__-__"
+                            maxLength={18}
+                            className="h-12 w-full rounded-2xl border border-border/60 bg-surface px-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15"
+                          />
+                        </Field>
+                        <Field label={t("enroll.goal.label")} error={errors.goal}>
+                          <div className="flex flex-wrap gap-2">
+                            {GOALS.map((g) => {
+                              const active = goal === g.id;
+                              return (
+                                <button
+                                  key={g.id}
+                                  type="button"
+                                  onClick={() => setGoal(g.id)}
+                                  className={cn(
+                                    "rounded-full border px-4 py-2 text-sm font-semibold transition",
+                                    active
+                                      ? "border-brand bg-brand text-brand-foreground shadow-soft"
+                                      : "border-border/70 bg-surface text-foreground hover:border-brand/60 hover:text-brand",
+                                  )}
+                                >
+                                  {t(g.key)}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </Field>
+                        <button
+                          type="submit"
+                          disabled={sending}
+                          className="mt-2 inline-flex h-14 w-full items-center justify-center rounded-full bg-brand text-base font-bold uppercase tracking-wider text-brand-foreground shadow-float transition hover:opacity-95 hover:shadow-glow"
+                        >
+                          {t("enroll.submit")}
+                        </button>
+                      </form>
+                    )}
                   </div>
                 ) : (
                   <div>
@@ -291,7 +278,6 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                   </div>
                 )}
               </div>
-
             </div>
           </motion.div>
         </motion.div>

@@ -116,7 +116,9 @@ export function ImageCropper({ src, aspect = 1, onCancel, onApply }: Props) {
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">Масштаб</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">
+          Масштаб
+        </span>
         <input
           type="range"
           min={1}
@@ -149,7 +151,9 @@ export function ImageCropper({ src, aspect = 1, onCancel, onApply }: Props) {
           Отмена
         </button>
       </div>
-      <p className="text-xs text-[oklch(0.6_0.03_45)]">Перетащите изображение мышью, масштабируйте колесом или ползунком.</p>
+      <p className="text-xs text-[oklch(0.6_0.03_45)]">
+        Перетащите изображение мышью, масштабируйте колесом или ползунком.
+      </p>
     </div>
   );
 }

@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { ImageCropper } from "@/components/admin/ImageCropper";
-import type { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 import { cn } from "@/lib/utils";
 
 export function Panel({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
@@ -15,7 +22,15 @@ export function Panel({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
   );
 }
 
-export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  action,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div className="min-w-0">
@@ -27,7 +42,10 @@ export function PageHeader({ title, subtitle, action }: { title: string; subtitl
   );
 }
 
-type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "outline" | "danger"; size?: "sm" | "md" };
+type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "primary" | "ghost" | "outline" | "danger";
+  size?: "sm" | "md";
+};
 
 export function Btn({ className, variant = "primary", size = "md", ...rest }: BtnProps) {
   return (
@@ -35,10 +53,13 @@ export function Btn({ className, variant = "primary", size = "md", ...rest }: Bt
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors disabled:opacity-50",
         size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2.5 text-sm",
-        variant === "primary" && "bg-[oklch(0.6_0.21_27)] text-white hover:bg-[oklch(0.55_0.21_27)]",
-        variant === "outline" && "border border-[oklch(0.88_0.03_50)] bg-white hover:bg-[oklch(0.97_0.02_60)]",
+        variant === "primary" &&
+          "bg-[oklch(0.6_0.21_27)] text-white hover:bg-[oklch(0.55_0.21_27)]",
+        variant === "outline" &&
+          "border border-[oklch(0.88_0.03_50)] bg-white hover:bg-[oklch(0.97_0.02_60)]",
         variant === "ghost" && "hover:bg-[oklch(0.95_0.02_60)]",
-        variant === "danger" && "border border-[oklch(0.85_0.08_27)] text-[oklch(0.55_0.21_27)] hover:bg-[oklch(0.96_0.04_30)]",
+        variant === "danger" &&
+          "border border-[oklch(0.85_0.08_27)] text-[oklch(0.55_0.21_27)] hover:bg-[oklch(0.96_0.04_30)]",
         className,
       )}
       {...rest}
@@ -46,10 +67,20 @@ export function Btn({ className, variant = "primary", size = "md", ...rest }: Bt
   );
 }
 
-export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
+export function Field({
+  label,
+  children,
+  hint,
+}: {
+  label: string;
+  children: ReactNode;
+  hint?: string;
+}) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">{label}</span>
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">
+        {label}
+      </span>
       {children}
       {hint ? <span className="mt-1 block text-xs text-[oklch(0.55_0.03_45)]">{hint}</span> : null}
     </label>
@@ -85,12 +116,16 @@ export function PhotoPicker({
   const [editing, setEditing] = useState<string | null>(null);
   return (
     <div>
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">{label}</span>
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">
+        {label}
+      </span>
       <div className="flex items-center gap-4">
         {value ? (
           <img src={value} alt="" className="h-20 w-20 rounded-2xl object-cover" />
         ) : (
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[oklch(0.95_0.02_60)] text-xs text-[oklch(0.6_0.03_45)]">нет фото</div>
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[oklch(0.95_0.02_60)] text-xs text-[oklch(0.6_0.03_45)]">
+            нет фото
+          </div>
         )}
         <label className="cursor-pointer rounded-full border border-[oklch(0.88_0.03_50)] bg-white px-4 py-2 text-sm font-semibold hover:bg-[oklch(0.97_0.02_60)]">
           Загрузить фото
@@ -136,7 +171,13 @@ export function PhotoPicker({
   );
 }
 
-export function Badge({ tone = "neutral", children }: { tone?: "neutral" | "green" | "red" | "amber" | "brand"; children: ReactNode }) {
+export function Badge({
+  tone = "neutral",
+  children,
+}: {
+  tone?: "neutral" | "green" | "red" | "amber" | "brand";
+  children: ReactNode;
+}) {
   const tones: Record<string, string> = {
     neutral: "bg-[oklch(0.95_0.01_60)] text-[oklch(0.4_0.02_45)]",
     green: "bg-[oklch(0.93_0.07_150)] text-[oklch(0.42_0.12_150)]",
@@ -144,10 +185,29 @@ export function Badge({ tone = "neutral", children }: { tone?: "neutral" | "gree
     amber: "bg-[oklch(0.94_0.08_80)] text-[oklch(0.48_0.12_70)]",
     brand: "bg-[oklch(0.93_0.06_30)] text-[oklch(0.55_0.2_27)]",
   };
-  return <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold", tones[tone])}>{children}</span>;
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold",
+        tones[tone],
+      )}
+    >
+      {children}
+    </span>
+  );
 }
 
-export function Stat({ label, value, hint, tone = "neutral" }: { label: string; value: string | number; hint?: string; tone?: "neutral" | "brand" | "green" | "red" }) {
+export function Stat({
+  label,
+  value,
+  hint,
+  tone = "neutral",
+}: {
+  label: string;
+  value: string | number;
+  hint?: string;
+  tone?: "neutral" | "brand" | "green" | "red";
+}) {
   const accent: Record<string, string> = {
     neutral: "text-[oklch(0.22_0.05_40)]",
     brand: "text-[oklch(0.6_0.21_27)]",
@@ -156,17 +216,32 @@ export function Stat({ label, value, hint, tone = "neutral" }: { label: string; 
   };
   return (
     <Panel className="p-5">
-      <div className="text-xs font-semibold uppercase tracking-wide text-[oklch(0.55_0.03_45)]">{label}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-[oklch(0.55_0.03_45)]">
+        {label}
+      </div>
       <div className={cn("mt-2 font-display text-3xl font-extrabold", accent[tone])}>{value}</div>
       {hint ? <div className="mt-1 text-xs text-[oklch(0.55_0.03_45)]">{hint}</div> : null}
     </Panel>
   );
 }
 
-export function Modal({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[oklch(0.2_0.03_40_/_0.45)] p-0 md:items-center md:p-6" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[oklch(0.2_0.03_40_/_0.45)] p-0 md:items-center md:p-6"
+      onClick={onClose}
+    >
       <div
         className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-white p-6 text-[oklch(0.22_0.05_40)] md:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
@@ -183,7 +258,15 @@ export function Modal({ open, onClose, title, children }: { open: boolean; onClo
   );
 }
 
-export function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label?: string }) {
+export function Toggle({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  label?: string;
+}) {
   return (
     <button
       type="button"
@@ -196,14 +279,25 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
           checked ? "bg-[oklch(0.6_0.21_27)]" : "bg-[oklch(0.88_0.02_60)]",
         )}
       >
-        <span className={cn("absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all", checked ? "left-[22px]" : "left-0.5")} />
+        <span
+          className={cn(
+            "absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all",
+            checked ? "left-[22px]" : "left-0.5",
+          )}
+        />
       </span>
       {label}
     </button>
   );
 }
 
-export function Bar({ value, tone = "brand" }: { value: number; tone?: "brand" | "green" | "red" }) {
+export function Bar({
+  value,
+  tone = "brand",
+}: {
+  value: number;
+  tone?: "brand" | "green" | "red";
+}) {
   const colors: Record<string, string> = {
     brand: "bg-[oklch(0.6_0.21_27)]",
     green: "bg-[oklch(0.6_0.14_150)]",
@@ -211,7 +305,10 @@ export function Bar({ value, tone = "brand" }: { value: number; tone?: "brand" |
   };
   return (
     <div className="h-2 w-full overflow-hidden rounded-full bg-[oklch(0.94_0.01_60)]">
-      <div className={cn("h-full rounded-full", colors[tone])} style={{ width: `${Math.min(100, Math.max(0, value))}%` }} />
+      <div
+        className={cn("h-full rounded-full", colors[tone])}
+        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+      />
     </div>
   );
 }

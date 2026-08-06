@@ -2,12 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
-import { Badge, Btn, Field, PageHeader, Panel, Select, Stat, TextArea, TextInput } from "@/components/admin/ui";
+import {
+  Badge,
+  Btn,
+  Field,
+  PageHeader,
+  Panel,
+  Select,
+  Stat,
+  TextArea,
+  TextInput,
+} from "@/components/admin/ui";
 import { REQUEST_STATUS_LABEL, type RequestStatus } from "@/lib/admin-data";
 import { programLabel } from "@/lib/programs";
 import { Trash2 } from "lucide-react";
 
-export const Route = createFileRoute("/admin/requests")({ component: () => <AdminOnly roles={["admin", "manager"]}><RequestsPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/requests")({
+  component: () => (
+    <AdminOnly roles={["admin", "manager"]}>
+      <RequestsPage />
+    </AdminOnly>
+  ),
+});
 
 const STATUSES: RequestStatus[] = ["new", "progress", "enrolled", "declined"];
 
@@ -18,7 +34,9 @@ const formatCreated = (iso: string) => {
   if (Number.isNaN(d.getTime())) return iso;
   const date = d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" });
   const hasTime = iso.includes("T");
-  return hasTime ? `${date}, ${d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}` : date;
+  return hasTime
+    ? `${date}, ${d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}`
+    : date;
 };
 
 function RequestsPage() {
@@ -38,7 +56,9 @@ function RequestsPage() {
             (!from || dayKey(r.createdAt) >= from) &&
             (!to || dayKey(r.createdAt) <= to) &&
             (q.trim() === "" ||
-              `${r.name} ${r.phone} ${programLabel(r.program)}`.toLowerCase().includes(q.toLowerCase())),
+              `${r.name} ${r.phone} ${programLabel(r.program)}`
+                .toLowerCase()
+                .includes(q.toLowerCase())),
         )
         .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1)),
     [requests, filter, q, from, to],
@@ -57,28 +77,62 @@ function RequestsPage() {
             label={REQUEST_STATUS_LABEL[s]}
             value={n}
             hint={`${requests.length ? Math.round((n / requests.length) * 100) : 0}% от всех`}
-            tone={s === "new" ? "brand" : s === "enrolled" ? "green" : s === "declined" ? "red" : "neutral"}
+            tone={
+              s === "new"
+                ? "brand"
+                : s === "enrolled"
+                  ? "green"
+                  : s === "declined"
+                    ? "red"
+                    : "neutral"
+            }
           />
         ))}
       </div>
 
       <Panel className="mt-6 p-5">
         <div className="flex flex-wrap gap-3">
-          <TextInput className="max-w-xs" placeholder="Поиск по имени, телефону, программе" value={q} onChange={(e) => setQ(e.target.value)} />
+          <TextInput
+            className="max-w-xs"
+            placeholder="Поиск по имени, телефону, программе"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
           <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
             С
-            <TextInput type="date" className="w-40" value={from} onChange={(e) => setFrom(e.target.value)} />
+            <TextInput
+              type="date"
+              className="w-40"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            />
           </label>
           <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
             По
-            <TextInput type="date" className="w-40" value={to} onChange={(e) => setTo(e.target.value)} />
+            <TextInput
+              type="date"
+              className="w-40"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
           </label>
           {from || to ? (
-            <Btn variant="ghost" size="sm" onClick={() => { setFrom(""); setTo(""); }}>
+            <Btn
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setFrom("");
+                setTo("");
+              }}
+            >
               Сбросить даты
             </Btn>
           ) : null}
-          <Select className="max-w-48" value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>
+          <Select
+            className="max-w-48"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as typeof filter)}
+          >
             <option value="all">Все статусы</option>
             {STATUSES.map((s) => (
               <option key={s} value={s}>
@@ -102,14 +156,28 @@ function RequestsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge tone={r.status === "new" ? "brand" : r.status === "enrolled" ? "green" : r.status === "declined" ? "red" : "amber"}>
+                  <Badge
+                    tone={
+                      r.status === "new"
+                        ? "brand"
+                        : r.status === "enrolled"
+                          ? "green"
+                          : r.status === "declined"
+                            ? "red"
+                            : "amber"
+                    }
+                  >
                     {REQUEST_STATUS_LABEL[r.status]}
                   </Badge>
                   <Select
                     className="w-40"
                     value={r.status}
                     onChange={(e) =>
-                      setRequests((prev) => prev.map((x) => (x.id === r.id ? { ...x, status: e.target.value as RequestStatus } : x)))
+                      setRequests((prev) =>
+                        prev.map((x) =>
+                          x.id === r.id ? { ...x, status: e.target.value as RequestStatus } : x,
+                        ),
+                      )
                     }
                   >
                     {STATUSES.map((s) => (
@@ -124,7 +192,8 @@ function RequestsPage() {
                       size="sm"
                       aria-label="Удалить заявку"
                       onClick={() => {
-                        if (window.confirm("Удалить заявку безвозвратно?")) void deleteRequest(r.id);
+                        if (window.confirm("Удалить заявку безвозвратно?"))
+                          void deleteRequest(r.id);
                       }}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -138,13 +207,21 @@ function RequestsPage() {
                     className="min-h-16"
                     value={r.comment ?? ""}
                     placeholder="Заметка менеджера"
-                    onChange={(e) => setRequests((prev) => prev.map((x) => (x.id === r.id ? { ...x, comment: e.target.value } : x)))}
+                    onChange={(e) =>
+                      setRequests((prev) =>
+                        prev.map((x) => (x.id === r.id ? { ...x, comment: e.target.value } : x)),
+                      )
+                    }
                   />
                 </Field>
               </div>
             </div>
           ))}
-          {rows.length === 0 ? <div className="py-10 text-center text-sm text-[oklch(0.55_0.03_45)]">Заявок не найдено</div> : null}
+          {rows.length === 0 ? (
+            <div className="py-10 text-center text-sm text-[oklch(0.55_0.03_45)]">
+              Заявок не найдено
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
