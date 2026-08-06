@@ -31,6 +31,18 @@ export function Footer() {
                 </a>
               </div>
             )}
+            {org.telegram && (
+              <div>
+                <a
+                  href={org.telegram.startsWith("http") ? org.telegram : `https://t.me/${org.telegram.replace(/^@/, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white"
+                >
+                  Telegram
+                </a>
+              </div>
+            )}
           </div>
         </div>
         <div className="text-sm">

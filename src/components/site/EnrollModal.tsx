@@ -30,6 +30,20 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
   const [tab, setTab] = useState<Tab>("form");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  /** Маска +7 (___) ___-__-__ */
+  const maskPhone = (raw: string) => {
+    let digits = raw.replace(/\D/g, "");
+    if (digits.startsWith("8")) digits = `7${digits.slice(1)}`;
+    if (!digits.startsWith("7")) digits = `7${digits}`;
+    digits = digits.slice(0, 11);
+    const rest = digits.slice(1);
+    let out = "+7";
+    if (rest.length) out += ` (${rest.slice(0, 3)}`;
+    if (rest.length >= 3) out += `) ${rest.slice(3, 6)}`;
+    if (rest.length >= 6) out += `-${rest.slice(6, 8)}`;
+    if (rest.length >= 8) out += `-${rest.slice(8, 10)}`;
+    return out;
+  };
   const [goal, setGoal] = useState<string | null>(defaultGoal ?? null);
   const [errors, setErrors] = useState<{ name?: string; phone?: string; goal?: string }>({});
   const [sent, setSent] = useState(false);
@@ -80,7 +94,7 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
     if (sending) return;
     const errs: typeof errors = {};
     if (name.trim().length < 2) errs.name = t("enroll.error.name");
-    if (phone.replace(/\D/g, "").length < 7) errs.phone = t("enroll.error.phone");
+    if (phone.replace(/\D/g, "").length !== 11) errs.phone = t("enroll.error.phone");
     if (!goal) errs.goal = t("enroll.error.goal");
     setErrors(errs);
     if (Object.keys(errs).length) return;
@@ -210,9 +224,11 @@ export function EnrollModal({ open, onClose, defaultGoal }: EnrollModalProps) {
                             <input
                               type="tel"
                               value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              placeholder={t("enroll.phone.placeholder")}
-                              maxLength={30}
+                              onChange={(e) => setPhone(maskPhone(e.target.value))}
+                              onFocus={() => { if (!phone) setPhone("+7 ("); }}
+                              inputMode="tel"
+                              placeholder="+7 (___) ___-__-__"
+                              maxLength={18}
                               className="h-12 w-full rounded-2xl border border-border/60 bg-surface px-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15"
                             />
                           </Field>
