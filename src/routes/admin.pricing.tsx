@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Star, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus, Star, Trash2 } from "lucide-react";
 import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
 import { Btn, Field, Modal, PageHeader, Panel, TextArea, TextInput, Toggle } from "@/components/admin/ui";
@@ -26,6 +26,17 @@ function PricingAdminPage() {
     footer: "",
     highlight: "",
   });
+  const move = (id: string, dir: -1 | 1) =>
+    setPrices((v) => {
+      const i = v.findIndex((x) => x.id === id);
+      const j = i + dir;
+      if (i < 0 || j < 0 || j >= v.length) return v;
+      const next = [...v];
+      const a = next[i]!;
+      next[i] = next[j]!;
+      next[j] = a;
+      return next;
+    });
   const patch = (id: string, part: Record<string, unknown>) =>
     setPrices((v) => v.map((x) => (x.id === id ? { ...x, ...part } : x)));
 
@@ -45,6 +56,17 @@ function PricingAdminPage() {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {prices.map((p) => (
           <Panel key={p.id} className={`p-5 ${p.featured ? "ring-2 ring-[oklch(0.8_0.15_75)]" : ""}`}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[oklch(0.6_0.03_45)]">Порядок на сайте</span>
+              <div className="flex gap-1">
+                <Btn variant="ghost" size="sm" aria-label="Выше" onClick={() => move(p.id, -1)}>
+                  <ArrowUp className="h-4 w-4" />
+                </Btn>
+                <Btn variant="ghost" size="sm" aria-label="Ниже" onClick={() => move(p.id, 1)}>
+                  <ArrowDown className="h-4 w-4" />
+                </Btn>
+              </div>
+            </div>
             <div className="space-y-3">
               <Field label="Название">
                 <TextInput value={p.title} onChange={(e) => setPrices((v) => v.map((x) => (x.id === p.id ? { ...x, title: e.target.value } : x)))} />
