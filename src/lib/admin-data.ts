@@ -1,6 +1,13 @@
 /** Типы данных админ-панели. Сами данные приходят с бекенда (папка server/). */
 
-export type Role = "admin" | "teacher";
+export type Role = "admin" | "manager" | "editor" | "teacher";
+
+export const ROLE_LABEL: Record<Role, string> = {
+  admin: "Администратор",
+  manager: "Менеджер",
+  editor: "Редактор",
+  teacher: "Преподаватель",
+};
 
 export type RequestStatus = "new" | "progress" | "enrolled" | "declined";
 
@@ -71,6 +78,7 @@ export type Review = {
   level: string;
   text: string;
   visible: boolean;
+  photo?: string;
 };
 
 export type PricePlan = {
