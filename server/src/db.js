@@ -25,6 +25,12 @@ db.exec(`
   );
 `);
 
+// Флаг главного администратора (супер-админ)
+const accountColumns = db.prepare("PRAGMA table_info(accounts)").all().map((c) => c.name);
+if (!accountColumns.includes("is_super")) {
+  db.exec("ALTER TABLE accounts ADD COLUMN is_super INTEGER NOT NULL DEFAULT 0");
+}
+
 export const COLLECTIONS = ["requests", "teachers", "leaders", "lessons", "reviews", "prices", "users", "org", "news"];
 
 const readStmt = db.prepare("SELECT data FROM collections WHERE key = ?");
@@ -49,7 +55,7 @@ export function readAll() {
 
 export function listAccounts() {
   return db
-    .prepare("SELECT login, role, name, teacher_id AS teacherId FROM accounts")
+    .prepare("SELECT login, role, name, teacher_id AS teacherId, is_super AS isSuper FROM accounts")
     .all();
 }
 
@@ -57,15 +63,16 @@ export function findAccount(login) {
   return db.prepare("SELECT * FROM accounts WHERE login = ?").get(login);
 }
 
-export function upsertAccount({ login, password, role, name, teacherId }) {
+export function upsertAccount({ login, password, role, name, teacherId, isSuper }) {
   const existing = findAccount(login);
   const hash = password ? bcrypt.hashSync(password, 10) : existing?.password_hash;
   if (!hash) throw new Error("password required for new account");
+  const superFlag = isSuper === undefined ? (existing?.is_super ?? 0) : isSuper ? 1 : 0;
   db.prepare(
-    `INSERT INTO accounts (login, password_hash, role, name, teacher_id)
-     VALUES (?, ?, ?, ?, ?)
-     ON CONFLICT(login) DO UPDATE SET password_hash = excluded.password_hash, role = excluded.role, name = excluded.name, teacher_id = excluded.teacher_id`,
-  ).run(login, hash, role, name, teacherId ?? null);
+    `INSERT INTO accounts (login, password_hash, role, name, teacher_id, is_super)
+     VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT(login) DO UPDATE SET password_hash = excluded.password_hash, role = excluded.role, name = excluded.name, teacher_id = excluded.teacher_id, is_super = excluded.is_super`,
+  ).run(login, hash, role, name, teacherId ?? null, superFlag);
 }
 
 export function deleteAccount(login) {
@@ -85,4 +92,6 @@ export function bootstrap() {
   if (count === 0) {
     for (const acc of SEED_ACCOUNTS) upsertAccount(acc);
   }
+  // Главный админ всегда супер-админ
+  db.prepare("UPDATE accounts SET is_super = 1 WHERE login = ?").run("AdminChinar1");
 }
