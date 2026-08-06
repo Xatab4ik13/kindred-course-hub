@@ -2,15 +2,23 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
-import { Badge, Bar, PageHeader, Panel, Select, Stat } from "@/components/admin/ui";
+import { Badge, Bar, Btn, PageHeader, Panel, Select, Stat, TextInput } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/lessons")({ component: () => <AdminOnly roles={["admin", "manager"]}><LessonStatsPage /></AdminOnly> });
 
 function LessonStatsPage() {
   const { lessons, teachers } = useAdmin();
   const [teacherId, setTeacherId] = useState("all");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
-  const rows = useMemo(() => lessons.filter((l) => teacherId === "all" || l.teacherId === teacherId), [lessons, teacherId]);
+  const rows = useMemo(
+    () =>
+      lessons.filter(
+        (l) => (teacherId === "all" || l.teacherId === teacherId) && (!from || l.date >= from) && (!to || l.date <= to),
+      ),
+    [lessons, teacherId, from, to],
+  );
   const done = rows.filter((l) => l.status === "done").length;
   const cancelled = rows.filter((l) => l.status === "cancelled").length;
   const planned = rows.filter((l) => l.status === "planned").length;
@@ -27,7 +35,7 @@ function LessonStatsPage() {
     <>
       <PageHeader title="Статистика занятий" subtitle="Проведённые и отменённые занятия с причинами отмены" />
 
-      <Panel className="mb-4 p-4">
+      <Panel className="mb-4 flex flex-wrap items-center gap-3 p-4">
         <Select className="max-w-xs" value={teacherId} onChange={(e) => setTeacherId(e.target.value)}>
           <option value="all">Все преподаватели</option>
           {teachers.map((t) => (
@@ -36,6 +44,19 @@ function LessonStatsPage() {
             </option>
           ))}
         </Select>
+        <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
+          С
+          <TextInput type="date" className="w-40" value={from} onChange={(e) => setFrom(e.target.value)} />
+        </label>
+        <label className="flex items-center gap-2 text-sm text-[oklch(0.5_0.03_45)]">
+          По
+          <TextInput type="date" className="w-40" value={to} onChange={(e) => setTo(e.target.value)} />
+        </label>
+        {from || to ? (
+          <Btn variant="ghost" size="sm" onClick={() => { setFrom(""); setTo(""); }}>
+            Сбросить даты
+          </Btn>
+        ) : null}
       </Panel>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -85,6 +106,7 @@ function LessonStatsPage() {
 
       <Panel className="mt-6 p-5">
         <h2 className="font-display text-lg font-extrabold">Журнал занятий</h2>
+        <p className="mt-1 text-xs text-[oklch(0.6_0.03_45)]">Новые занятия сверху, учитываются выбранные фильтры</p>
         <div className="mt-4 divide-y divide-[oklch(0.94_0.01_60)]">
           {rows
             .slice()
