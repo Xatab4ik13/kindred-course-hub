@@ -37,8 +37,29 @@ const auth = (req, res, next) => {
   }
 };
 
-const adminOnly = (req, res, next) =>
-  req.user?.role === "admin" ? next() : res.status(403).json({ error: "forbidden" });
+const superOnly = (req, res, next) =>
+  req.user?.role === "admin" && req.user?.isSuper ? next() : res.status(403).json({ error: "forbidden" });
+
+/** Какие коллекции роль видит и может менять. */
+const READ_SCOPE = {
+  admin: null, // всё
+  manager: ["requests", "teachers", "lessons", "reviews", "prices", "news", "org"],
+  editor: ["news"],
+  teacher: ["teachers", "lessons", "reviews", "prices", "news", "org"],
+};
+
+const WRITE_SCOPE = {
+  admin: null,
+  manager: ["requests", "lessons", "reviews", "prices", "news"],
+  editor: ["news"],
+  teacher: ["lessons", "teachers"],
+};
+
+const canWrite = (role, key) => {
+  const scope = WRITE_SCOPE[role];
+  if (scope === undefined) return false;
+  return scope === null || scope.includes(key);
+};
 
 /* ---------- auth ---------- */
 
@@ -48,14 +69,20 @@ app.post("/api/auth/login", (req, res) => {
   if (!acc || !password || !bcrypt.compareSync(String(password), acc.password_hash)) {
     return res.status(401).json({ error: "Неверный логин или пароль" });
   }
-  const session = { login: acc.login, name: acc.name, role: acc.role, ...(acc.teacher_id ? { teacherId: acc.teacher_id } : {}) };
+  const session = {
+    login: acc.login,
+    name: acc.name,
+    role: acc.role,
+    isSuper: Boolean(acc.is_super),
+    ...(acc.teacher_id ? { teacherId: acc.teacher_id } : {}),
+  };
   const token = jwt.sign(session, JWT_SECRET, { expiresIn: TOKEN_TTL });
   res.json({ token, session });
 });
 
 app.get("/api/auth/me", auth, (req, res) => {
-  const { login, name, role, teacherId } = req.user;
-  res.json({ login, name, role, ...(teacherId ? { teacherId } : {}) });
+  const { login, name, role, teacherId, isSuper } = req.user;
+  res.json({ login, name, role, isSuper: Boolean(isSuper), ...(teacherId ? { teacherId } : {}) });
 });
 
 /* ---------- публичные данные для сайта ---------- */
@@ -82,7 +109,7 @@ app.post("/api/public/requests", (req, res) => {
     name: String(name).slice(0, 120),
     phone: String(phone).slice(0, 40),
     program: String(program || "Не указано").slice(0, 120),
-    createdAt: new Date().toISOString().slice(0, 10),
+    createdAt: new Date().toISOString(),
     source: ["Сайт", "Телефон", "VK"].includes(source) ? source : "Сайт",
     status: "new",
     ...(comment ? { comment: String(comment).slice(0, 500) } : {}),
@@ -95,12 +122,14 @@ app.post("/api/public/requests", (req, res) => {
 
 app.get("/api/state", auth, (req, res) => {
   const state = readAll();
-  if (req.user.role !== "admin") {
-    // Преподаватель не видит заявки и список пользователей
-    state.requests = [];
-    state.users = [];
+  const scope = READ_SCOPE[req.user.role];
+  if (scope) {
+    for (const key of COLLECTIONS) {
+      if (!scope.includes(key)) state[key] = key === "org" ? {} : [];
+    }
   }
-  res.json({ ...state, accounts: req.user.role === "admin" ? listAccounts() : [] });
+  const isSuper = req.user.role === "admin" && req.user.isSuper;
+  res.json({ ...state, accounts: isSuper ? listAccounts() : [] });
 });
 
 /** Полная замена коллекции. Преподавателю разрешено менять только свои данные. */
@@ -110,7 +139,9 @@ app.put("/api/state/:key", auth, (req, res) => {
   const value = req.body?.data;
   if (value === undefined) return res.status(400).json({ error: "data required" });
 
-  if (req.user.role !== "admin") {
+  if (!canWrite(req.user.role, key)) return res.status(403).json({ error: "forbidden" });
+
+  if (req.user.role === "teacher") {
     const teacherId = req.user.teacherId;
     if (!teacherId) return res.status(403).json({ error: "forbidden" });
 
@@ -140,28 +171,46 @@ app.put("/api/state/:key", auth, (req, res) => {
 
 /* ---------- учётные записи (только админ) ---------- */
 
-app.get("/api/accounts", auth, adminOnly, (_req, res) => res.json(listAccounts()));
+app.get("/api/accounts", auth, superOnly, (_req, res) => res.json(listAccounts()));
 
-app.post("/api/accounts", auth, adminOnly, (req, res) => {
+app.post("/api/accounts", auth, superOnly, (req, res) => {
   const { login, password, role, name, teacherId } = req.body || {};
-  if (!login || !name || !["admin", "teacher"].includes(role)) {
+  if (!login || !name || !["admin", "manager", "editor", "teacher"].includes(role)) {
     return res.status(400).json({ error: "login, name and role are required" });
   }
   const existing = findAccount(String(login));
   if (!existing && !password) return res.status(400).json({ error: "password required" });
+  if (existing?.is_super && role !== "admin") {
+    return res.status(400).json({ error: "нельзя понизить роль главного администратора" });
+  }
   upsertAccount({ login: String(login), password: password ? String(password) : undefined, role, name: String(name), teacherId: teacherId || null });
   res.json({ ok: true, accounts: listAccounts() });
 });
 
-app.delete("/api/accounts/:login", auth, adminOnly, (req, res) => {
+app.delete("/api/accounts/:login", auth, superOnly, (req, res) => {
   if (req.params.login === req.user.login) return res.status(400).json({ error: "нельзя удалить свою учётную запись" });
+  if (findAccount(req.params.login)?.is_super) return res.status(400).json({ error: "нельзя удалить главного администратора" });
   deleteAccount(req.params.login);
   res.json({ ok: true, accounts: listAccounts() });
 });
 
-app.delete("/api/accounts/by-teacher/:teacherId", auth, adminOnly, (req, res) => {
+app.delete("/api/accounts/by-teacher/:teacherId", auth, superOnly, (req, res) => {
   deleteAccountsByTeacher(req.params.teacherId);
   res.json({ ok: true, accounts: listAccounts() });
+});
+
+/* ---------- удаление заявок (только главный админ) ---------- */
+
+app.delete("/api/requests/:id", auth, superOnly, (req, res) => {
+  const requests = readCollection("requests") || [];
+  const next = requests.filter((r) => r.id !== req.params.id);
+  writeCollection("requests", next);
+  res.json({ ok: true, data: next });
+});
+
+app.delete("/api/requests", auth, superOnly, (_req, res) => {
+  writeCollection("requests", []);
+  res.json({ ok: true, data: [] });
 });
 
 app.get("/api/health", (_req, res) => res.json({ ok: true }));

@@ -7,7 +7,7 @@ import { Badge, Btn, Field, Modal, PageHeader, Panel, Select, TextInput } from "
 import type { Lesson } from "@/lib/admin-data";
 import { dateKey } from "@/lib/schedule-view";
 
-export const Route = createFileRoute("/admin/schedule")({ component: () => <AdminOnly><SchedulePage /></AdminOnly> });
+export const Route = createFileRoute("/admin/schedule")({ component: () => <AdminOnly roles={["admin", "manager"]}><SchedulePage /></AdminOnly> });
 
 const DAY_SHORT = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 

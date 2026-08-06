@@ -18,6 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ROLE_LABEL, type Role } from "@/lib/admin-data";
 import { useAdmin } from "@/components/admin/store";
 import { Btn, Field, Panel, TextInput } from "@/components/admin/ui";
 import mascot from "@/assets/mascot/day-1.png";
@@ -53,6 +54,39 @@ const ADMIN_NAV: { group: string; items: NavItem[] }[] = [
   {
     group: "Доступы",
     items: [{ to: "/admin/users", label: "Пользователи", icon: Shield }],
+  },
+];
+
+const MANAGER_NAV: { group: string; items: NavItem[] }[] = [
+  {
+    group: "Обзор",
+    items: [
+      { to: "/admin", label: "Дашборд", icon: Home },
+      { to: "/admin/requests", label: "Заявки", icon: ClipboardList },
+      { to: "/admin/lessons", label: "Статистика занятий", icon: BarChart3 },
+    ],
+  },
+  {
+    group: "Учебный процесс",
+    items: [{ to: "/admin/schedule", label: "Расписание", icon: CalendarDays }],
+  },
+  {
+    group: "Сайт",
+    items: [
+      { to: "/admin/reviews", label: "Отзывы", icon: MessageSquareQuote },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
+      { to: "/admin/pricing", label: "Цены", icon: Tags },
+    ],
+  },
+];
+
+const EDITOR_NAV: { group: string; items: NavItem[] }[] = [
+  {
+    group: "Сайт",
+    items: [
+      { to: "/admin", label: "Дашборд", icon: Home },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
+    ],
   },
 ];
 
@@ -97,18 +131,36 @@ function LoginScreen() {
           }}
         >
           <Field label="Логин">
-            <TextInput value={login} onChange={(e) => setLogin(e.target.value)} autoComplete="username" placeholder="Введите логин" />
+            <TextInput
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              autoComplete="username"
+              placeholder="Введите логин"
+            />
           </Field>
           <Field label="Пароль">
-            <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="••••••••" />
+            <TextInput
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              placeholder="••••••••"
+            />
           </Field>
-          {error ? <div className="rounded-2xl bg-[oklch(0.95_0.05_27)] px-4 py-2.5 text-sm text-[oklch(0.5_0.19_27)]">Неверный логин или пароль</div> : null}
+          {error ? (
+            <div className="rounded-2xl bg-[oklch(0.95_0.05_27)] px-4 py-2.5 text-sm text-[oklch(0.5_0.19_27)]">
+              Неверный логин или пароль
+            </div>
+          ) : null}
           <Btn type="submit" className="w-full" disabled={busy}>
             {busy ? "Входим…" : "Войти"}
           </Btn>
         </form>
 
-        <Link to="/" className="mt-6 block text-center text-xs font-semibold text-[oklch(0.55_0.03_45)] hover:text-[oklch(0.6_0.21_27)]">
+        <Link
+          to="/"
+          className="mt-6 block text-center text-xs font-semibold text-[oklch(0.55_0.03_45)] hover:text-[oklch(0.6_0.21_27)]"
+        >
           ← Вернуться на сайт
         </Link>
       </Panel>
@@ -145,7 +197,14 @@ export function AdminShell() {
 
   if (!session) return <LoginScreen />;
 
-  const nav = session.role === "admin" ? ADMIN_NAV : TEACHER_NAV;
+  const nav =
+    session.role === "admin"
+      ? ADMIN_NAV
+      : session.role === "manager"
+        ? MANAGER_NAV
+        : session.role === "editor"
+          ? EDITOR_NAV
+          : TEACHER_NAV;
 
   const sidebar = (
     <div className="flex h-full flex-col gap-6 p-5">
@@ -153,14 +212,19 @@ export function AdminShell() {
         <img src={mascot} alt="" className="h-10 w-10 object-contain" />
         <div>
           <div className="font-display text-base font-extrabold tracking-tight">CHINAR</div>
-          <div className="text-[11px] text-[oklch(0.55_0.03_45)]">{session.role === "admin" ? "Администратор" : "Преподаватель"}</div>
+          <div className="text-[11px] text-[oklch(0.55_0.03_45)]">
+            {ROLE_LABEL[session.role]}
+            {session.isSuper ? " · главный" : ""}
+          </div>
         </div>
       </Link>
 
       <nav className="flex-1 space-y-5 overflow-y-auto">
         {nav.map((group) => (
           <div key={group.group}>
-            <div className="mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-[oklch(0.65_0.03_45)]">{group.group}</div>
+            <div className="mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-[oklch(0.65_0.03_45)]">
+              {group.group}
+            </div>
             <div className="space-y-1">
               {group.items.map((item) => {
                 const active = pathname === item.to;
@@ -197,7 +261,9 @@ export function AdminShell() {
 
   return (
     <div className="min-h-screen bg-[oklch(0.97_0.02_60)] text-[oklch(0.22_0.05_40)]">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-[oklch(0.9_0.02_60)] bg-white lg:block">{sidebar}</aside>
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-[oklch(0.9_0.02_60)] bg-white lg:block">
+        {sidebar}
+      </aside>
 
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[oklch(0.9_0.02_60)] bg-white/90 px-4 py-3 backdrop-blur lg:hidden">
         <Btn variant="ghost" size="sm" onClick={() => setMenuOpen(true)} aria-label="Меню">
@@ -209,7 +275,10 @@ export function AdminShell() {
       {menuOpen ? (
         <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setMenuOpen(false)}>
           <div className="absolute inset-0 bg-[oklch(0.2_0.03_40_/_0.45)]" />
-          <div className="absolute inset-y-0 left-0 w-72 bg-white" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="absolute inset-y-0 left-0 w-72 bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
             {sidebar}
           </div>
         </div>
@@ -224,12 +293,21 @@ export function AdminShell() {
   );
 }
 
-export function AdminOnly({ children }: { children: React.ReactNode }) {
+export function AdminOnly({
+  children,
+  roles = ["admin"],
+  superOnly = false,
+}: {
+  children: React.ReactNode;
+  roles?: Role[];
+  superOnly?: boolean;
+}) {
   const { session } = useAdmin();
-  if (session?.role !== "admin") {
+  const allowed = session ? roles.includes(session.role) && (!superOnly || session.isSuper) : false;
+  if (!allowed) {
     return (
       <Panel className="p-8 text-center text-sm text-[oklch(0.5_0.03_45)]">
-        Раздел доступен только администратору.
+        Раздел недоступен для вашей роли.
       </Panel>
     );
   }

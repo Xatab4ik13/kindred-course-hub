@@ -5,7 +5,10 @@ export function Footer() {
   const { t } = useI18n();
   const { org } = usePublicContent();
   return (
-    <footer className="text-white/90 border-t border-white/10" style={{ background: "oklch(0.17 0.04 28)" }}>
+    <footer
+      className="text-white/90 border-t border-white/10"
+      style={{ background: "oklch(0.17 0.04 28)" }}
+    >
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-3 md:px-8">
         <div>
           <div className="flex items-center gap-2">
@@ -14,9 +17,7 @@ export function Footer() {
             </span>
             <span className="font-display text-xl font-extrabold text-white">CHINAR</span>
           </div>
-          <p className="mt-3 max-w-xs text-sm text-white/60">
-            {t("hero.subtitle")}
-          </p>
+          <p className="mt-3 max-w-xs text-sm text-white/60">{t("hero.subtitle")}</p>
         </div>
         <div className="text-sm">
           <div className="font-semibold mb-2 text-white">{t("nav.contacts")}</div>
@@ -28,6 +29,22 @@ export function Footer() {
               <div>
                 <a href={org.vk} target="_blank" rel="noreferrer" className="hover:text-white">
                   ВКонтакте
+                </a>
+              </div>
+            )}
+            {org.telegram && (
+              <div>
+                <a
+                  href={
+                    org.telegram.startsWith("http")
+                      ? org.telegram
+                      : `https://t.me/${org.telegram.replace(/^@/, "")}`
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white"
+                >
+                  Telegram
                 </a>
               </div>
             )}

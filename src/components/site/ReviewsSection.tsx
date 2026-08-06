@@ -33,8 +33,18 @@ export function ReviewsSection() {
   const { reviews } = usePublicContent();
 
   const items = reviews.length
-    ? reviews.map((r) => ({ id: r.id, name: r.level ? `${r.author}, ${r.level}` : r.author, text: r.text }))
-    : FALLBACK_REVIEWS.map((r) => ({ id: r.name.en, name: r.name[lang], text: r.text[lang] }));
+    ? reviews.map((r) => ({
+        id: r.id,
+        name: r.level ? `${r.author}, ${r.level}` : r.author,
+        text: r.text,
+        photo: r.photo,
+      }))
+    : FALLBACK_REVIEWS.map((r) => ({
+        id: r.name.en,
+        name: r.name[lang],
+        text: r.text[lang],
+        photo: undefined as string | undefined,
+      }));
   return (
     <section className="relative" style={{ background: "oklch(0.19 0.045 28)" }}>
       {/* Плавный разделитель, который перекрывает низ расписания */}
@@ -50,7 +60,6 @@ export function ReviewsSection() {
       </svg>
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 md:px-8">
-
         <div className="text-sm font-semibold uppercase tracking-widest text-white">
           {t("reviews.title")}
         </div>
@@ -71,9 +80,18 @@ export function ReviewsSection() {
                 <div className="font-hanzi text-5xl leading-none text-white/60">"</div>
                 <p className="mt-2">{r.text}</p>
                 <div className="mt-6 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-soft text-brand font-bold">
-                    {r.name.charAt(0)}
-                  </div>
+                  {r.photo ? (
+                    <img
+                      src={r.photo}
+                      alt={r.name}
+                      loading="lazy"
+                      className="h-11 w-11 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-11 w-11 place-items-center rounded-full bg-brand-soft text-brand font-bold">
+                      {r.name.charAt(0)}
+                    </div>
+                  )}
                   <div className="text-sm font-semibold text-white">{r.name}</div>
                 </div>
               </SoftCard>
