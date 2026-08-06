@@ -7,7 +7,7 @@ import { Btn, Field, Modal, PageHeader, Panel, PhotoPicker, TextArea, TextInput 
 
 export const Route = createFileRoute("/admin/news")({
   component: () => (
-    <AdminOnly>
+    <AdminOnly roles={["admin", "manager", "editor"]}>
       <NewsAdminPage />
     </AdminOnly>
   ),

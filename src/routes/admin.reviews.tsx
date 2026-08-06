@@ -5,7 +5,7 @@ import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
 import { Btn, Field, Modal, PageHeader, Panel, TextArea, TextInput, Toggle } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/admin/reviews")({ component: () => <AdminOnly><ReviewsPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/reviews")({ component: () => <AdminOnly roles={["admin", "manager"]}><ReviewsPage /></AdminOnly> });
 
 function ReviewsPage() {
   const { reviews, setReviews } = useAdmin();

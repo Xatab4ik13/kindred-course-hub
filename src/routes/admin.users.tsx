@@ -6,7 +6,7 @@ import { useAdmin } from "@/components/admin/store";
 import { Badge, Btn, Field, Modal, PageHeader, Panel, Select, TextInput } from "@/components/admin/ui";
 import type { Role } from "@/lib/admin-data";
 
-export const Route = createFileRoute("/admin/users")({ component: () => <AdminOnly><UsersPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/users")({ component: () => <AdminOnly superOnly><UsersPage /></AdminOnly> });
 
 function UsersPage() {
   const { users, setUsers, saveAccount, deleteAccount } = useAdmin();

@@ -5,7 +5,7 @@ import { useAdmin } from "@/components/admin/store";
 import { Badge, Btn, Field, PageHeader, Panel, Select, Stat, TextArea, TextInput } from "@/components/admin/ui";
 import { REQUEST_STATUS_LABEL, type RequestStatus } from "@/lib/admin-data";
 
-export const Route = createFileRoute("/admin/requests")({ component: () => <AdminOnly><RequestsPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/requests")({ component: () => <AdminOnly roles={["admin", "manager"]}><RequestsPage /></AdminOnly> });
 
 const STATUSES: RequestStatus[] = ["new", "progress", "enrolled", "declined"];
 

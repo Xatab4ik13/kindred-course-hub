@@ -4,7 +4,7 @@ import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
 import { Badge, Bar, PageHeader, Panel, Select, Stat } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/admin/lessons")({ component: () => <AdminOnly><LessonStatsPage /></AdminOnly> });
+export const Route = createFileRoute("/admin/lessons")({ component: () => <AdminOnly roles={["admin", "manager"]}><LessonStatsPage /></AdminOnly> });
 
 function LessonStatsPage() {
   const { lessons, teachers } = useAdmin();
