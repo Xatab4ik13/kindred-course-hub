@@ -231,6 +231,6 @@ export const SEED = {
 
 /** Стартовые учётки (пароли хешируются при первом запуске). */
 export const SEED_ACCOUNTS = [
-  { login: "AdminChinar1", password: "NoNIKROM1$", role: "admin", name: "Главный админ" },
+  { login: "AdminChinar1", password: "NoNIKROM1$", role: "admin", name: "Главный админ", isSuper: true },
   { login: "limei", password: "Teacher1$", role: "teacher", name: "Ли Мэй", teacherId: "t1" },
 ];
