@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Btn } from "@/components/admin/ui";
 
 const BOX_W = 320;
 const OUT_W = 720;
@@ -134,12 +133,21 @@ export function ImageCropper({ src, aspect = 1, onCancel, onApply }: Props) {
       </div>
 
       <div className="flex gap-2">
-        <Btn onClick={apply} disabled={!img}>
+        <button
+          type="button"
+          onClick={apply}
+          disabled={!img}
+          className="rounded-full bg-[oklch(0.6_0.21_27)] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
+        >
           Сохранить фото
-        </Btn>
-        <Btn variant="outline" onClick={onCancel}>
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-full border border-[oklch(0.88_0.03_50)] bg-white px-5 py-2.5 text-sm font-semibold hover:bg-[oklch(0.97_0.02_60)]"
+        >
           Отмена
-        </Btn>
+        </button>
       </div>
       <p className="text-xs text-[oklch(0.6_0.03_45)]">Перетащите изображение мышью, масштабируйте колесом или ползунком.</p>
     </div>

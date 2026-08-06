@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { ImageCropper } from "@/components/admin/ImageCropper";
 import type { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +71,18 @@ export function Select({ className, ...rest }: SelectHTMLAttributes<HTMLSelectEl
   return <select className={cn(controlCls, "pr-8", className)} {...rest} />;
 }
 
-export function PhotoPicker({ value, onChange, label = "Фотография" }: { value: string; onChange: (dataUrl: string) => void; label?: string }) {
+export function PhotoPicker({
+  value,
+  onChange,
+  label = "Фотография",
+  aspect = 1,
+}: {
+  value: string;
+  onChange: (dataUrl: string) => void;
+  label?: string;
+  aspect?: number;
+}) {
+  const [editing, setEditing] = useState<string | null>(null);
   return (
     <div>
       <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[oklch(0.5_0.03_45)]">{label}</span>
@@ -89,13 +102,36 @@ export function PhotoPicker({ value, onChange, label = "Фотография" }:
               const file = e.target.files?.[0];
               if (!file) return;
               const reader = new FileReader();
-              reader.onload = () => onChange(String(reader.result));
+              reader.onload = () => setEditing(String(reader.result));
               reader.readAsDataURL(file);
               e.target.value = "";
             }}
           />
         </label>
+        {value ? (
+          <button
+            type="button"
+            onClick={() => setEditing(value)}
+            className="rounded-full border border-[oklch(0.88_0.03_50)] bg-white px-4 py-2 text-sm font-semibold hover:bg-[oklch(0.97_0.02_60)]"
+          >
+            Редактировать
+          </button>
+        ) : null}
       </div>
+
+      <Modal open={editing !== null} onClose={() => setEditing(null)} title="Обрезка фотографии">
+        {editing ? (
+          <ImageCropper
+            src={editing}
+            aspect={aspect}
+            onCancel={() => setEditing(null)}
+            onApply={(dataUrl) => {
+              onChange(dataUrl);
+              setEditing(null);
+            }}
+          />
+        ) : null}
+      </Modal>
     </div>
   );
 }
