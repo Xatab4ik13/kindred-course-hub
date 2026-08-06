@@ -3,8 +3,8 @@ import { api, setToken, getToken, ApiError } from "@/lib/api";
 import type { AppUser, EnrollRequest, Leader, Lesson, OrgInfo, PricePlan, Review, Role, Teacher } from "@/lib/admin-data";
 import type { NewsItem } from "@/lib/public-content";
 
-export type Session = { login: string; name: string; role: Role; teacherId?: string };
-export type Account = { login: string; name: string; role: Role; teacherId?: string | null };
+export type Session = { login: string; name: string; role: Role; teacherId?: string; isSuper?: boolean };
+export type Account = { login: string; name: string; role: Role; teacherId?: string | null; isSuper?: number | boolean };
 
 type ServerState = {
   requests: EnrollRequest[];
@@ -61,6 +61,8 @@ type Store = {
   setNews: Setter<NewsItem[]>;
 
   accounts: Account[];
+  deleteRequest: (id: string) => Promise<void>;
+  clearRequests: () => Promise<void>;
   saveAccount: (input: { login: string; password?: string; role: Role; name: string; teacherId?: string | null }) => Promise<void>;
   deleteAccount: (login: string) => Promise<void>;
   deleteAccountsByTeacher: (teacherId: string) => Promise<void>;
@@ -189,6 +191,14 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       news,
       setNews: makeSetter("news", setNewsRaw),
       accounts,
+      deleteRequest: async (id) => {
+        const res = await api<{ data: EnrollRequest[] }>(`/requests/${encodeURIComponent(id)}`, { method: "DELETE" });
+        setRequestsRaw(res.data);
+      },
+      clearRequests: async () => {
+        const res = await api<{ data: EnrollRequest[] }>("/requests", { method: "DELETE" });
+        setRequestsRaw(res.data);
+      },
       saveAccount: async (input) => {
         const res = await api<{ accounts: Account[] }>("/accounts", { method: "POST", body: JSON.stringify(input) });
         refreshAccounts(res);

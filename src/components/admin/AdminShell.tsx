@@ -18,6 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ROLE_LABEL, type Role } from "@/lib/admin-data";
 import { useAdmin } from "@/components/admin/store";
 import { Btn, Field, Panel, TextInput } from "@/components/admin/ui";
 import mascot from "@/assets/mascot/day-1.png";
@@ -53,6 +54,39 @@ const ADMIN_NAV: { group: string; items: NavItem[] }[] = [
   {
     group: "Доступы",
     items: [{ to: "/admin/users", label: "Пользователи", icon: Shield }],
+  },
+];
+
+const MANAGER_NAV: { group: string; items: NavItem[] }[] = [
+  {
+    group: "Обзор",
+    items: [
+      { to: "/admin", label: "Дашборд", icon: Home },
+      { to: "/admin/requests", label: "Заявки", icon: ClipboardList },
+      { to: "/admin/lessons", label: "Статистика занятий", icon: BarChart3 },
+    ],
+  },
+  {
+    group: "Учебный процесс",
+    items: [{ to: "/admin/schedule", label: "Расписание", icon: CalendarDays }],
+  },
+  {
+    group: "Сайт",
+    items: [
+      { to: "/admin/reviews", label: "Отзывы", icon: MessageSquareQuote },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
+      { to: "/admin/pricing", label: "Цены", icon: Tags },
+    ],
+  },
+];
+
+const EDITOR_NAV: { group: string; items: NavItem[] }[] = [
+  {
+    group: "Сайт",
+    items: [
+      { to: "/admin", label: "Дашборд", icon: Home },
+      { to: "/admin/news", label: "Новости", icon: Newspaper },
+    ],
   },
 ];
 
@@ -145,7 +179,8 @@ export function AdminShell() {
 
   if (!session) return <LoginScreen />;
 
-  const nav = session.role === "admin" ? ADMIN_NAV : TEACHER_NAV;
+  const nav =
+    session.role === "admin" ? ADMIN_NAV : session.role === "manager" ? MANAGER_NAV : session.role === "editor" ? EDITOR_NAV : TEACHER_NAV;
 
   const sidebar = (
     <div className="flex h-full flex-col gap-6 p-5">
@@ -153,7 +188,7 @@ export function AdminShell() {
         <img src={mascot} alt="" className="h-10 w-10 object-contain" />
         <div>
           <div className="font-display text-base font-extrabold tracking-tight">CHINAR</div>
-          <div className="text-[11px] text-[oklch(0.55_0.03_45)]">{session.role === "admin" ? "Администратор" : "Преподаватель"}</div>
+          <div className="text-[11px] text-[oklch(0.55_0.03_45)]">{ROLE_LABEL[session.role]}{session.isSuper ? " · главный" : ""}</div>
         </div>
       </Link>
 
@@ -224,12 +259,21 @@ export function AdminShell() {
   );
 }
 
-export function AdminOnly({ children }: { children: React.ReactNode }) {
+export function AdminOnly({
+  children,
+  roles = ["admin"],
+  superOnly = false,
+}: {
+  children: React.ReactNode;
+  roles?: Role[];
+  superOnly?: boolean;
+}) {
   const { session } = useAdmin();
-  if (session?.role !== "admin") {
+  const allowed = session ? roles.includes(session.role) && (!superOnly || session.isSuper) : false;
+  if (!allowed) {
     return (
       <Panel className="p-8 text-center text-sm text-[oklch(0.5_0.03_45)]">
-        Раздел доступен только администратору.
+        Раздел недоступен для вашей роли.
       </Panel>
     );
   }
