@@ -3,14 +3,14 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { AdminOnly } from "@/components/admin/AdminShell";
 import { useAdmin } from "@/components/admin/store";
-import { Btn, Field, Modal, PageHeader, Panel, TextArea, TextInput, Toggle } from "@/components/admin/ui";
+import { Btn, Field, Modal, PageHeader, Panel, PhotoPicker, TextArea, TextInput, Toggle } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/reviews")({ component: () => <AdminOnly roles={["admin", "manager"]}><ReviewsPage /></AdminOnly> });
 
 function ReviewsPage() {
   const { reviews, setReviews } = useAdmin();
   const [creating, setCreating] = useState(false);
-  const [draft, setDraft] = useState({ author: "", level: "", text: "", visible: true });
+  const [draft, setDraft] = useState({ author: "", level: "", text: "", visible: true, photo: "" });
 
   return (
     <>
@@ -34,6 +34,13 @@ function ReviewsPage() {
               <Field label="Уровень">
                 <TextInput value={r.level} onChange={(e) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, level: e.target.value } : x)))} />
               </Field>
+            </div>
+            <div className="mt-3">
+              <PhotoPicker
+                label="Фото автора"
+                value={r.photo ?? ""}
+                onChange={(photo) => setReviews((p) => p.map((x) => (x.id === r.id ? { ...x, photo } : x)))}
+              />
             </div>
             <div className="mt-3">
               <Field label="Текст отзыва">
@@ -63,6 +70,7 @@ function ReviewsPage() {
           <Field label="Уровень">
             <TextInput value={draft.level} placeholder="HSK 3" onChange={(e) => setDraft({ ...draft, level: e.target.value })} />
           </Field>
+          <PhotoPicker label="Фото автора" value={draft.photo} onChange={(photo) => setDraft({ ...draft, photo })} />
           <Field label="Текст">
             <TextArea value={draft.text} onChange={(e) => setDraft({ ...draft, text: e.target.value })} />
           </Field>
@@ -70,7 +78,7 @@ function ReviewsPage() {
             <Btn
               onClick={() => {
                 setReviews((p) => [...p, { id: `r${Date.now()}`, ...draft }]);
-                setDraft({ author: "", level: "", text: "", visible: true });
+                setDraft({ author: "", level: "", text: "", visible: true, photo: "" });
                 setCreating(false);
               }}
             >
